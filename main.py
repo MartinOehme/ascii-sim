@@ -12,7 +12,7 @@ RED = (255, 0, 0)
 # Open a new window
 size = (700, 500)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("My First Game")
+pygame.display.set_caption("Ascii Sim")
 
 # The loop will carry on until the user exit the game (e.g. clicks the close button).
 carryOn = True
