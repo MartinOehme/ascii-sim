@@ -1,10 +1,15 @@
 import pygame
+from pygame.time import Clock
+from pygame import Surface
+
+from .base.context import Context
 
 class Game(object):
     def __init__(self, screen):
-        self.clock = pygame.time.Clock()
+        self.clock: Clock = Clock()
+        self.context: Context = Context()
         self.running = True
-        self.screen = screen
+        self.screen: Surface = screen
         
     def update(self):
         for event in pygame.event.get():
