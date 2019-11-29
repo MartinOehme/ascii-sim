@@ -15,9 +15,12 @@ class Game(object):
         self.screen: Surface = screen
         
     def update(self):
-        for event in pygame.event.get():
+        self.context.events = pygame.event.get()
+        for event in self.context.events:
             if event.type == pygame.QUIT:
                 self.running = False
+        for sprite in self.context.room.sprites:
+            sprite.update(self.context)
         self.clock.tick(60)
                 
     def render(self):
