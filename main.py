@@ -33,7 +33,7 @@ while carryOn:
         # First, clear the screen to white.
     screen.fill(WHITE)
 
-    # updete screen
+    # update screen
     pygame.display.flip()
 
     # --- Limit to 60 frames per second
