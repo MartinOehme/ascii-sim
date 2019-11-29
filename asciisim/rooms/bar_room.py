@@ -6,6 +6,8 @@ from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
 from ..sprites.static_sprite import StaticSprite
 
+from ..sprites.coffee_machine import CoffeeMachine
+
 class BarRoom(Room):
     def __init__(self):
         super().__init__()
@@ -21,5 +23,8 @@ class BarRoom(Room):
                 SpritePosition(2, 4),
                 pygame.image.load(IMG_DIR + "dummy.png")
             )
+        )
+        self.sprites.append(
+            CoffeeMachine()
         )
         
