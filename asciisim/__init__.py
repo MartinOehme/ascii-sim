@@ -24,7 +24,7 @@ class AsciiSim(object):
         pygame.joystick.init()
         pygame.init()
 
-        self.screen = pygame.display.set_mode((1280, 720))
+        self.screen = pygame.display.set_mode((1920, 1080))
         self.game = Game(self.screen)
 
     def main(self):

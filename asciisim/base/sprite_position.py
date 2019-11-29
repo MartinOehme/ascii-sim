@@ -7,4 +7,9 @@ class SpritePosition(object):
 
     @property
     def rect(self):
-        return Rect(72 * self.x, 72 * self.y, 72, 72)
+        return Rect(
+            135 * self.x + 435 + 68,
+            135 * self.y + 68,
+            135,
+            135
+        )
