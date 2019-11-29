@@ -16,4 +16,4 @@ class CoffeeMachine(StaticSprite):
         )
 
     def useSprite(self, state: States):
-        if state
+        pass
