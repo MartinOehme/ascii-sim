@@ -8,6 +8,7 @@ from ..sprites.bar_keeper import BarKeeper
 from ..sprites.coffee_machine import CoffeeMachine
 from ..sprites.static_sprite import StaticSprite
 
+
 class BarRoom(Room):
     def __init__(self):
         super().__init__()

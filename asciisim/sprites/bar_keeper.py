@@ -20,7 +20,17 @@ class BarKeeper(AbstractSprite):
                 self.position.y -= 1
             elif event.key == pygame.K_DOWN and self.position.y < 6:
                 self.position.y += 1
-            elif event.key == pygame.K_LEFT and self.position.x > 0:
-                self.position.x -= 1
-            elif event.key == pygame.K_RIGHT and self.position.x < 9:
-                self.position.x += 1
+            elif event.key == pygame.K_LEFT:
+                if (self.position.x == 0
+                      and self.position.y == 6
+                      and context.room_key == Context.STORE_ROOM):
+                    context.set_room(Context.BAR_ROOM)
+                elif self.position.x > 0:
+                    self.position.x -= 1
+            elif event.key == pygame.K_RIGHT:
+                if (self.position.x == 9
+                    and self.position.y == 6
+                    and context.room_key == Context.BAR_ROOM):
+                    context.set_room(Context.STORE_ROOM)
+                elif self.position.x < 9:
+                    self.position.x += 1
