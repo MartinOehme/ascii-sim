@@ -27,7 +27,7 @@ class BarRoom(Room):
         )
 
         self.sprites.append(
-            BarKeeper()
+            BarKeeper(9, 6)
         )
         
         self.sprites.append(

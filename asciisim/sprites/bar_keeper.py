@@ -7,9 +7,9 @@ from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
 
 class BarKeeper(AbstractSprite):
-    def __init__(self):
+    def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
-        self.position = SpritePosition(0, 0)
+        self.position = SpritePosition(x, y)
         self.image = pygame.image.load(IMG_DIR + "bar_keeper.png")
 
     def update(self, context: Context):

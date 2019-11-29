@@ -11,5 +11,5 @@ class StoreRoom(Room):
         super().__init__()
         self.background: Surface = pygame.image.load(IMG_DIR + "store_room.png")
         self.sprites.append(
-            BarKeeper()
+            BarKeeper(0, 6)
         )
