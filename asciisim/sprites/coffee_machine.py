@@ -1,5 +1,7 @@
 import pygame
 
+from .sprite_enums import States
+
 from .static_sprite import StaticSprite
 from ..base.sprite_position import SpritePosition
 from ..base.context import Context
@@ -13,4 +15,5 @@ class CoffeeMachine(StaticSprite):
             pygame.image.load(IMG_DIR + "coffee_machine.png")
         )
 
-
+    def useSprite(self, state: States):
+        pass
