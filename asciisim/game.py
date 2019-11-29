@@ -22,6 +22,10 @@ class Game(object):
                 
     def render(self):
         self.screen.blit(self.context.room.background, (0, 0))
+
+        for sprite in self.context.room.sprites:
+            self.screen.blit(sprite.image, sprite.position.rect)
+
         pygame.display.flip()
         
     def main(self):
