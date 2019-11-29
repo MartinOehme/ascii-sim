@@ -11,7 +11,7 @@ from ..res import IMG_DIR
 class CoffeeMachine(StaticSprite):
     def __init__(self):
         super().__init__(
-            SpritePosition(0, 0),
+            SpritePosition(9, 2),
             pygame.image.load(IMG_DIR + "coffee_machine.png")
         )
 
