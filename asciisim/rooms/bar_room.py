@@ -13,6 +13,20 @@ class BarRoom(Room):
     def __init__(self):
         super().__init__()
         self.background: Surface = pygame.image.load(IMG_DIR + "bar_room.png")
+        self.obstacles += [
+            SpritePosition(9, 1),
+            SpritePosition(8, 1),
+            SpritePosition(7, 1),
+            SpritePosition(7, 2),
+            SpritePosition(7, 3),
+            SpritePosition(7, 4),
+            SpritePosition(7, 5),
+            SpritePosition(6, 1),
+            SpritePosition(6, 2),
+            SpritePosition(6, 3),
+            SpritePosition(6, 4),
+            SpritePosition(6, 5),
+        ]
         self.sprites.append(
             StaticSprite(
                 SpritePosition(0, 0),
