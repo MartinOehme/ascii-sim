@@ -14,15 +14,27 @@ class CoffeeStates(Enum):
     REFILL_WATER = 3
 
 
+class CustomerStatus(Enum):
+    WALKING = 0
+    SITTING = 1
+
+
 class OrderWalkers(Enum):
-    HOT_DRINK = 0
-    COLD_DRINK = 1
-    RETURN_CUP = 2
-    GET_BROOM = 3
-    RETURN_BROOM = 4
+    COFFEE = 0
+    COFFEE_MILK = 1
+    KOLLE_MATE = 2
+    PREMIUM_COLA = 3
+    ZOTRINE = 4
+    RETURN_CUP = 5
+    GET_BROOM = 6
+    RETURN_BOTTLE = 7
+    RETURN_BROOM = 8
 
 
 class OrderSiters(Enum):
     CHANGE_MUSIC = 0
-    MUSIC_VOLUME = 1
-    CHANGE_TEMPERATURE = 3
+    MUSIC_VOLUME_UP = 1
+    MUSIC_VOLUME_DOWN = 2
+    TEMPERATURE_UP = 3
+    TEMPERATURE_DOWN = 4
+
