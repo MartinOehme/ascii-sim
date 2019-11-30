@@ -49,6 +49,7 @@ class BarRoom(Room):
             CoffeeMachine()
         )
 
+
         # add radiator to bar
         radiator = Radiator(Rect(3, 3, 1, 1))
 
