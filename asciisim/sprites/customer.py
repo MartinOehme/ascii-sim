@@ -1,7 +1,10 @@
+import pygame
 from pygame import Surface
+
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..base.sprite_position import SpritePosition
+from ..res import IMG_DIR
 from .sprite_enums import CustomerStatus, CustomerHappiness, OrderWalkers, OrderSitters
 from .bar_keeper import BarKeeper
 import random
@@ -9,20 +12,29 @@ import time
 
 
 class CustomerSprite(AbstractSprite):
-    def __init__(self, position: SpritePosition, image: Surface):
+    def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
-        self.position = position
-        self.image = image
+        self.position = SpritePosition(x, y)
         # status determines if the customer is sitting or walking
         self.status = CustomerStatus.WALKING
         self.happiness = None
         self.order_value = None
         self.timer = None
 
-    def get_order_value(self): return self.order_value
+        self.register_surface(
+            "image",
+            lambda: pygame.image.load(IMG_DIR + "bar_keeper.png")
+        )
+
+    @property
+    def image(self) -> Surface:
+        return self.get_surface("image")
+
+    def get_order_value(self):
+        return self.order_value
 
     def generate_order(self):
-        # generate order from random value
+        # generate order for walkers from random value
         if self.status == CustomerStatus.WALKING:
             random_value = random.randint(0, 99)
             if 0 <= random_value < 12:
@@ -42,6 +54,7 @@ class CustomerSprite(AbstractSprite):
             elif 96 <= random_value <= 99:
                 self.order_value = OrderWalkers.GET_BROOM
                 # TODO: make broom return order if broom has been taken
+        # generate order for sitters from random value
         elif self.status == CustomerStatus.SITTING:
             random_value = random.randint(0, 99)
             if 0 <= random_value < 20:
@@ -109,11 +122,22 @@ class CustomerSprite(AbstractSprite):
 
     def check_order(self):
         # TODO: Check and Adjust times
+        # TODO: Let customer leave after getting his order
         self.timer = time.time() - self.timer
+        # Check if correct order was served in what time
         if BarKeeper.get_current_order() == self.order_value and self.timer < 20:
             self.happiness = CustomerHappiness.HAPPY
+            # Customer has a chance to sit down when served happily (50%)
+            random_value = random.randint(0, 3)
+            if random_value < 2:
+                self.status = CustomerStatus.SITTING
+                # TODO: Let customer walk to bench and sit down
         elif BarKeeper.get_current_order() == self.order_value and 20 < self.timer < 40:
             self.happiness = CustomerHappiness.NEUTRAL
+            # Customer has a chance to sit down when served happily (25%)
+            random_value = random.randint(0, 3)
+            if random_value < 1:
+                self.status = CustomerStatus.SITTING
         elif BarKeeper.get_current_order() == self.order_value and self.timer >= 40:
             self.happiness = CustomerHappiness.UNHAPPY
         elif BarKeeper.get_current_order() != self.order_value:
