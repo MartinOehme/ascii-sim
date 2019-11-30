@@ -12,6 +12,11 @@ class Room(GameObject):
         self.sprites = []
         self.bubbles = []
 
+        # radiator temperature
+        self.temperature = 22
+        # music volume
+        self.volume = 50
+
     @property
     def renderable_sprites_by_z_index(self):
         return filter(

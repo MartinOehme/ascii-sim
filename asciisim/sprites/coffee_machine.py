@@ -31,7 +31,7 @@ class CoffeeMachine(AbstractSprite):
         self.renderable = False
         self._state = MachineStates.NOT_USED
         self.broken_status = list()
-        self.broken_status.append(MachineStates.NOT_USED)
+        self.broken_status.append(MachineStates.ALL_GOOD)
         self.status_displayed = False
 
         self.pot = False
