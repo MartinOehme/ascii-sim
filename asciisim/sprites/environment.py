@@ -51,7 +51,7 @@ class MusicBox(StaticSprite):
             self.volume += value
 
     def change_music(self, track: MusicTracks):
-        pygame.mixer_music.fadeout(2)
+        pygame.mixer_music.fadeout(2000)
         if track is MusicTracks.MUSIC_OFF:
             pygame.mixer_music.stop()
         else:
