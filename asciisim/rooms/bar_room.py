@@ -10,6 +10,7 @@ from ..sprites.customer import CustomerSprite
 from ..sprites.coffee_machine import CoffeeMachine
 from ..sprites.static_sprite import StaticSprite
 
+from ..sprites.environment import Radiator, MusicBox
 
 class BarRoom(Room):
     def __init__(self):
@@ -62,7 +63,21 @@ class BarRoom(Room):
         self.sprites.append(
             CoffeeMachine()
         )
-        
+
+        # add radiator to bar
+        radiator = Radiator(SpritePosition(3, 3))
+
+        self.sprites.append(
+            radiator
+        )
+
+        # add music box to bar
+        music_box = MusicBox(SpritePosition(4, 4))
+
+        self.sprites.append(
+            music_box
+        )
+
     @property
     def background(self) -> Surface:
         return self.get_surface("background")
