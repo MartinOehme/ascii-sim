@@ -158,7 +158,6 @@ class CoffeeMachine(StaticSprite):
             # - display status
             # - make coffee
             # TODO: Get status of "Buttons" (e.g. make coffee, ...)
-            # DEBUG ONLY: hardcoded buttons (later mouse click?)
 
         for machine_state in self.broken_status:
             if (
