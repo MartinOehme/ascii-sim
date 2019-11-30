@@ -45,3 +45,9 @@ class OrderSitters(Enum):
     MUSIC_VOLUME_DOWN = 2
     TEMPERATURE_UP = 3
     TEMPERATURE_DOWN = 4
+
+
+class CustomerHappiness(Enum):
+    NEUTRAL = 0
+    HAPPY = 1
+    UNHAPPY = 2
