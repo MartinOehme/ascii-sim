@@ -3,7 +3,7 @@ import pygame
 from pygame.rect import Rect
 
 from asciisim.res import IMG_DIR
-from asciisim.sprites.sprite_enums import OrderWalkers
+from asciisim.sprites.sprite_enums import MachineStates
 from ..base.closeup import Closeup
 from ..base.context import Context
 from ..base.sprite import AbstractSprite
@@ -12,14 +12,12 @@ from ..menu.menu import Menu
 from ..sprites.bar_keeper import BarKeeper
 
 
-class RefrigeratorCloseup(Closeup):
-    def __init__(self, refrigeratore: 'Refrigerator'):
-        super().__init__(IMG_DIR + "refrigeratore/refrigeratore_closeup.png")
-        self.refrigeratore = refrigeratore
+class CoffeeStorageCloseup(Closeup):
+    def __init__(self, coffee_storage: 'CoffeeStorage'):
+        super().__init__(IMG_DIR + "coffee_storage/coffee_storage_closeup.png")
+        self.coffee_storage = coffee_storage
         self.menu = Menu()
-        self.menu.add_control(Control(760, 200, 400, 100))
         self.menu.add_control(Control(760, 400, 400, 100))
-        self.menu.add_control(Control(760, 600, 400, 100))
 
         self.sprites += self.menu.control_sprites
 
@@ -28,11 +26,7 @@ class RefrigeratorCloseup(Closeup):
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 if self.menu.control_index == 0:
-                    self.refrigeratore.state = OrderWalkers.KOLLE_MATE
-                elif self.menu.control_index == 1:
-                    self.refrigeratore.state = OrderWalkers.PREMIUM_COLA
-                elif self.menu.control_index == 2:
-                    self.refrigeratore.state = OrderWalkers.ZOTRINE
+                    self.coffee_storage.state = MachineStates.REFILL_COFFEE
 
                 context.closeup = None
 
@@ -40,11 +34,11 @@ class RefrigeratorCloseup(Closeup):
                 context.closeup = None
 
 
-class Refrigerator(AbstractSprite):
+class CoffeeStorage(AbstractSprite):
     def __init__(self):
         super().__init__()
-        self.closeup = RefrigeratorCloseup(self)
-        self.tile_rect = Rect(0, 4, 2, 1)
+        self.closeup = CoffeeStorageCloseup(self)
+        self.tile_rect = Rect(0, 3, 2, 1)
         self.obstacle = True
         self.renderable = False
         self.state = None
@@ -57,3 +51,4 @@ class Refrigerator(AbstractSprite):
                         if sprite.is_near(self):
                             context.closeup = self.closeup
                             sprite.item = self.state
+                            print(sprite.item)
