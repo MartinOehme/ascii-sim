@@ -1,9 +1,5 @@
 import pygame
-<<<<<<< HEAD
-import keyboard
 import time
-=======
->>>>>>> 3f45a6021cf5ecc2fa59fba3e9104e08d18425f8
 
 from .sprite_enums import States, CoffeeStates, CoffeeTypes
 from .static_sprite import StaticSprite
