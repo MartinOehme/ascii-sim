@@ -8,6 +8,7 @@ from pygame import Surface
 
 from .base.game_object import GameObject
 from .base.sprite_position import SpritePosition
+from .menu.control import Control
 
 class RenderContext(object):
     def __init__(self, resolution: Tuple[int, int]):
@@ -44,5 +45,6 @@ class RenderContext(object):
         self.tile_size = 135 * self.resolution[0] / 1920
         self.top_border = 68 * self.resolution[0] / 1920
 
+        Control.update_render_context(self)
         GameObject.update_render_context(self)
         SpritePosition.update_render_context(self)
