@@ -105,24 +105,30 @@ class CustomerSprite(AbstractSprite):
             pass
         elif self.order_value == OrderSitters.CHANGE_MUSIC:
             # TODO: Display change music dialog
+            # TODO: save current music
             pass
         elif self.order_value == OrderSitters.MUSIC_VOLUME_UP:
             # TODO: Display volume up dialog
+            # TODO: save current music volume
             pass
         elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN:
             # TODO: Display volume down dialog
+            # TODO: save current music volume
             pass
         elif self.order_value == OrderSitters.TEMPERATURE_UP:
             # TODO: Display temperature up dialog
+            # TODO: save current temperature
             pass
         elif self.order_value == OrderSitters.TEMPERATURE_DOWN:
             # TODO: Display temperature down dialog
+            # TODO: save current temperature
             pass
         self.timer = time.time()
 
     def check_order(self):
         # TODO: Check and Adjust times
         # TODO: Let customer leave after getting his order
+        # TODO: get number of sitting customers
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
         if BarKeeper.get_current_order() == self.order_value and self.timer < 20:
@@ -131,17 +137,57 @@ class CustomerSprite(AbstractSprite):
             random_value = random.randint(0, 3)
             if random_value < 2:
                 self.status = CustomerStatus.SITTING
-                # TODO: Let customer walk to bench and sit down
+                # TODO: Let customer walk to bench and sit down, update room temp, music and volume
         elif BarKeeper.get_current_order() == self.order_value and 20 < self.timer < 40:
             self.happiness = CustomerHappiness.NEUTRAL
-            # Customer has a chance to sit down when served happily (25%)
+            # Customer has a chance to sit down when served (25%)
             random_value = random.randint(0, 3)
             if random_value < 1:
                 self.status = CustomerStatus.SITTING
+                # TODO: Let customer walk to bench and sit down, update room temp, music and volume
         elif BarKeeper.get_current_order() == self.order_value and self.timer >= 40:
             self.happiness = CustomerHappiness.UNHAPPY
         elif BarKeeper.get_current_order() != self.order_value:
             self.happiness = CustomerHappiness.UNHAPPY
+
+    # For sitting customers, TODO: check order after certain time
+    def check_order(self):
+        self.timer = time.time() - self.timer
+        # if self.order_value == OrderSitters.CHANGE_MUSIC and self.music != BarRoom.getMusic
+        #   self.music = BarRoom.getMusic
+        #   self.customer.happiness = CustomerHappiness.HAPPY
+        # elif self.order_value == OrderSitters.CHANGE_MUSIC and self.music == BarRoom.getMusic
+        #   self.music = BarRoom.getMusic
+        #   self.customer.happiness = CustomerHappiness.UNHAPPY
+        #   self.status = CustomerStatus.WALKING TODO: Customer leaves
+        # elif self.order_value == OrderSitters.MUSIC_VOLUME_UP and self.music_volume < BarRoom.getMusicVolume
+        #   self.music_volume = BarRoom.getMusicVolume
+        #   self.customer.happiness = CustomerHappiness.HAPPY
+        # elif self.order_value == OrderSitters.MUSIC_VOLUME_UP and self.music_volume >= BarRoom.getMusicVolume
+        #   self.music_volume = BarRoom.getMusicVolume
+        #   self.customer.happiness = CustomerHappiness.UNHAPPY
+        #   self.status = CustomerStatus.WALKING TODO: Customer leaves
+        # elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN and self.music_volume > BarRoom.getMusicVolume
+        #   self.music_volume = BarRoom.getMusicVolume
+        #   self.customer.happiness = CustomerHappiness.HAPPY
+        # elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN and self.music_volume <= BarRoom.getMusicVolume
+        #   self.music_volume = BarRoom.getMusicVolume
+        #   self.customer.happiness = CustomerHappiness.UNHAPPY
+        #   self.status = CustomerStatus.WALKING TODO: Customer leaves
+        # elif self.order_value == OrderSitters.TEMPERATURE_UP and self.room_temperature < BarRoom.getTemperature
+        #   self.music_volume = BarRoom.getMusicVolume
+        #   self.customer.happiness = CustomerHappiness.HAPPY
+        # elif self.order_value == OrderSitters.TEMPERATURE_UP and self.room_temperature >= BarRoom.getTemperature
+        #   self.music_volume = BarRoom.getMusicVolume
+        #   self.customer.happiness = CustomerHappiness.UNHAPPY
+        #   self.status = CustomerStatus.WALKING TODO: Customer leaves
+        # elif self.order_value == OrderSitters.TEMPERATURE_DOWN and self.room_temperature > BarRoom.getTemperature
+        #   self.music_volume = BarRoom.getMusicVolume
+        #   self.customer.happiness = CustomerHappiness.HAPPY
+        # elif self.order_value == OrderSitters.TEMPERATURE_DOWN and self.room_temperature <= BarRoom.getTemperature
+        #   self.music_volume = BarRoom.getMusicVolume
+        #   self.customer.happiness = CustomerHappiness.UNHAPPY
+        #   self.status = CustomerStatus.WALKING TODO: Customer leaves
 
     def update(self, context: Context):
         pass

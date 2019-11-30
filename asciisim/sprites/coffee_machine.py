@@ -4,7 +4,6 @@ import time
 from .bar_keeper import BarKeeper
 
 from .sprite_enums import MachineStates
-from .sprite_enums import CoffeeStates
 from .sprite_enums import CoffeeTypes
 from .static_sprite import StaticSprite
 
@@ -40,7 +39,7 @@ class CoffeeMachine(StaticSprite):
         )
         self._state = MachineStates.NOT_USED
         self.broken_status = list()
-        self.broken_status.append(CoffeeStates.ALL_GOOD)
+        self.broken_status.append(MachineStates.ALL_GOOD)
         self.status_displayed = False
 
         self.pot = False
