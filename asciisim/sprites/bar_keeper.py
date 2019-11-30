@@ -12,6 +12,7 @@ class BarKeeper(AbstractSprite):
         super().__init__()
         self.tile_rect = Rect(x, y, 1, 1) 
         self.current_order = None
+        self.item = None
 
         self.register_surface(
             "image",
