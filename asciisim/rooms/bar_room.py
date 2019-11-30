@@ -36,15 +36,12 @@ class BarRoom(Room):
         self.sprites.append(
             barkeeper
         )
-        self.bubbles.append(
-            SpeechBubble(barkeeper)
-        )
 
-        customer = CustomerSprite(8, 4)
+        customer = CustomerSprite(5, 4)
         self.sprites.append(
             customer
         )
-        customer.generate_order()
+        customer.generate_order_walking()
 
         self.sprites.append(
             CoffeeMachine()
