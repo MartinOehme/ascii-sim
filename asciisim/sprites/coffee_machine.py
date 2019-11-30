@@ -76,35 +76,44 @@ class CoffeeMachineCloseup(Closeup):
         return return_list
 
     def default_routine(self, context: Context, check_list: list):
-        for event in context.events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                context.closeup = None
-                self.coffee_machine.state = MachineStates.NOT_USED
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                if self.menu.control_index == 0:
-                    try:
-                        check_list.remove(MachineStates.REFILL_COFFEE)
-                        self.refill_coffee()
-                    except:
-                        pass
-                elif self.menu.control_index == 3:
-                    try:
-                        check_list.remove(MachineStates.CLEAR_COFFEE)
-                        self.clear_dregs()
-                    except:
-                        pass
-                elif self.menu.control_index == 4:
-                    try:
-                        check_list.remove(MachineStates.REFILL_MILK)
-                        self.refill_milk()
-                    except:
-                        pass
-        if len(check_list) == 0:
-            check_list.append(MachineStates.ALL_GOOD)
-        return check_list
+        for sprite in context.current_room.sprites:
+            if type(sprite) == BarKeeper:
+                for event in context.events:
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                        context.closeup = None
+                        self.coffee_machine.state = MachineStates.NOT_USED
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                        if self.menu.control_index == 0:
+                            if self.refill_coffee(sprite):
+                                try:
+                                    check_list.remove(MachineStates.REFILL_COFFEE)
+                                except:
+                                    pass
 
-    def refill_coffee(self):
-        self.coffee_machine.coffee = 50
+                        elif self.menu.control_index == 3:
+                            self.clear_dregs()
+                            try:
+                                check_list.remove(MachineStates.CLEAR_COFFEE)
+                            except:
+                                pass
+
+                        elif self.menu.control_index == 4:
+                            if self.refill_milk(sprite):
+                                try:
+                                    check_list.remove(MachineStates.REFILL_MILK)
+                                except:
+                                    pass
+
+                if len(check_list) == 0:
+                    check_list.append(MachineStates.ALL_GOOD)
+                return check_list
+
+    def refill_coffee(self, barkeeper):
+        if barkeeper.item is MachineStates.REFILL_COFFEE:
+            self.coffee_machine.coffee = 50
+            barkeeper.item = None
+            return True
+        return False
 
     def make_coffee(self, coffee_type: CoffeeTypes = CoffeeTypes.NORMAL_COFFEE):
         self.coffee_machine.coffee -= 1
@@ -121,8 +130,12 @@ class CoffeeMachineCloseup(Closeup):
     def clear_dregs(self):
         self.coffee_machine.coffee_grounds = 0
 
-    def refill_milk(self):
-        self.coffee_machine.milk = 10
+    def refill_milk(self, barkeeper):
+        if barkeeper.item is MachineStates.REFILL_MILK:
+            self.coffee_machine.milk = 10
+            barkeeper.item = None
+            return True
+        return False
 
 
 class CoffeeMachine(AbstractSprite):
