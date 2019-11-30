@@ -16,6 +16,7 @@ class GameObject(ABC):
     TILE_SIZE = 135
     
     def __init__(self):
+        self.obstacle = False
         self.renderable = True
         self.tile_rect: Rect = None
         self.z_index = 0
