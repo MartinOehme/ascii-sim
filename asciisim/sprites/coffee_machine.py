@@ -1,6 +1,9 @@
 import pygame
+<<<<<<< HEAD
 import keyboard
 import time
+=======
+>>>>>>> 3f45a6021cf5ecc2fa59fba3e9104e08d18425f8
 
 from .sprite_enums import States, CoffeeStates, CoffeeTypes
 from .static_sprite import StaticSprite
@@ -32,12 +35,14 @@ class CoffeeMachine(StaticSprite):
 
         self.coffee_time = time.time()
 
-        self.closeup = Closeup()
-        self.closeup.background = pygame.image.load(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
+        self.closeup = Closeup(
+            IMG_DIR + "coffee_machine/coffee_machine_closeup.png"
+        )
+
         self.closeup.sprites.append(
             StaticSprite(
                 SpritePosition(5, 5),
-                pygame.image.load(IMG_DIR + "coffee_machine/coffee.png")
+                IMG_DIR + "coffee_machine/coffee.png"
             )
         )
 
@@ -49,6 +54,9 @@ class CoffeeMachine(StaticSprite):
         # TODO: Get state of the coffee machine (is it in use or broken)
         if keyboard.is_pressed('q') and (self.state is not States.BLOCKED) and (self.state is not States.READY):
             self.state = States.IN_USE
+        for event in context.events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                self.state = States.IN_USE
 
         # get broken status
         if self.coffee_grounds >= 15:

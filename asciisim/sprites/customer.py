@@ -38,12 +38,16 @@ class CustomerSprite(AbstractSprite):
                 # TODO: make broom return order if broom has been taken
         elif self.status == CustomerStatus.SITTING:
             random_value = random.randint(0, 99)
-            # ------------IMPLEMENTIERUNGSIDEE-----------------
             if 0 <= random_value < 20:
                 self.order_value = OrderSitters.CHANGE_MUSIC
-                BarRoom.set_music_vol(3)
-            elif 20 <= random_value < 40 and BarRoom.get_music_vol():
+            elif 20 <= random_value < 40:
+                self.order_value = OrderSitters.MUSIC_VOLUME_UP
+            elif 40 <= random_value < 60:
                 self.order_value = OrderSitters.MUSIC_VOLUME_DOWN
+            elif 60 <= random_value < 80:
+                self.order_value = OrderSitters.TEMPERATURE_UP
+            elif 80 <= random_value <= 99:
+                self.order_value = OrderSitters.TEMPERATURE_DOWN
 
     def spawn(self, context: Context):
         # TODO: Spawn in der Tür; Generation von Wünschen
