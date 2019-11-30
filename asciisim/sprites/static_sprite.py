@@ -4,7 +4,7 @@ from pygame import Surface
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..base.sprite_position import SpritePosition
-from .sprite_enums import States
+from .sprite_enums import MachineStates
 
 
 class StaticSprite(AbstractSprite):
@@ -15,7 +15,7 @@ class StaticSprite(AbstractSprite):
             "image",
             lambda: pygame.image.load(image_path)
         )
-        self.state: States = States.NOT_USED
+        self.state: MachineStates = MachineStates.NOT_USED
 
     @property
     def image(self) -> Surface:

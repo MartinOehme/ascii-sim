@@ -1,17 +1,18 @@
 from enum import Enum
 
 
-class States(Enum):
-    NOT_USED = 0
-    IN_USE = 1
-    BROKEN = 2
-    BLOCKED = 3
-    READY = 4
-
-
-class CoffeeStates(Enum):
-    ALL_GOOD = 'all_good'
+class MachineStates(Enum):
+    # Closeup not open
+    NOT_USED = 'not_used'
+    # Closeup open
+    IN_USE = 'in_use'
+    # Cannot open closeup
+    BLOCKED = 'blocked'
+    # Coffee is ready
+    COFFEE_READY = 'coffee_ready'
+    # Empty the coffee dregs
     CLEAR_COFFEE = 'clear_coffee'
+    # Bring water out
     CLEAR_WATER = 'clear_water'
     REFILL_MILK = 'refill_milk'
     REFILL_COFFEE = 'refill_coffee'

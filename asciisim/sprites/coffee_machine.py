@@ -3,7 +3,7 @@ import time
 
 from .bar_keeper import BarKeeper
 
-from .sprite_enums import States
+from .sprite_enums import MachineStates
 from .sprite_enums import CoffeeStates
 from .sprite_enums import CoffeeTypes
 from .static_sprite import StaticSprite
@@ -11,7 +11,9 @@ from .static_sprite import StaticSprite
 from ..base.sprite_position import SpritePosition
 from ..base.context import Context
 from ..base.closeup import Closeup
+from ..base.speech_bubble import SpeechBubble
 from ..res import IMG_DIR
+from ..speech_bubble.machine_states import MachineStatesContent
 
 class CoffeeMachineCloseup(Closeup):
     def __init__(self, coffee_machine: 'CoffeeMachine'):
@@ -28,7 +30,7 @@ class CoffeeMachineCloseup(Closeup):
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 context.closeup = None
-                self.coffee_machine.state = States.NOT_USED
+                self.coffee_machine.state = MachineStates.NOT_USED
         
 class CoffeeMachine(StaticSprite):
     def __init__(self):
@@ -36,7 +38,7 @@ class CoffeeMachine(StaticSprite):
             SpritePosition(9, 3),
             IMG_DIR + "coffee_machine/coffee_machine.png"
         )
-        self.state = States.NOT_USED
+        self._state = MachineStates.NOT_USED
         self.broken_status = list()
         self.broken_status.append(CoffeeStates.ALL_GOOD)
         self.status_displayed = False
@@ -51,28 +53,42 @@ class CoffeeMachine(StaticSprite):
         self.last_coffee: CoffeeTypes = None
         self.coffee_time = time.time()
 
-    def update(self, context: Context):
+        self.bubble = None
 
+    @property
+    def state(self):
+        return self._state
+
+    @state.setter
+    def state(self, value):
+        self._state = value
+
+
+    def update(self, context: Context):
+        if not self.bubble:
+            self.bubble = SpeechBubble(self)
+            self.bubble.content = MachineStatesContent(self.state)
+            context.current_room.bubbles.append(self.bubble)
         if (
                 (time.time() - self.coffee_time >= 20) and
-                (self.state is not States.NOT_USED) and
-                (self.state is not States.IN_USE)
+                (self.state is not MachineStates.NOT_USED) and
+                (self.state is not MachineStates.IN_USE)
         ):
-            self.state = States.READY
+            self.state = MachineStates.READY
 
         for event in context.events:
             if (
                     (event.type == pygame.KEYDOWN and event.key == pygame.K_q)
-                    and (self.state is not States.BLOCKED)
-                    and (self.state is not States.READY)
+                    and (self.state is not MachineStates.BLOCKED)
+                    and (self.state is not MachineStates.READY)
             ):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
                         if sprite.position.is_near(self.position):
-                            self.state = States.IN_USE
+                            self.state = MachineStates.IN_USE
             if (
                     (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
-                    and (self.state is States.READY)
+                    and (self.state is MachineStates.READY)
             ):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
@@ -114,7 +130,7 @@ class CoffeeMachine(StaticSprite):
                 raise Exception("Could not remove state")
             self.broken_status.append(CoffeeStates.REFILL_COFFEE)
 
-        if self.state is States.IN_USE:
+        if self.state is MachineStates.IN_USE:
             # What to do generally:
             # - open interface
             context.closeup = self.closeup
@@ -191,7 +207,7 @@ class CoffeeMachine(StaticSprite):
 
     def use_sprite(self):
         # TODO: Check for Pot
-        self.state = States.IN_USE
+        self.state = MachineStates.IN_USE
 
     @property
     def pot_status(self):
