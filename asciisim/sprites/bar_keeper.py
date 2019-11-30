@@ -11,16 +11,12 @@ class BarKeeper(AbstractSprite):
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
         self.tile_rect = Rect(x, y, 1, 1) 
-        self.current_order = None
         self.item = None
 
         self.register_surface(
             "image",
             lambda: pygame.image.load(IMG_DIR + "bar_keeper.png")
         )
-
-    def get_current_order(self):
-        return self.current_order
 
     @property
     def image(self) -> Surface:

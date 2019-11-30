@@ -5,7 +5,7 @@ from pygame import Rect
 
 from .bar_keeper import BarKeeper
 from .sprite_enums import MachineStates
-from .sprite_enums import CoffeeTypes
+from .sprite_enums import CoffeeTypes, OrderWalkers
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..base.closeup import Closeup
@@ -109,10 +109,11 @@ class CoffeeMachineCloseup(Closeup):
     def make_coffee(self, coffee_type: CoffeeTypes = CoffeeTypes.NORMAL_COFFEE):
         self.coffee_machine.coffee -= 1
         self.coffee_machine.coffee_grounds += 1
+        self.coffee_machine.last_coffee = OrderWalkers.COFFEE
         if coffee_type is CoffeeTypes.COFFEE_MILK:
+            self.coffee_machine.last_coffee = OrderWalkers.COFFEE_MILK
             self.coffee_machine.milk -= 1
 
-        self.coffee_machine.last_coffee = coffee_type
         self.coffee_machine.coffee_time = time.time()
 
         self.coffee_machine.state = MachineStates.BLOCKED
@@ -132,11 +133,10 @@ class CoffeeMachine(AbstractSprite):
         self.state = MachineStates.NOT_USED
         self.obstacle = True
         
-        self.pot = False
         self.coffee_grounds = 0
         self.milk: int = 10
         self.coffee: int = 50
-        self.last_coffee: CoffeeTypes = None
+        self.last_coffee: OrderWalkers = None
         self.coffee_time = time.time()
 
         self.closeup = CoffeeMachineCloseup(self)
@@ -151,7 +151,7 @@ class CoffeeMachine(AbstractSprite):
 
         if self.state is MachineStates.BLOCKED:
             if time.time() - self.coffee_time > 5:
-                self.state = MachineStates.NOT_USED
+                self.state = MachineStates.COFFEE_READY
 
         if self.state is not MachineStates.BLOCKED:
             for event in context.events:
@@ -168,5 +168,8 @@ class CoffeeMachine(AbstractSprite):
                     (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
                     and (self.state is MachineStates.COFFEE_READY)
                 ):
-                    # TODO: Return coffee to barkeeper
-                    pass
+                    for sprite in context.current_room.sprites:
+                        if type(sprite) == BarKeeper:
+                            if sprite.is_near(self):
+                                sprite.item = self.last_coffee
+                                self.state = MachineStates.NOT_USED
