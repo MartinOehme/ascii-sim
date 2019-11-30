@@ -17,10 +17,12 @@ class Context(object):
         self.room_key: str = ""
         self.closeup: Closeup = None
         self.delta_t = 0
+        self.change_room = False
 
     def set_room(self, key) -> None:
         if key in self.rooms:
             self.room_key = key
+            self.change_room = True
 
     @property
     def current_room(self) -> Room:

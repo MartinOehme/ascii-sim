@@ -12,7 +12,8 @@ class Room(GameObject):
         self.obstacles: List[SpritePosition] = []
         self.sprites = []
         self.bubbles = []
-
+        self.sidebar_left = True
+        
         # radiator temperature
         self.temperature = 22
         # music

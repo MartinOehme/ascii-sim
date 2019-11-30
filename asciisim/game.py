@@ -29,12 +29,15 @@ class Game(object):
         else:
             for sprite in self.context.current_room.sprites:
                 sprite.update(self.context)
+        if self.context.change_room:
+            self.context.change_room = False
+            self.render_context.sidebar_left = self.context.current_room.sidebar_left
         self.clock.tick(60)
                 
     def render(self):
         current_room = self.context.current_room
         sprites_to_render = current_room.renderable_sprites_by_z_index
-        
+    
         self.render_context.screen.blit(
                 self.context.current_room.background,
                 (0, 0)
