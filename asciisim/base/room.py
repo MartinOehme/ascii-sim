@@ -11,6 +11,10 @@ class Room(GameObject):
         self.obstacles: List[SpritePosition] = []
         self.sprites = []
         self.bubbles = []
+
+    @property
+    def sprites_by_z_index(self):
+        return sorted(self.sprites, key = lambda sprite: sprite.z_index)
         
     def has_obstacle(self, x: int, y: int) -> bool:
         return bool(
