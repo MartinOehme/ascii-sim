@@ -5,6 +5,8 @@ class States(Enum):
     NOT_USED = 0
     IN_USE = 1
     BROKEN = 2
+    BLOCKED = 3
+    READY = 4
 
 
 class CoffeeStates(Enum):
@@ -13,8 +15,11 @@ class CoffeeStates(Enum):
     CLEAR_WATER = 2
     REFILL_MILK = 3
     REFILL_COFFEE = 4
-    MAKE_COFFEE = 5
-    MAKE_COFFEE_MILK = 6
+
+
+class CoffeeTypes(Enum):
+    MAKE_COFFEE = 0
+    MAKE_COFFEE_MILK = 1
 
 
 class CustomerStatus(Enum):
