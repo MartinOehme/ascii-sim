@@ -148,9 +148,6 @@ class CoffeeMachine(AbstractSprite):
             self.bubble = SpeechBubble(self)
             self.bubble.content = MachineStatesContent(self.state)
             context.current_room.bubbles.append(self.bubble)
-        else:
-            self.bubble.content = MachineStatesContent(self.state)
-            context.current_room.bubbles[context.current_room.bubbles.index(self.bubble)].context = MachineStatesContent(self.state)
 
         if self.state is MachineStates.BLOCKED:
             if time.time() - self.coffee_time > 5:
