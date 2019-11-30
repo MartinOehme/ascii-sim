@@ -17,6 +17,7 @@ class RenderContext(object):
         self.resolution: Tuple[int, int] = resolution
         self.scaling: float = 1
         self.screen: Surface = None
+        self._sidebar_left = True
         self.sidebar_width: int = 0
         self.tile_size: int = 0
         self.top_border: int = 0
@@ -43,6 +44,20 @@ class RenderContext(object):
         self.sidebar_width = 435 * self.resolution[0] / 1920
         self.tile_size = 135 * self.resolution[0] / 1920
         self.top_border = 68 * self.resolution[0] / 1920
+
+        Control.update_render_context(self)
+        GameObject.update_render_context(self)
+
+    @property
+    def sidebar_left(self):
+        return self._sidebar_left
+
+    @sidebar_left.setter
+    def sidebar_left(self, value):
+        if value == self._sidebar_left:
+            return
+
+        self._sidebar_left = value
 
         Control.update_render_context(self)
         GameObject.update_render_context(self)

@@ -9,12 +9,14 @@ from pygame import Surface
 class GameObject(ABC):
     BASE_SURFACES = {}
     SCALED_SURFACES = {}
+    SIDEBAR_LEFT = True
     SIDEBAR_WIDTH = 435
     LEFT_BORDER = 68
     TOP_BORDER = 68
     TILE_SIZE = 135
     
     def __init__(self):
+        self.obstacle = False
         self.renderable = True
         self.tile_rect: Rect = None
         self.z_index = 0
@@ -41,9 +43,12 @@ class GameObject(ABC):
         
     @property
     def rect(self):
+        left = self.TILE_SIZE * self.tile_rect.left + self.LEFT_BORDER
+        if self.SIDEBAR_LEFT:
+            left += self.SIDEBAR_WIDTH
+        
         return Rect(
-            self.TILE_SIZE * self.tile_rect.left + self.SIDEBAR_WIDTH +
-            self.LEFT_BORDER,
+            left,
             self.TILE_SIZE * self.tile_rect.top + self.TOP_BORDER,
             self.TILE_SIZE * self.tile_rect.width,
             self.TILE_SIZE * self.tile_rect.height,
@@ -53,6 +58,7 @@ class GameObject(ABC):
     def update_render_context(cls, render_context) -> None:
         cls.SIDEBAR_WIDTH = render_context.sidebar_width
         cls.LEFT_BORDER = render_context.left_border
+        cls.SIDEBAR_LEFT = render_context.sidebar_left
         cls.TOP_BORDER = render_context.top_border
         cls.TILE_SIZE = render_context.tile_size
 

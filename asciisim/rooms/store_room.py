@@ -16,7 +16,8 @@ class StoreRoom(Room):
         self.sprites.append(
             BarKeeper(0, 6)
         )
-
+        self.sidebar_left = False
+        
     @property
     def background(self) -> Surface:
         return self.get_surface("background")

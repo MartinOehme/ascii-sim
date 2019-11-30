@@ -45,7 +45,8 @@ class CoffeeMachine(AbstractSprite):
         self.broken_status = list()
         self.broken_status.append(MachineStates.ALL_GOOD)
         self.status_displayed = False
-
+        self.obstacle = True
+        
         self.pot = False
         self.coffee_grounds = 0
         self.sewage = 0

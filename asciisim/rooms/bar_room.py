@@ -28,7 +28,6 @@ class BarRoom(Room):
             Rect(7, 1, 3, 1),
             Rect(7, 2, 1, 4),
             Rect(6, 2, 1, 4),
-            Rect(9, 3, 1, 2),
             Rect(0, 4, 1, 3),
             Rect(1, 4, 2, 2),
         ]

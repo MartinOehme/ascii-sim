@@ -21,6 +21,7 @@ class CustomerSprite(AbstractSprite):
         self.tile_rect = Rect(x, y, 1, 1)
         # status determines if the customer is sitting or walking
         self.status = CustomerStatus.WALKING
+        self.obstacle = True
         self.happiness = None
         self.order_value = None
         self.timer = None
