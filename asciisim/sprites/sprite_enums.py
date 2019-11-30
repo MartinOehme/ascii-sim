@@ -1,5 +1,6 @@
 from enum import Enum
 
+from ..res import SOUND_DIR
 
 class MachineStates(Enum):
     ALL_GOOD = 'all_good'
@@ -53,3 +54,9 @@ class CustomerHappiness(Enum):
     NEUTRAL = 'neutral'
     HAPPY = 'happy'
     UNHAPPY = 'unhappy'
+
+
+class MusicTracks(Enum):
+    MUSIC_OFF = None
+    TRACK1 = SOUND_DIR + "track1.wav"
+    TRACK2 = SOUND_DIR + "track2.wav"
