@@ -5,6 +5,7 @@ from pygame import Surface
 
 from .game_object import GameObject
 
+from ..sprites.sprite_enums import MusicTracks
 
 class Room(GameObject):
     def __init__(self):
@@ -14,7 +15,8 @@ class Room(GameObject):
 
         # radiator temperature
         self.temperature = 22
-        # music volume
+        # music
+        self.track: MusicTracks = None
         self.volume = 50
 
     @property
