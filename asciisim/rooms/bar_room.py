@@ -1,6 +1,7 @@
 import pygame
 from pygame import Surface
 
+from ..base.speech_bubble import SpeechBubble
 from ..base.room import Room
 from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
@@ -8,10 +9,25 @@ from ..sprites.bar_keeper import BarKeeper
 from ..sprites.coffee_machine import CoffeeMachine
 from ..sprites.static_sprite import StaticSprite
 
+
 class BarRoom(Room):
     def __init__(self):
         super().__init__()
         self.background: Surface = pygame.image.load(IMG_DIR + "bar_room.png")
+        self.obstacles += [
+            SpritePosition(9, 1),
+            SpritePosition(8, 1),
+            SpritePosition(7, 1),
+            SpritePosition(7, 2),
+            SpritePosition(7, 3),
+            SpritePosition(7, 4),
+            SpritePosition(7, 5),
+            SpritePosition(6, 1),
+            SpritePosition(6, 2),
+            SpritePosition(6, 3),
+            SpritePosition(6, 4),
+            SpritePosition(6, 5),
+        ]
         self.sprites.append(
             StaticSprite(
                 SpritePosition(0, 0),
@@ -25,11 +41,15 @@ class BarRoom(Room):
             )
         )
 
+        barkeeper = BarKeeper(9, 6)
+
         self.sprites.append(
-            BarKeeper()
+            barkeeper
         )
         
         self.sprites.append(
             CoffeeMachine()
         )
-        
+        self.bubbles.append(
+            SpeechBubble(barkeeper)
+        )

@@ -1,8 +1,6 @@
 import pygame
 import keyboard
 
-from pygame import Surface
-
 from .sprite_enums import States
 from .sprite_enums import CoffeeStates
 from .static_sprite import StaticSprite
@@ -16,7 +14,7 @@ from ..res import IMG_DIR
 class CoffeeMachine(StaticSprite):
     def __init__(self):
         super().__init__(
-            SpritePosition(10, 2),
+            SpritePosition(9, 2),
             pygame.image.load(IMG_DIR + "coffee_machine/coffee_machine.png")
         )
         self.state = States.NOT_USED
