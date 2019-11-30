@@ -11,6 +11,8 @@ from ..sprites.customer import CustomerSprite
 from ..sprites.coffee_machine import CoffeeMachine
 from ..sprites.static_sprite import StaticSprite
 
+from ..sprites.sprite_enums import MusicTracks
+
 from ..sprites.environment import Radiator, MusicBox
 
 class BarRoom(Room):

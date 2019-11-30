@@ -33,7 +33,7 @@ class MusicBox(StaticSprite):
         self.volume = volume
 
         if self.track is not MusicTracks.MUSIC_OFF:
-            pygame.mixer.music.load(self.track)
+            pygame.mixer.music.load(self.track.value)
             pygame.mixer.music.play(loops=-1)
 
     def update(self, context: Context):
