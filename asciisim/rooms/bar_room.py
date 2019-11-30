@@ -11,6 +11,7 @@ from ..sprites.bar_keeper import BarKeeper
 from ..sprites.customer import CustomerSprite
 from ..sprites.coffee_machine import CoffeeMachine
 from ..sprites.static_sprite import StaticSprite
+from ..sprites.sprite_enums import CustomerStatus
 
 from ..sprites.sprite_enums import MusicTracks
 

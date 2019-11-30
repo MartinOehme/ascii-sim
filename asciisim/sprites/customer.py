@@ -15,22 +15,22 @@ import time
 
 
 class CustomerSprite(AbstractSprite):
-    def __init__(self, x: int = 0, y: int = 0):
+    def __init__(self, x: int = 0, y: int = 0, status=CustomerStatus.WALKING):
         super().__init__()
         self.bubble = None
         self.tile_rect = Rect(x, y, 1, 1)
         # status determines if the customer is sitting or walking
-        self.status = CustomerStatus.WALKING
+        self.status = status
         self.obstacle = True
         self.happiness = None
         self.order_value = None
-        self.timer = None
+        self.timer = time.time()
         self.walk_timer = time.time()
         self.track = None
         self.volume = None
         self.temperature = None
-        self.path = [Rect(1, 1, 1, 1), Rect(1, 2, 1, 1), Rect(1, 3, 1, 1), Rect(1, 4, 1, 1), Rect(2, 4, 1, 1),
-                     Rect(3, 4, 1, 1), Rect(4, 4, 1, 1)]
+        self.path = [Rect(1, 1, 1, 1), Rect(1, 2, 1, 1), Rect(1, 3, 1, 1), Rect(2, 3, 1, 1), Rect(3, 3, 1, 1),
+                     Rect(3, 4, 1, 1), Rect(4, 4, 1, 1), Rect(5, 4, 1, 1)]
 
         self.register_surface(
             "image",
@@ -46,9 +46,10 @@ class CustomerSprite(AbstractSprite):
 
     def customer_walking(self):
         for i in self.path:
-            if time.time() - self.walk_timer > 5:
+            if time.time() - self.walk_timer > 20/60:
                 self.tile_rect = i
                 self.walk_timer = time.time()
+                self.path.pop(0)
 
     def generate_order_walking(self):
         # generate order for walkers from random value
@@ -189,5 +190,6 @@ class CustomerSprite(AbstractSprite):
             self.timer = time.time()
 
     def update(self, context: Context):
-        self.display_order(context)
         self.customer_walking()
+        if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
+            self.display_order(context)
