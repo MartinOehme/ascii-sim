@@ -1,16 +1,16 @@
 import pygame
+from pygame import Rect
 from pygame import Surface
 
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
-from ..base.sprite_position import SpritePosition
 from .sprite_enums import MachineStates
 
 
 class StaticSprite(AbstractSprite):
-    def __init__(self, position: SpritePosition, image_path: str):
+    def __init__(self, tile_rect: Rect, image_path: str):
         super().__init__()
-        self.position = position
+        self.tile_rect = tile_rect
         self.register_surface(
             "image",
             lambda: pygame.image.load(image_path)

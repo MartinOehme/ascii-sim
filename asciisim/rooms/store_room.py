@@ -2,7 +2,6 @@ import pygame
 from pygame import Surface
 
 from ..base.room import Room
-from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
 from ..sprites.bar_keeper import BarKeeper
 

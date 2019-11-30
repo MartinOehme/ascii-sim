@@ -1,10 +1,10 @@
 import pygame
+from pygame import Rect
 from pygame import Surface
 
 from ..res import IMG_DIR
 from .game_object import GameObject
 from .sprite import AbstractSprite
-from .sprite_position import SpritePosition
 
 
 class SpeechBubble(GameObject):
@@ -19,24 +19,26 @@ class SpeechBubble(GameObject):
             "down",
             lambda: pygame.image.load(IMG_DIR + "speech_bubbles/down.png")
         )
-
+        
     @property
-    def position(self) -> SpritePosition:
-        if self.sprite.position.y == 0:
-            return SpritePosition(
-                self.sprite.position.x,
-                self.sprite.position.y + 1
+    def tile_rect(self) -> Rect:
+        if self.sprite.tile_rect.top == 0:
+            return Rect(
+                self.sprite.tile_rect.left,
+                self.sprite.tile_rect.top + 1,
+                1, 1
             )
 
-        return SpritePosition(
-            self.sprite.position.x,
-            self.sprite.position.y - 1
+        return Rect(
+            self.sprite.tile_rect.left,
+            self.sprite.tile_rect.top - 1,
+            1, 1
         )
 
     @property
     def image(self) -> Surface:
         surface = self.get_surface("up")
-        if self.sprite.position.y == 0:
+        if self.sprite.tile_rect.top == 0:
             surface = self.get_surface("down")
 
         if self.content:

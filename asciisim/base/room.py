@@ -1,9 +1,9 @@
 from typing import List
 
+from pygame import Rect
 from pygame import Surface
 
 from .game_object import GameObject
-from .sprite_position import SpritePosition
 
 
 class Room(GameObject):
@@ -13,11 +13,19 @@ class Room(GameObject):
         self.bubbles = []
 
     @property
-    def sprites_by_z_index(self):
-        return sorted(self.sprites, key = lambda sprite: sprite.z_index)
-        
-    def has_obstacle(self, x: int, y: int) -> bool:
-        return bool(
-            [pos for pos in self.obstacles
-             if pos.x == x and pos.y == y]
+    def renderable_sprites_by_z_index(self):
+        return filter(
+            lambda sprite: sprite.renderable,
+            sorted(self.sprites, key = lambda sprite: sprite.z_index)
         )
+
+    
+    def has_obstacle(self, other: GameObject, dx: int, dy: int) -> bool:
+        tmp_tile_rect = Rect(
+            other.tile_rect.left + dx,
+            other.tile_rect.top + dy,
+            other.tile_rect.width,
+            other.tile_rect.height,
+        )
+        
+        return -1 != tmp_tile_rect.collidelist(self.obstacles)

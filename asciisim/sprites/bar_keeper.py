@@ -1,16 +1,16 @@
 import pygame
+from pygame import Rect
 from pygame import Surface
 
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
-from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
 
 
 class BarKeeper(AbstractSprite):
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
-        self.position = SpritePosition(x, y)
+        self.tile_rect = Rect(x, y, 1, 1) 
         self.current_order = None
 
         self.register_surface(
@@ -29,42 +29,35 @@ class BarKeeper(AbstractSprite):
         for event in context.events:
             if event.type != pygame.KEYDOWN:
                 continue
-            if event.key == pygame.K_UP and self.position.y > 0:
-                if context.current_room.has_obstacle(
-                        self.position.x, self.position.y - 1
-                ):
+            if event.key == pygame.K_UP and self.tile_rect.top > 0:
+                if context.current_room.has_obstacle(self, 0, -1):
                     return
-                self.position.y -= 1
-            elif event.key == pygame.K_DOWN and self.position.y < 6:
-                if context.current_room.has_obstacle(
-                        self.position.x, self.position.y + 1
-                ):
+                
+                self.tile_rect.top -= 1
+            elif event.key == pygame.K_DOWN and self.tile_rect.top < 6:
+                if context.current_room.has_obstacle(self, 0, 1):
                     return
-
-                self.position.y += 1
+                
+                self.tile_rect.top += 1
             elif event.key == pygame.K_LEFT:
-                if (self.position.x == 0
-                        and self.position.y == 6
+                if (self.tile_rect.left == 0
+                        and self.tile_rect.top == 6
                         and context.room_key == Context.STORE_ROOM):
                     context.set_room(Context.BAR_ROOM)
-                elif self.position.x > 0:
-                    if context.current_room.has_obstacle(
-                            self.position.x - 1, self.position.y
-                    ):
+                elif self.tile_rect.left > 0:
+                    if context.current_room.has_obstacle(self, -1, 0):
                         return
 
-                    self.position.x -= 1
+                    self.tile_rect.left -= 1
             elif event.key == pygame.K_RIGHT:
-                if (self.position.x == 9
-                        and self.position.y == 6
+                if (self.tile_rect.left == 9
+                        and self.tile_rect.top == 6
                         and context.room_key == Context.BAR_ROOM):
                     context.set_room(Context.STORE_ROOM)
-                elif self.position.x < 9:
-                    if context.current_room.has_obstacle(
-                            self.position.x + 1, self.position.y
-                    ):
+                elif self.tile_rect.left < 9:
+                    if context.current_room.has_obstacle(self, 1, 0):
                         return
-
-                    self.position.x += 1
+                    
+                    self.tile_rect.left += 1
             elif event.key == pygame.K_ESCAPE:
                 exit()

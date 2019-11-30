@@ -1,9 +1,9 @@
 import pygame
+from pygame import Rect
 from pygame import Surface
 
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
-from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
 from .sprite_enums import CustomerStatus, CustomerHappiness, OrderWalkers, OrderSitters
 from .bar_keeper import BarKeeper
@@ -14,7 +14,7 @@ import time
 class CustomerSprite(AbstractSprite):
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
-        self.position = SpritePosition(x, y)
+        self.tile_rect = Rect(x, y, 1, 1)
         # status determines if the customer is sitting or walking
         self.status = CustomerStatus.WALKING
         self.happiness = None
