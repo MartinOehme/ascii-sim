@@ -53,8 +53,8 @@ class Game(object):
                 self.context.closeup.background,
                 self.context.closeup.rect
             )
-
-            for sprite in self.context.closeup.sprites:
+    
+            for sprite in self.context.closeup.renderable_sprites:
                 self.render_context.screen.blit(
                     sprite.image,
                     sprite.rect

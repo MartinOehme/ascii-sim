@@ -2,6 +2,9 @@ import pygame
 from pygame import Rect
 from pygame import Surface
 
+from asciisim.base.speech_bubble import SpeechBubble
+from asciisim.speech_bubble.order_sitters import OrderSittersContent
+from asciisim.speech_bubble.order_walkers import OrderWalkersContent
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..res import IMG_DIR
@@ -14,6 +17,7 @@ import time
 class CustomerSprite(AbstractSprite):
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
+        self.bubble = None
         self.tile_rect = Rect(x, y, 1, 1)
         # status determines if the customer is sitting or walking
         self.status = CustomerStatus.WALKING
@@ -200,4 +204,11 @@ class CustomerSprite(AbstractSprite):
             self.timer = time.time()
 
     def update(self, context: Context):
-        pass
+        if not self.bubble:
+            self.bubble = SpeechBubble(self)
+            if self.status == CustomerStatus.WALKING:
+                self.bubble.content = OrderWalkersContent(self.order_value)
+            elif self.status == CustomerStatus.SITTING:
+                self.bubble.content = OrderSittersContent(self.order_value)
+
+            context.current_room.bubbles.append(self.bubble)
