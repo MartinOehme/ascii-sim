@@ -14,7 +14,7 @@ class CoffeeMachine(StaticSprite):
     def __init__(self):
         super().__init__(
             SpritePosition(9, 3),
-            pygame.image.load(IMG_DIR + "coffee_machine/coffee_machine.png")
+            IMG_DIR + "coffee_machine/coffee_machine.png"
         )
         self.state = States.NOT_USED
         self.broken_status = list()
@@ -48,10 +48,8 @@ class CoffeeMachine(StaticSprite):
             self.state = States.READY
 
         # TODO: Get state of the coffee machine (is it in use or broken)
-        if keyboard.is_pressed('q') and (self.state is not States.BLOCKED) and (self.state is not States.READY):
-            self.state = States.IN_USE
         for event in context.events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_q) and (self.state is not States.BLOCKED) and (self.state is not States.READY):
                 self.state = States.IN_USE
 
         # get broken status
@@ -91,14 +89,15 @@ class CoffeeMachine(StaticSprite):
         if self.state is States.IN_USE:
             context.closeup = self.closeup
             # TODO: Get status of "Buttons" (e.g. make coffee, ...)
-            if keyboard.is_pressed('n'):
-                self.state = States.BLOCKED
-                context.closeup = None
-                self.make_coffee(CoffeeTypes.MAKE_COFFEE)
-            if keyboard.is_pressed('m'):
-                self.state = States.BLOCKED
-                context.closeup = None
-                self.make_coffee(CoffeeTypes.MAKE_COFFEE_MILK)
+            for event in context.events:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+                    self.state = States.BLOCKED
+                    context.closeup = None
+                    self.make_coffee(CoffeeTypes.MAKE_COFFEE)
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_m:
+                    self.state = States.BLOCKED
+                    context.closeup = None
+                    self.make_coffee(CoffeeTypes.MAKE_COFFEE_MILK)
 
         for machine_state in self.broken_status:
             if (machine_state is CoffeeStates.CLEAR_COFFEE) and (not self.status_displayed):
