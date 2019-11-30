@@ -1,16 +1,23 @@
 import pygame
-
-from asciisim.res import IMG_DIR
-from .sprite import AbstractSprite
-from .sprite_position import SpritePosition
 from pygame import Surface
 
+from ..res import IMG_DIR
+from .game_object import GameObject
+from .sprite import AbstractSprite
+from .sprite_position import SpritePosition
 
-class SpeechBubble(object):
+
+class SpeechBubble(GameObject):
     def __init__(self, sprite: AbstractSprite):
         self.sprite = sprite
-        self.image_up = pygame.image.load(IMG_DIR + "speech_bubbles/up.png")
-        self.image_down = pygame.image.load(IMG_DIR + "speech_bubbles/down.png")
+        self.register_surface(
+            "up",
+            lambda: pygame.image.load(IMG_DIR + "speech_bubbles/up.png")
+        )
+        self.register_surface(
+            "down",
+            lambda: pygame.image.load(IMG_DIR + "speech_bubbles/down.png")
+        )
 
     @property
     def position(self) -> SpritePosition:
@@ -28,6 +35,6 @@ class SpeechBubble(object):
     @property
     def image(self) -> Surface:
         if self.sprite.position.y == 0:
-            return self.image_down
+            return self.get_surface("down")
 
-        return self.image_up
+        return self.get_surface("up")

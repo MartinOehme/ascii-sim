@@ -11,8 +11,16 @@ class BarKeeper(AbstractSprite):
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
         self.position = SpritePosition(x, y)
-        self.image = pygame.image.load(IMG_DIR + "bar_keeper.png")
 
+        self.register_surface(
+            "image",
+            lambda : pygame.image.load(IMG_DIR + "bar_keeper.png")
+        )
+       
+    @property
+    def image(self) -> Surface:
+        return self.get_surface("image")
+        
     def update(self, context: Context):
         for event in context.events:
             if event.type != pygame.KEYDOWN:

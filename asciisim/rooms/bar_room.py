@@ -13,7 +13,10 @@ from ..sprites.static_sprite import StaticSprite
 class BarRoom(Room):
     def __init__(self):
         super().__init__()
-        self.background: Surface = pygame.image.load(IMG_DIR + "bar_room.png")
+        self.register_surface(
+            "background",
+            lambda: pygame.image.load(IMG_DIR + "bar_room.png")
+        )
         self.obstacles += [
             SpritePosition(9, 1),
             SpritePosition(8, 1),
@@ -31,13 +34,13 @@ class BarRoom(Room):
         self.sprites.append(
             StaticSprite(
                 SpritePosition(0, 0),
-                pygame.image.load(IMG_DIR + "dummy.png")
+                IMG_DIR + "dummy.png"
             )
         )
         self.sprites.append(
             StaticSprite(
                 SpritePosition(2, 4),
-                pygame.image.load(IMG_DIR + "dummy.png")
+                IMG_DIR + "dummy.png"
             )
         )
 
@@ -53,3 +56,7 @@ class BarRoom(Room):
         self.bubbles.append(
             SpeechBubble(barkeeper)
         )
+        
+    @property
+    def background(self) -> Surface:
+        return self.get_surface("background")

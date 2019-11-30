@@ -1,14 +1,16 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys
+
 import pygame
 
 from .game import Game
 
+
 class AsciiSim(object):
     def __init__(self):
         self.game = None
-        self.running = True
         self.screen = None
         
     def initialize(self):
@@ -24,8 +26,7 @@ class AsciiSim(object):
         pygame.joystick.init()
         pygame.init()
 
-        self.screen = pygame.display.set_mode((1920, 1080))
-        self.game = Game(self.screen)
+        self.game = Game()
 
     def main(self):
         self.initialize()

@@ -10,7 +10,14 @@ from ..sprites.bar_keeper import BarKeeper
 class StoreRoom(Room):
     def __init__(self):
         super().__init__()
-        self.background: Surface = pygame.image.load(IMG_DIR + "store_room.png")
+        self.register_surface(
+            "background",
+            lambda: pygame.image.load(IMG_DIR + "store_room.png")
+        )
         self.sprites.append(
             BarKeeper(0, 6)
         )
+
+    @property
+    def background(self) -> Surface:
+        return self.get_surface("background")

@@ -1,5 +1,4 @@
 import pygame
-import keyboard
 
 from .sprite_enums import States
 from .sprite_enums import CoffeeStates
@@ -15,7 +14,7 @@ class CoffeeMachine(StaticSprite):
     def __init__(self):
         super().__init__(
             SpritePosition(9, 2),
-            pygame.image.load(IMG_DIR + "coffee_machine/coffee_machine.png")
+            IMG_DIR + "coffee_machine/coffee_machine.png"
         )
         self.state = States.NOT_USED
         self.broken_status = list()
@@ -28,19 +27,21 @@ class CoffeeMachine(StaticSprite):
         self.milk: int = 10
         self.coffee: int = 50
 
-        self.closeup = Closeup()
-        self.closeup.background = pygame.image.load(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
+        self.closeup = Closeup(
+            IMG_DIR + "coffee_machine/coffee_machine_closeup.png"
+        )
         self.closeup.sprites.append(
             StaticSprite(
                 SpritePosition(5, 5),
-                pygame.image.load(IMG_DIR + "coffee_machine/coffee.png")
+                IMG_DIR + "coffee_machine/coffee.png"
             )
         )
 
     def update(self, context: Context):
         # TODO: Get state of the coffee machine (is it in use or broken)
-        if keyboard.is_pressed('q'):
-            self.state = States.IN_USE
+        for event in context.events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                self.state = States.IN_USE
 
         # get broken status
         if self.coffee_grounds >= 15:
@@ -110,3 +111,4 @@ class CoffeeMachine(StaticSprite):
 
     def set_pot(self, new_status):
         self.pot = new_status
+        
