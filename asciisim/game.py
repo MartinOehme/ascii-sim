@@ -27,7 +27,7 @@ class Game(object):
         if self.context.closeup:
             self.context.closeup.update(self.context)
         else:
-            for sprite in self.context.current_room.sprites:
+            for sprite in self.context.current_room.sprites_by_z_index:
                 sprite.update(self.context)
         self.clock.tick(60)
                 
