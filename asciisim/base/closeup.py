@@ -10,6 +10,7 @@ class Closeup(GameObject):
             "background",
             lambda: pygame.image.load(background_path)
         )
+        self.menu = None
         self.sprites = []
 
     @property
@@ -20,7 +21,15 @@ class Closeup(GameObject):
             1920 * scale,
             1080 * scale
         )
-        
+
+    @property
+    def renderable_sprites(self):
+        return filter(
+            lambda sprite: sprite.renderable,
+            self.sprites
+        )
+
+    
     @property
     def background(self) -> Surface:
         return self.get_surface("background")
