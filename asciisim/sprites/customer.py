@@ -153,6 +153,7 @@ class CustomerSprite(AbstractSprite):
     # For sitting customers, TODO: check order after certain time
     def check_order(self):
         self.timer = time.time() - self.timer
+        # TODO
         # if self.order_value == OrderSitters.CHANGE_MUSIC and self.music != BarRoom.getMusic
         #   self.music = BarRoom.getMusic
         #   self.customer.happiness = CustomerHappiness.HAPPY
