@@ -7,7 +7,6 @@ import pygame
 from pygame import Surface
 
 from .base.game_object import GameObject
-from .base.sprite_position import SpritePosition
 from .menu.control import Control
 
 class RenderContext(object):
@@ -47,4 +46,3 @@ class RenderContext(object):
 
         Control.update_render_context(self)
         GameObject.update_render_context(self)
-        SpritePosition.update_render_context(self)

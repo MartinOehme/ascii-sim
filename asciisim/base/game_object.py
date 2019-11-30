@@ -9,6 +9,9 @@ from pygame import Surface
 class GameObject(ABC):
     BASE_SURFACES = {}
     SCALED_SURFACES = {}
+    SIDEBAR_WIDTH = 435
+    LEFT_BORDER = 68
+    TOP_BORDER = 68
     TILE_SIZE = 135
     
     def __init__(self):
@@ -17,15 +20,13 @@ class GameObject(ABC):
         self.z_index = 0
 
     def is_near(self, other: 'GameObject') -> bool:
-        return (
-            (
-                self.tile_rect.left - other.tile_rect.left < 2
-                and not self.tile_rect.top - other.tile_rect.top
-            ) or (
-                self.tile_rect.top - other.tile_rect.op < 2
-                and not self.tile_rect.left - other.tile_rect.left
-            )
+        tmp_rect = Rect(
+            self.tile_rect.left - 1,
+            self.tile_rect.top - 1,
+            self.tile_rect.width + 2,
+            self.tile_rect.height + 2
         )
+        return tmp_rect.colliderect(other.tile_rect)
 
         
     def register_surface(self, name: str, callback: Callable[[], Surface]) -> None:
@@ -41,15 +42,20 @@ class GameObject(ABC):
     @property
     def rect(self):
         return Rect(
-            self.TILE_SIZE * self.tile_rect.left,
-            self.TILE_SIZE * self.tile_rect.top,
+            self.TILE_SIZE * self.tile_rect.left + self.SIDEBAR_WIDTH +
+            self.LEFT_BORDER,
+            self.TILE_SIZE * self.tile_rect.top + self.TOP_BORDER,
             self.TILE_SIZE * self.tile_rect.width,
             self.TILE_SIZE * self.tile_rect.height,
         )
         
     @classmethod
     def update_render_context(cls, render_context) -> None:
+        cls.SIDEBAR_WIDTH = render_context.sidebar_width
+        cls.LEFT_BORDER = render_context.left_border
+        cls.TOP_BORDER = render_context.top_border
         cls.TILE_SIZE = render_context.tile_size
+
         for key, surface in cls.BASE_SURFACES.items():
             size = surface.get_size()
             new_size = (

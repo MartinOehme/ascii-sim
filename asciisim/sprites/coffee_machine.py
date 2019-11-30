@@ -1,13 +1,12 @@
-import pygame
 import time
 
-from .bar_keeper import BarKeeper
+import pygame
+from pygame import Rect
 
+from .bar_keeper import BarKeeper
 from .sprite_enums import MachineStates
 from .sprite_enums import CoffeeTypes
-from .static_sprite import StaticSprite
-
-from ..base.sprite_position import SpritePosition
+from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..base.closeup import Closeup
 from ..base.speech_bubble import SpeechBubble
@@ -18,19 +17,18 @@ class CoffeeMachineCloseup(Closeup):
     def __init__(self, coffee_machine: 'CoffeeMachine'):
         super().__init__(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
         self.coffee_machine = coffee_machine
-
+        
     def update(self, context: Context) -> None:
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 context.closeup = None
                 self.coffee_machine.state = MachineStates.NOT_USED
         
-class CoffeeMachine(StaticSprite):
+class CoffeeMachine(AbstractSprite):
     def __init__(self):
-        super().__init__(
-            SpritePosition(9, 3),
-            IMG_DIR + "coffee_machine/coffee_machine.png"
-        )
+        super().__init__()
+        self.tile_rect = Rect(9, 3, 1, 2)
+        self.renderable = False
         self._state = MachineStates.NOT_USED
         self.broken_status = list()
         self.broken_status.append(MachineStates.ALL_GOOD)
@@ -77,7 +75,7 @@ class CoffeeMachine(StaticSprite):
             ):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
-                        if sprite.position.is_near(self.position):
+                        if sprite.is_near(self):
                             self.state = MachineStates.IN_USE
             if (
                     (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
@@ -85,7 +83,7 @@ class CoffeeMachine(StaticSprite):
             ):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
-                        if sprite.position.is_near(self.position):
+                        if sprite.is_near(self):
                             # TODO: return coffee to barkeeper
                             pass
 
@@ -190,7 +188,7 @@ class CoffeeMachine(StaticSprite):
             ):
                 context.rooms["bar"].sprites.append(
                     StaticSprite(
-                        SpritePosition(9, 1),
+                        Rect(9, 1, 1, 1),
                         pygame.image.load(IMG_DIR + "coffee_machine/no_coffee.png")
                     )
                 )
