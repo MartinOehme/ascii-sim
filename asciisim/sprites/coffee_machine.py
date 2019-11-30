@@ -47,13 +47,15 @@ class CoffeeMachine(StaticSprite):
         if (time.time() - self.coffee_time >= 20) and (self.state is not States.NOT_USED) and (self.state is not States.IN_USE):
             self.state = States.READY
 
-        # TODO: Get state of the coffee machine (is it in use or broken)
         for event in context.events:
             if (event.type == pygame.KEYDOWN and event.key == pygame.K_q) and (self.state is not States.BLOCKED) and (self.state is not States.READY):
                 self.state = States.IN_USE
+            if (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN) and (self.state is States.READY):
+                # TODO: Return pot on enter
+                pass
 
         # get broken status
-        if self.coffee_grounds >= 15:
+        if self.coffee_grounds >= 15 and (not self.status_displayed):
             try:
                 self.broken_status.remove(CoffeeStates.ALL_GOOD)
             except ValueError:
@@ -61,7 +63,7 @@ class CoffeeMachine(StaticSprite):
             except:
                 raise Exception("Could not remove state")
             self.broken_status.append(CoffeeStates.CLEAR_COFFEE)
-        elif self.sewage >= 15:
+        elif self.sewage >= 15 and (not self.status_displayed):
             try:
                 self.broken_status.remove(CoffeeStates.ALL_GOOD)
             except ValueError:
@@ -69,7 +71,7 @@ class CoffeeMachine(StaticSprite):
             except:
                 raise Exception("Could not remove state")
             self.broken_status.append(CoffeeStates.CLEAR_WATER)
-        elif self.milk <= 0:
+        elif self.milk <= 0 and (not self.status_displayed):
             try:
                 self.broken_status.remove(CoffeeStates.ALL_GOOD)
             except ValueError:
@@ -77,7 +79,7 @@ class CoffeeMachine(StaticSprite):
             except:
                 raise Exception("Could not remove state")
             self.broken_status.append(CoffeeStates.REFILL_MILK)
-        elif self.coffee <= 0:
+        elif self.coffee <= 0 and (not self.status_displayed):
             try:
                 self.broken_status.remove(CoffeeStates.ALL_GOOD)
             except ValueError:
@@ -87,8 +89,65 @@ class CoffeeMachine(StaticSprite):
             self.broken_status.append(CoffeeStates.REFILL_COFFEE)
 
         if self.state is States.IN_USE:
+            # What to do generally:
+            # - open interface
             context.closeup = self.closeup
+            # check if something is missing/broken
+            if self.broken_status[0] is not CoffeeStates.ALL_GOOD:
+                # What to do when broken:
+                # - check what is broken
+                # - display what is broken
+                # - start repair routine
+                # - unlock machine
+                for machine_state in self.broken_status:
+                    if machine_state is CoffeeStates.CLEAR_COFFEE:
+                        for event in context.events:
+                            # TODO: hardcoded button: change to mouse input
+                            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                                self.coffee_grounds = 0
+                                self.broken_status.remove(CoffeeStates.CLEAR_COFFEE)
+                    elif machine_state is CoffeeStates.CLEAR_WATER:
+                        for event in context.events:
+                            # TODO: hardcoded button: change to mouse input
+                            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                                self.sewage = 0
+                                self.broken_status.remove(CoffeeStates.CLEAR_WATER)
+                    elif machine_state is CoffeeStates.REFILL_MILK:
+                        for event in context.events:
+                            # TODO: hardcoded button: change to mouse input
+                            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                                self.milk = 10
+                                self.broken_status.remove(CoffeeStates.REFILL_MILK)
+                    elif machine_state is CoffeeStates.REFILL_COFFEE:
+                        for event in context.events:
+                            # TODO: hardcoded button: change to mouse input
+                            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                                self.coffee = 50
+                                self.broken_status.remove(CoffeeStates.REFILL_COFFEE)
+
+                pass
+            # What to do when not broken:
+            # - check button status (e.g. make coffee, ...)
+            # - block interface
+            # - close interface
+            # - display status
+            # - make coffee
             # TODO: Get status of "Buttons" (e.g. make coffee, ...)
+            # DEBUG ONLY: hardcoded buttons (later mouse click?)
+            for event in context.events:
+                # make normal coffee
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+
+
+
+
+
+
+
+
+
+
+
             for event in context.events:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
                     self.state = States.BLOCKED
@@ -98,6 +157,7 @@ class CoffeeMachine(StaticSprite):
                     self.state = States.BLOCKED
                     context.closeup = None
                     self.make_coffee(CoffeeTypes.MAKE_COFFEE_MILK)
+
 
         for machine_state in self.broken_status:
             if (machine_state is CoffeeStates.CLEAR_COFFEE) and (not self.status_displayed):
@@ -129,6 +189,11 @@ class CoffeeMachine(StaticSprite):
         self.pot = new_status
 
     def make_coffee(self, coffee_type: CoffeeTypes):
+
+        if self.status_displayed:
+            # TODO: If there is any broken status: coffee can not be made
+            return
+
         self.coffee -= 1
         self.coffee_grounds += 1
         self.sewage += 0.2
