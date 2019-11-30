@@ -10,6 +10,8 @@ from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..base.closeup import Closeup
 from ..base.speech_bubble import SpeechBubble
+from ..menu.control import Control
+from ..menu.menu import Menu
 from ..res import IMG_DIR
 from ..speech_bubble.machine_states import MachineStatesContent
 
@@ -17,8 +19,18 @@ class CoffeeMachineCloseup(Closeup):
     def __init__(self, coffee_machine: 'CoffeeMachine'):
         super().__init__(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
         self.coffee_machine = coffee_machine
+        self.menu = Menu()
+        self.menu.add_control(Control(480, 30, 550, 210))
+        self.menu.add_control(Control(460, 650, 300, 100))
+        self.menu.add_control(Control(850, 630, 220, 100))
+        self.menu.add_control(Control(470, 770, 520, 130))
+        self.menu.add_control(Control(50, 630, 300, 350))
+        self.menu.add_control(Control(1470, 600, 200, 200))
+        
+        self.sprites += self.menu.control_sprites
         
     def update(self, context: Context) -> None:
+        self.menu.update(context)
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 context.closeup = None
