@@ -1,12 +1,12 @@
 from enum import Enum
 
 
-class States(Enum):
-    NOT_USED = 0
-    IN_USE = 1
-    BROKEN = 2
-    BLOCKED = 3
-    READY = 4
+class MachineStates(Enum):
+    NOT_USED = 'not_used'
+    IN_USE = 'in_use'
+    BROKEN = 'broken'
+    BLOCKED = 'blocked'
+    READY = 'ready'
 
 
 class CoffeeStates(Enum):
