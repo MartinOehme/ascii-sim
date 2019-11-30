@@ -45,9 +45,7 @@ class MusicBox(StaticSprite):
     def change_volume(self, value):
         if 0 < self.volume < 100:
             self.volume += value
-        if value > 0 and self.volume == 0:
-            self.volume += value
-        if value < 0 and self.volume == 100:
+        elif (value > 0 and self.volume == 0) or (value < 0 and self.volume == 100):
             self.volume += value
 
     def change_music(self, track: MusicTracks):
