@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class MachineStates(Enum):
+    ALL_GOOD = 'all_good'
     # Closeup not open
     NOT_USED = 'not_used'
     # Closeup open

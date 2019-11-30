@@ -18,12 +18,6 @@ class CoffeeMachineCloseup(Closeup):
     def __init__(self, coffee_machine: 'CoffeeMachine'):
         super().__init__(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
         self.coffee_machine = coffee_machine
-        self.sprites.append(
-            StaticSprite(
-                SpritePosition(5, 5),
-                IMG_DIR + "coffee_machine/coffee.png"
-            )
-        )
 
     def update(self, context: Context) -> None:
         for event in context.events:
@@ -73,13 +67,13 @@ class CoffeeMachine(StaticSprite):
                 (self.state is not MachineStates.NOT_USED) and
                 (self.state is not MachineStates.IN_USE)
         ):
-            self.state = MachineStates.READY
+            self.state = MachineStates.COFFEE_READY
 
         for event in context.events:
             if (
                     (event.type == pygame.KEYDOWN and event.key == pygame.K_q)
                     and (self.state is not MachineStates.BLOCKED)
-                    and (self.state is not MachineStates.READY)
+                    and (self.state is not MachineStates.COFFEE_READY)
             ):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
@@ -87,7 +81,7 @@ class CoffeeMachine(StaticSprite):
                             self.state = MachineStates.IN_USE
             if (
                     (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
-                    and (self.state is MachineStates.READY)
+                    and (self.state is MachineStates.COFFEE_READY)
             ):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
