@@ -1,8 +1,8 @@
 import pygame
 from pygame import Surface
-from pygame import Rect
 
-from asciisim.sprites.refrigerator import Refrigerator
+from ..sprites.refrigerator import Refrigerator
+from ..sprites.coffee_storage import CoffeeStorage
 from ..base.room import Room
 from ..res import IMG_DIR
 from ..sprites.bar_keeper import BarKeeper
@@ -22,6 +22,10 @@ class StoreRoom(Room):
 
         self.sprites.append(
             Refrigerator()
+        )
+
+        self.sprites.append(
+            CoffeeStorage()
         )
 
         self.sidebar_left = False
