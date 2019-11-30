@@ -11,6 +11,12 @@ class SpritePosition(object):
         self.x = x
         self.y = y
 
+    def is_near(self, position) -> bool:
+        return (
+                (self.x - position.x < 2 and not self.y - position.y) or
+                (self.y - position.y < 2 and not self.x - position.x)
+        )
+    
     @property
     def rect(self):
         return Rect(

@@ -6,6 +6,7 @@ from ..base.context import Context
 from ..base.sprite_position import SpritePosition
 from .sprite_enums import States
 
+
 class StaticSprite(AbstractSprite):
     def __init__(self, position: SpritePosition, image_path: str):
         super().__init__()

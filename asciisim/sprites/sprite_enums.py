@@ -5,6 +5,8 @@ class States(Enum):
     NOT_USED = 0
     IN_USE = 1
     BROKEN = 2
+    BLOCKED = 3
+    READY = 4
 
 
 class CoffeeStates(Enum):
@@ -13,8 +15,11 @@ class CoffeeStates(Enum):
     CLEAR_WATER = 'clear_water'
     REFILL_MILK = 'refill_milk'
     REFILL_COFFEE = 'refill_coffee'
-    MAKE_COFFEE = 'make_coffee'
-    MAKE_COFFEE_MILK = 'make_coffee_milk'
+
+
+class CoffeeTypes(Enum):
+    MAKE_COFFEE = 0
+    MAKE_COFFEE_MILK = 1
 
 
 class CustomerStatus(Enum):
@@ -40,3 +45,9 @@ class OrderSitters(Enum):
     MUSIC_VOLUME_DOWN = 'music_volume_down'
     TEMPERATURE_UP = 'temperature_up'
     TEMPERATURE_DOWN = 'temperature_down'
+
+
+class CustomerHappiness(Enum):
+    NEUTRAL = 'neutral'
+    HAPPY = 'happy'
+    UNHAPPY = 'unhappy'
