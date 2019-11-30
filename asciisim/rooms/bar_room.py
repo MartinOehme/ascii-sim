@@ -6,6 +6,7 @@ from ..base.room import Room
 from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
 from ..sprites.bar_keeper import BarKeeper
+from ..sprites.customer import CustomerSprite
 from ..sprites.coffee_machine import CoffeeMachine
 from ..sprites.static_sprite import StaticSprite
 
@@ -49,12 +50,21 @@ class BarRoom(Room):
         self.sprites.append(
             barkeeper
         )
-        
-        self.sprites.append(
-            CoffeeMachine()
-        )
         self.bubbles.append(
             SpeechBubble(barkeeper)
+        )
+
+        customer = CustomerSprite(8, 4)
+
+        self.sprites.append(
+            customer
+        )
+        self.bubbles.append(
+            SpeechBubble(customer)
+        )
+
+        self.sprites.append(
+            CoffeeMachine()
         )
         
     @property

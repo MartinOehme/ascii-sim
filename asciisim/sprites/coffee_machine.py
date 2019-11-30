@@ -4,7 +4,6 @@ import time
 from .bar_keeper import BarKeeper
 
 from .sprite_enums import MachineStates
-from .sprite_enums import CoffeeStates
 from .sprite_enums import CoffeeTypes
 from .static_sprite import StaticSprite
 
@@ -40,7 +39,7 @@ class CoffeeMachine(StaticSprite):
         )
         self._state = MachineStates.NOT_USED
         self.broken_status = list()
-        self.broken_status.append(CoffeeStates.ALL_GOOD)
+        self.broken_status.append(MachineStates.NOT_USED)
         self.status_displayed = False
 
         self.pot = False
@@ -99,73 +98,73 @@ class CoffeeMachine(StaticSprite):
         # get broken status
         if self.coffee_grounds >= 15 and (not self.status_displayed):
             try:
-                self.broken_status.remove(CoffeeStates.ALL_GOOD)
+                self.broken_status.remove(MachineStates.ALL_GOOD)
             except ValueError:
                 pass
             except:
                 raise Exception("Could not remove state")
-            self.broken_status.append(CoffeeStates.CLEAR_COFFEE)
+            self.broken_status.append(MachineStates.CLEAR_COFFEE)
         elif self.sewage >= 15 and (not self.status_displayed):
             try:
-                self.broken_status.remove(CoffeeStates.ALL_GOOD)
+                self.broken_status.remove(MachineStates.ALL_GOOD)
             except ValueError:
                 pass
             except:
                 raise Exception("Could not remove state")
-            self.broken_status.append(CoffeeStates.CLEAR_WATER)
+            self.broken_status.append(MachineStates.CLEAR_WATER)
         elif self.milk <= 0 and (not self.status_displayed):
             try:
-                self.broken_status.remove(CoffeeStates.ALL_GOOD)
+                self.broken_status.remove(MachineStates.ALL_GOOD)
             except ValueError:
                 pass
             except:
                 raise Exception("Could not remove state")
-            self.broken_status.append(CoffeeStates.REFILL_MILK)
+            self.broken_status.append(MachineStates.REFILL_MILK)
         elif self.coffee <= 0 and (not self.status_displayed):
             try:
-                self.broken_status.remove(CoffeeStates.ALL_GOOD)
+                self.broken_status.remove(MachineStates.ALL_GOOD)
             except ValueError:
                 pass
             except:
                 raise Exception("Could not remove state")
-            self.broken_status.append(CoffeeStates.REFILL_COFFEE)
+            self.broken_status.append(MachineStates.REFILL_COFFEE)
 
         if self.state is MachineStates.IN_USE:
             # What to do generally:
             # - open interface
             context.closeup = self.closeup
             # check if something is missing/broken
-            if self.broken_status[0] is not CoffeeStates.ALL_GOOD:
+            if self.broken_status[0] is not MachineStates.ALL_GOOD:
                 # What to do when broken:
                 # - check what is broken
                 # - display what is broken
                 # - start repair routine
                 # - unlock machine
                 for machine_state in self.broken_status:
-                    if machine_state is CoffeeStates.CLEAR_COFFEE:
+                    if machine_state is MachineStates.CLEAR_COFFEE:
                         for event in context.events:
                             # TODO: hardcoded button: change to mouse input
                             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                                 self.coffee_grounds = 0
-                                self.broken_status.remove(CoffeeStates.CLEAR_COFFEE)
-                    elif machine_state is CoffeeStates.CLEAR_WATER:
+                                self.broken_status.remove(MachineStates.CLEAR_COFFEE)
+                    elif machine_state is MachineStates.CLEAR_WATER:
                         for event in context.events:
                             # TODO: hardcoded button: change to mouse input
                             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                                 self.sewage = 0
-                                self.broken_status.remove(CoffeeStates.CLEAR_WATER)
-                    elif machine_state is CoffeeStates.REFILL_MILK:
+                                self.broken_status.remove(MachineStates.CLEAR_WATER)
+                    elif machine_state is MachineStates.REFILL_MILK:
                         for event in context.events:
                             # TODO: hardcoded button: change to mouse input
                             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                                 self.milk = 10
-                                self.broken_status.remove(CoffeeStates.REFILL_MILK)
-                    elif machine_state is CoffeeStates.REFILL_COFFEE:
+                                self.broken_status.remove(MachineStates.REFILL_MILK)
+                    elif machine_state is MachineStates.REFILL_COFFEE:
                         for event in context.events:
                             # TODO: hardcoded button: change to mouse input
                             if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
                                 self.coffee = 50
-                                self.broken_status.remove(CoffeeStates.REFILL_COFFEE)
+                                self.broken_status.remove(MachineStates.REFILL_COFFEE)
 
             # What to do when not broken:
             # - check button status (e.g. make coffee, ...)
@@ -177,22 +176,22 @@ class CoffeeMachine(StaticSprite):
 
         for machine_state in self.broken_status:
             if (
-                    (machine_state is CoffeeStates.CLEAR_COFFEE)
+                    (machine_state is MachineStates.CLEAR_COFFEE)
                     and (not self.status_displayed)
             ):
                 self.status_displayed = True
             elif (
-                    (machine_state is CoffeeStates.CLEAR_WATER)
+                    (machine_state is MachineStates.CLEAR_WATER)
                     and (not self.status_displayed)
             ):
                 self.status_displayed = True
             elif (
-                    (machine_state is CoffeeStates.REFILL_MILK)
+                    (machine_state is MachineStates.REFILL_MILK)
                     and (not self.status_displayed)
             ):
                 self.status_displayed = True
             elif (
-                    (machine_state is CoffeeStates.REFILL_COFFEE)
+                    (machine_state is MachineStates.REFILL_COFFEE)
                     and (not self.status_displayed)
             ):
                 context.rooms["bar"].sprites.append(
@@ -202,7 +201,7 @@ class CoffeeMachine(StaticSprite):
                     )
                 )
                 self.status_displayed = True
-            elif machine_state is CoffeeStates.ALL_GOOD:
+            elif machine_state is MachineStates.NOT_USED:
                 pass
 
     def use_sprite(self):

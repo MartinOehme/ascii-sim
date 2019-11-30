@@ -23,7 +23,7 @@ class CustomerSprite(AbstractSprite):
 
         self.register_surface(
             "image",
-            lambda: pygame.image.load(IMG_DIR + "bar_keeper.png")
+            lambda: pygame.image.load(IMG_DIR + "dummy.png")
         )
 
     @property
