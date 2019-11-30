@@ -1,6 +1,7 @@
 import pygame
 from pygame import Surface
 
+from asciisim.sprites.sprite_enums import OrderSitters
 from ..base.speech_bubble import SpeechBubble
 from ..base.room import Room
 from ..base.sprite_position import SpritePosition
@@ -51,13 +52,10 @@ class BarRoom(Room):
         )
 
         customer = CustomerSprite(8, 4)
-
         self.sprites.append(
             customer
         )
-        self.bubbles.append(
-            SpeechBubble(customer)
-        )
+        customer.generate_order()
 
         self.sprites.append(
             CoffeeMachine()
