@@ -31,7 +31,7 @@ class OrderWalkers(Enum):
     RETURN_BROOM = 8
 
 
-class OrderSiters(Enum):
+class OrderSitters(Enum):
     CHANGE_MUSIC = 0
     MUSIC_VOLUME_UP = 1
     MUSIC_VOLUME_DOWN = 2
