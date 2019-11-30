@@ -7,6 +7,7 @@ from .game_object import GameObject
 
 from ..sprites.sprite_enums import MusicTracks
 
+
 class Room(GameObject):
     def __init__(self):
         self.obstacles: List[SpritePosition] = []
@@ -18,6 +19,7 @@ class Room(GameObject):
         # music
         self.track: MusicTracks = None
         self.volume = 50
+        self.no_of_sitters = 0
 
     @property
     def renderable_sprites_by_z_index(self):

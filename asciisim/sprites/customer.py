@@ -24,9 +24,12 @@ class CustomerSprite(AbstractSprite):
         self.happiness = None
         self.order_value = None
         self.timer = None
+        self.walk_timer = time.time()
         self.track = None
         self.volume = None
         self.temperature = None
+        self.path = [Rect(1, 1, 1, 1), Rect(1, 2, 1, 1), Rect(1, 3, 1, 1), Rect(1, 4, 1, 1), Rect(2, 4, 1, 1),
+                     Rect(3, 4, 1, 1), Rect(4, 4, 1, 1)]
 
         self.register_surface(
             "image",
@@ -40,9 +43,15 @@ class CustomerSprite(AbstractSprite):
     def get_order_value(self):
         return self.order_value
 
+    def customer_walking(self):
+        for i in self.path:
+            if time.time() - self.walk_timer > 5:
+                self.tile_rect = i
+                self.walk_timer = time.time()
+
     def generate_order_walking(self):
         # generate order for walkers from random value
-        if self.status == CustomerStatus.WALKING:
+        if self.status == CustomerStatus.WALKING and self.order_value is None:
             random_value = random.randint(0, 99)
             if 0 <= random_value < 12:
                 self.order_value = OrderWalkers.COFFEE
@@ -85,130 +94,99 @@ class CustomerSprite(AbstractSprite):
 
     # Display the customers order
     def display_order(self, context: Context):
-        if self.order_value == OrderWalkers.COFFEE:
-            # TODO: Display Coffee dialog
-            pass
-        elif self.order_value == OrderWalkers.COFFEE_MILK:
-            # TODO: Display Coffee and milk dialog
-            pass
-        elif self.order_value == OrderWalkers.KOLLE_MATE:
-            # TODO: Display mate dialog
-            pass
-        elif self.order_value == OrderWalkers.PREMIUM_COLA:
-            # TODO: Display cola dialog
-            pass
-        elif self.order_value == OrderWalkers.ZOTRINE:
-            # TODO: Display zotrine dialog
-            pass
-        elif self.order_value == OrderWalkers.RETURN_CUP:
-            # TODO: Display return cup dialog
-            pass
-        elif self.order_value == OrderWalkers.GET_BROOM:
-            # TODO: Display get broom dialog
-            pass
-        elif self.order_value == OrderWalkers.RETURN_BOTTLE:
-            # TODO: Display return bottle dialog
-            pass
-        elif self.order_value == OrderWalkers.RETURN_BROOM:
-            # TODO: Display return broom dialog
-            pass
+        if not self.bubble:
+            self.bubble = SpeechBubble(self)
+            if self.status == CustomerStatus.WALKING:
+                self.bubble.content = OrderWalkersContent(self.order_value)
         elif self.order_value == OrderSitters.CHANGE_MUSIC:
-            # TODO: Display change music dialog
+            self.bubble.content = OrderSittersContent(self.order_value)
             self.track = context.rooms["bar"].track
             pass
         elif self.order_value == OrderSitters.MUSIC_VOLUME_UP:
             self.volume = context.rooms["bar"].volume
-            # TODO: Display volume up dialog
+            self.bubble.content = OrderSittersContent(self.order_value)
             pass
         elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN:
             self.volume = context.rooms["bar"].volume
-            # TODO: Display volume down dialog
+            self.bubble.content = OrderSittersContent(self.order_value)
             pass
         elif self.order_value == OrderSitters.TEMPERATURE_UP:
             self.temperature = context.rooms["bar"].temperature
-            # TODO: Display temperature up dialog
+            self.bubble.content = OrderSittersContent(self.order_value)
             pass
         elif self.order_value == OrderSitters.TEMPERATURE_DOWN:
             self.temperature = context.rooms["bar"].temperature
-            # TODO: Display temperature down dialog
+            self.bubble.content = OrderSittersContent(self.order_value)
             pass
+        context.current_room.bubbles.append(self.bubble)
         self.timer = time.time()
 
-    def check_order_walkers(self):
+    def check_order_walkers(self, context: Context):
         # TODO: Check and Adjust times
-        # TODO: Let customer leave after getting his order
-        # TODO: get number of sitting customers
         # TODO: Get Barkeeper order_value
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
         if BarKeeper.get_current_order() == self.order_value and self.timer < 20:
             self.happiness = CustomerHappiness.HAPPY
-            # Customer has a chance to sit down when served happily (50%)
-            random_value = random.randint(0, 3)
-            if random_value < 2:
-                self.status = CustomerStatus.SITTING
-                # TODO: Let customer walk to bench and sit down
+            # TODO: HIGHSCORE and leave
         elif BarKeeper.get_current_order() == self.order_value and 20 <= self.timer < 40:
             self.happiness = CustomerHappiness.NEUTRAL
-            # Customer has a chance to sit down when served (25%)
-            random_value = random.randint(0, 3)
-            if random_value < 1:
-                self.status = CustomerStatus.SITTING
-                # TODO: Let customer walk to bench and sit down
+            # TODO: HIGHSCORE and leave
         elif BarKeeper.get_current_order() == self.order_value and self.timer >= 40:
             self.happiness = CustomerHappiness.UNHAPPY
+            # TODO: HIGHSCORE and leave
         elif BarKeeper.get_current_order() != self.order_value:
             self.happiness = CustomerHappiness.UNHAPPY
+            # TODO: HIGHTSCORE and leave
         self.order_value = None
 
     # For sitting customers
     def check_order_sitters(self, context: Context):
+        # TODO: HIGHSCORE
         if time.time() - self.timer >= 35:
-            # TODO
-            if self.order_value == OrderSitters.CHANGE_MUSIC and self.track != context.rooms["bar"].track:
+            if self.order_value == OrderSitters.CHANGE_MUSIC \
+                    and self.track != context.rooms["bar"].track:
                 self.track = context.rooms["bar"].track
                 self.happiness = CustomerHappiness.HAPPY
-            elif self.order_value == OrderSitters.CHANGE_MUSIC and self.track == context.rooms["bar"].track:
+            elif self.order_value == OrderSitters.CHANGE_MUSIC \
+                    and self.track == context.rooms["bar"].track:
                 self.track = context.rooms["bar"].track
                 self.happiness = CustomerHappiness.UNHAPPY
-                self.status = CustomerStatus.WALKING # TODO: Customer leaves
-            elif self.order_value == OrderSitters.MUSIC_VOLUME_UP and self.volume < context.rooms["bar"].volume:
+            elif self.order_value == OrderSitters.MUSIC_VOLUME_UP \
+                    and self.volume < context.rooms["bar"].volume:
                 self.volume = context.rooms["bar"].volume
                 self.happiness = CustomerHappiness.HAPPY
-            elif self.order_value == OrderSitters.MUSIC_VOLUME_UP and self.volume >= context.rooms["bar"].volume:
+            elif self.order_value == OrderSitters.MUSIC_VOLUME_UP \
+                    and self.volume >= context.rooms["bar"].volume:
                 self.volume = context.rooms["bar"].volume
                 self.happiness = CustomerHappiness.UNHAPPY
-                self.status = CustomerStatus.WALKING # TODO: Customer leaves
-            elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN and self.volume > context.rooms["bar"].volume:
+            elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN \
+                    and self.volume > context.rooms["bar"].volume:
                 self.volume = context.rooms["bar"].volume
                 self.happiness = CustomerHappiness.HAPPY
-            elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN and self.volume <= context.rooms["bar"].volume:
+            elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN \
+                    and self.volume <= context.rooms["bar"].volume:
                 self.volume = context.rooms["bar"].volume
                 self.happiness = CustomerHappiness.UNHAPPY
-                self.status = CustomerStatus.WALKING # TODO: Customer leaves
-            elif self.order_value == OrderSitters.TEMPERATURE_UP and self.temperature < context.rooms["bar"].temperature:
+            elif self.order_value == OrderSitters.TEMPERATURE_UP \
+                    and self.temperature < context.rooms["bar"].temperature:
                 self.temperature = context.rooms["bar"].temperature
                 self.happiness = CustomerHappiness.HAPPY
-            elif self.order_value == OrderSitters.TEMPERATURE_UP and self.temperature >= context.rooms["bar"].temperature:
+            elif self.order_value == OrderSitters.TEMPERATURE_UP \
+                    and self.temperature >= context.rooms["bar"].temperature:
                 self.temperature = context.rooms["bar"].temperature
                 self.happiness = CustomerHappiness.UNHAPPY
-                self.status = CustomerStatus.WALKING # TODO: Customer leaves
-            elif self.order_value == OrderSitters.TEMPERATURE_DOWN and self.temperature > context.rooms["bar"].temperature:
+            elif self.order_value == OrderSitters.TEMPERATURE_DOWN \
+                    and self.temperature > context.rooms["bar"].temperature:
                 self.temperature = context.rooms["bar"].temperature
                 self.happiness = CustomerHappiness.HAPPY
-            elif self.order_value == OrderSitters.TEMPERATURE_DOWN and self.temperature <= context.rooms["bar"].temperature:
+            elif self.order_value == OrderSitters.TEMPERATURE_DOWN \
+                    and self.temperature <= context.rooms["bar"].temperature:
                 self.temperature = context.rooms["bar"].temperature
                 self.happiness = CustomerHappiness.UNHAPPY
-                self.status = CustomerStatus.WALKING # TODO: Customer leaves
             self.order_value = None
             self.timer = time.time()
 
     def update(self, context: Context):
-        if not self.bubble:
-            self.bubble = SpeechBubble(self)
-            if self.status == CustomerStatus.WALKING:
-                self.bubble.content = OrderWalkersContent(self.order_value)
-            elif self.status == CustomerStatus.SITTING:
-                self.bubble.content = OrderSittersContent(self.order_value)
-
-            context.current_room.bubbles.append(self.bubble)
+        self.display_order(context)
+        self.customer_walking()

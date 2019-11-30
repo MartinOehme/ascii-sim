@@ -66,7 +66,6 @@ class CoffeeMachine(AbstractSprite):
     def state(self, value):
         self._state = value
 
-
     def update(self, context: Context):
         if not self.bubble:
             self.bubble = SpeechBubble(self)
