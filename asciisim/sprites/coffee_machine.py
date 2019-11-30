@@ -4,7 +4,6 @@ from .sprite_enums import States
 
 from .static_sprite import StaticSprite
 from ..base.sprite_position import SpritePosition
-from ..base.context import Context
 from ..res import IMG_DIR
 
 

@@ -28,31 +28,31 @@ class BarKeeper(AbstractSprite):
                         self.position.x, self.position.y + 1
                 ):
                     return
-               
+
                 self.position.y += 1
             elif event.key == pygame.K_LEFT:
                 if (self.position.x == 0
-                      and self.position.y == 6
-                      and context.room_key == Context.STORE_ROOM):
+                        and self.position.y == 6
+                        and context.room_key == Context.STORE_ROOM):
                     context.set_room(Context.BAR_ROOM)
                 elif self.position.x > 0:
                     if context.current_room.has_obstacle(
-                        self.position.x - 1, self.position.y
+                            self.position.x - 1, self.position.y
                     ):
                         return
-               
+
                     self.position.x -= 1
             elif event.key == pygame.K_RIGHT:
                 if (self.position.x == 9
-                    and self.position.y == 6
-                    and context.room_key == Context.BAR_ROOM):
+                        and self.position.y == 6
+                        and context.room_key == Context.BAR_ROOM):
                     context.set_room(Context.STORE_ROOM)
                 elif self.position.x < 9:
                     if context.current_room.has_obstacle(
-                        self.position.x + 1, self.position.y
+                            self.position.x + 1, self.position.y
                     ):
                         return
-               
+
                     self.position.x += 1
             elif event.key == pygame.K_ESCAPE:
                 exit()

@@ -6,6 +6,7 @@ from .base.context import Context
 from .rooms.bar_room import BarRoom
 from .rooms.store_room import StoreRoom
 
+
 class Game(object):
     BAR_ROOM = "bar"
     STORE_ROOM = "store"

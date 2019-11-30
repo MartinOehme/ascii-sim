@@ -4,6 +4,7 @@ from pygame.event import Event
 
 from .room import Room
 
+
 class Context(object):
     BAR_ROOM = "bar"
     STORE_ROOM = "store"

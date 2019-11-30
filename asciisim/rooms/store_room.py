@@ -6,6 +6,7 @@ from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
 from ..sprites.bar_keeper import BarKeeper
 
+
 class StoreRoom(Room):
     def __init__(self):
         super().__init__()
