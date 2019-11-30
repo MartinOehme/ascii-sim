@@ -17,7 +17,6 @@ class Game(object):
         self.context.rooms[self.BAR_ROOM] = BarRoom()
         self.context.rooms[self.STORE_ROOM] = StoreRoom()
         self.context.set_room(self.BAR_ROOM)
-        self.context.
         self.running = True
         self.screen: Surface = screen
         
