@@ -6,6 +6,7 @@ from ..base.context import Context
 from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
 
+
 class BarKeeper(AbstractSprite):
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
@@ -53,3 +54,5 @@ class BarKeeper(AbstractSprite):
                         return
                
                     self.position.x += 1
+            elif event.key == pygame.K_ESCAPE:
+                exit()

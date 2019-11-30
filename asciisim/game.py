@@ -34,6 +34,9 @@ class Game(object):
         for sprite in self.context.current_room.sprites:
             self.screen.blit(sprite.image, sprite.position.rect)
 
+        for bubble in self.context.current_room.bubbles:
+            self.screen.blit(bubble.image, bubble.position)
+
         pygame.display.flip()
         
     def main(self):

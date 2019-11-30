@@ -1,6 +1,7 @@
 import pygame
 from pygame import Surface
 
+from ..base.speech_bubble import SpeechBubble
 from ..base.room import Room
 from ..base.sprite_position import SpritePosition
 from ..res import IMG_DIR
@@ -40,11 +41,15 @@ class BarRoom(Room):
             )
         )
 
+        barkeeper = BarKeeper(9, 6)
+
         self.sprites.append(
-            BarKeeper(9, 6)
+            barkeeper
         )
         
         self.sprites.append(
             CoffeeMachine()
         )
-        
+        self.bubbles.append(
+            SpeechBubble(barkeeper)
+        )
