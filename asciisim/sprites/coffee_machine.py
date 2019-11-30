@@ -1,7 +1,11 @@
 import pygame
 import time
 
-from .sprite_enums import States, CoffeeStates, CoffeeTypes
+from .bar_keeper import BarKeeper
+
+from .sprite_enums import States
+from .sprite_enums import CoffeeStates
+from .sprite_enums import CoffeeTypes
 from .static_sprite import StaticSprite
 
 from ..base.sprite_position import SpritePosition
@@ -9,7 +13,23 @@ from ..base.context import Context
 from ..base.closeup import Closeup
 from ..res import IMG_DIR
 
+class CoffeeMachineCloseup(Closeup):
+    def __init__(self, coffee_machine: 'CoffeeMachine'):
+        super().__init__(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
+        self.coffee_machine = coffee_machine
+        self.sprites.append(
+            StaticSprite(
+                SpritePosition(5, 5),
+                IMG_DIR + "coffee_machine/coffee.png"
+            )
+        )
 
+    def update(self, context: Context) -> None:
+        for event in context.events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                context.closeup = None
+                self.coffee_machine.state = States.NOT_USED
+        
 class CoffeeMachine(StaticSprite):
     def __init__(self):
         super().__init__(
@@ -27,30 +47,30 @@ class CoffeeMachine(StaticSprite):
         self.milk: int = 10
         self.coffee: int = 50
 
+        self.closeup = CoffeeMachineCloseup(self)
         self.last_coffee: CoffeeTypes = None
-
         self.coffee_time = time.time()
-
-        self.closeup = Closeup(
-            IMG_DIR + "coffee_machine/coffee_machine_closeup.png"
-        )
-
-        self.closeup.sprites.append(
-            StaticSprite(
-                SpritePosition(5, 5),
-                IMG_DIR + "coffee_machine/coffee.png"
-            )
-        )
 
     def update(self, context: Context):
 
-        if (time.time() - self.coffee_time >= 20) and (self.state is not States.NOT_USED) and (self.state is not States.IN_USE):
+        if (
+                (time.time() - self.coffee_time >= 20) and
+                (self.state is not States.NOT_USED) and
+                (self.state is not States.IN_USE)
+        ):
             self.state = States.READY
 
         # TODO: Get state of the coffee machine (is it in use or broken)
         for event in context.events:
-            if (event.type == pygame.KEYDOWN and event.key == pygame.K_q) and (self.state is not States.BLOCKED) and (self.state is not States.READY):
-                self.state = States.IN_USE
+            if (
+                    (event.type == pygame.KEYDOWN and event.key == pygame.K_q)
+                    and (self.state is not States.BLOCKED)
+                    and (self.state is not States.READY)
+            ):
+                for sprite in context.current_room.sprites:
+                    if type(sprite) == BarKeeper:
+                        if sprite.position.is_near(self.position):
+                            self.state = States.IN_USE
 
         # get broken status
         if self.coffee_grounds >= 15:
@@ -100,13 +120,25 @@ class CoffeeMachine(StaticSprite):
                     self.make_coffee(CoffeeTypes.MAKE_COFFEE_MILK)
 
         for machine_state in self.broken_status:
-            if (machine_state is CoffeeStates.CLEAR_COFFEE) and (not self.status_displayed):
+            if (
+                    (machine_state is CoffeeStates.CLEAR_COFFEE)
+                    and (not self.status_displayed)
+            ):
                 self.status_displayed = True
-            elif (machine_state is CoffeeStates.CLEAR_WATER) and (not self.status_displayed):
+            elif (
+                    (machine_state is CoffeeStates.CLEAR_WATER)
+                    and (not self.status_displayed)
+            ):
                 self.status_displayed = True
-            elif (machine_state is CoffeeStates.REFILL_MILK) and (not self.status_displayed):
+            elif (
+                    (machine_state is CoffeeStates.REFILL_MILK)
+                    and (not self.status_displayed)
+            ):
                 self.status_displayed = True
-            elif (machine_state is CoffeeStates.REFILL_COFFEE) and (not self.status_displayed):
+            elif (
+                    (machine_state is CoffeeStates.REFILL_COFFEE)
+                    and (not self.status_displayed)
+            ):
                 context.rooms["bar"].sprites.append(
                     StaticSprite(
                         SpritePosition(9, 1),
