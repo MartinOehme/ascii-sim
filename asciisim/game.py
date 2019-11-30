@@ -17,6 +17,7 @@ class Game(object):
         self.context.rooms[self.BAR_ROOM] = BarRoom()
         self.context.rooms[self.STORE_ROOM] = StoreRoom()
         self.context.set_room(self.BAR_ROOM)
+        self.context.
         self.running = True
         self.screen: Surface = screen
         
@@ -30,13 +31,20 @@ class Game(object):
         self.clock.tick(60)
                 
     def render(self):
-        self.screen.blit(self.context.current_room.background, (0, 0))
+        if self.context.closeup is None:
+            self.screen.blit(self.context.current_room.background, (0, 0))
 
-        for sprite in self.context.current_room.sprites:
-            self.screen.blit(sprite.image, sprite.position.rect)
+            for sprite in self.context.current_room.sprites:
+                self.screen.blit(sprite.image, sprite.position.rect)
 
-        for bubble in self.context.current_room.bubbles:
-            self.screen.blit(bubble.image, bubble.position)
+            for bubble in self.context.current_room.bubbles:
+
+                self.screen.blit(bubble.image, bubble.position)
+        else:
+            self.screen.blit(self.context.closeup.background, (0, 0))
+
+            for sprite in self.context.closeup.sprites:
+                self.screen.blit(sprite.image, sprite.position.rect)
 
         pygame.display.flip()
         
