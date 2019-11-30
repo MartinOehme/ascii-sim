@@ -42,8 +42,10 @@ class BarRoom(Room):
         )
         customer.generate_order_walking()
 
+        coffee_machine = CoffeeMachine()
+
         self.sprites.append(
-            CoffeeMachine()
+            coffee_machine
         )
 
         # add radiator to bar

@@ -31,18 +31,17 @@ class CoffeeMachineCloseup(Closeup):
     def update(self, context: Context) -> None:
         self.menu.update(context)
         check_list = self.check_status()
-        print(check_list)
         for status in check_list:
-            if status is MachineStates.BLOCKED:
-                context.closeup = None
-            elif status is MachineStates.ALL_GOOD:
+            if status is MachineStates.ALL_GOOD:
                 check_list = self.default_routine(context, check_list)
                 for event in context.events:
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                         if self.menu.control_index == 1:
                             self.make_coffee(CoffeeTypes.COFFEE_MILK)
+                            context.closeup = None
                         elif self.menu.control_index == 2:
                             self.make_coffee()
+                            context.closeup = None
             elif status is MachineStates.CLEAR_COFFEE:
                 check_list = self.default_routine(context, check_list)
             elif status is MachineStates.REFILL_MILK:
@@ -58,29 +57,21 @@ class CoffeeMachineCloseup(Closeup):
             except:
                 pass
             return_list.append(MachineStates.REFILL_MILK)
+            self.coffee_machine.state = MachineStates.REFILL_MILK
         if self.coffee_machine.coffee <= 0:
             try:
                 return_list.remove(MachineStates.ALL_GOOD)
             except:
                 pass
             return_list.append(MachineStates.REFILL_COFFEE)
+            self.coffee_machine.state = MachineStates.REFILL_COFFEE
         if self.coffee_machine.coffee_grounds >= 20:
             try:
                 return_list.remove(MachineStates.ALL_GOOD)
             except:
                 pass
             return_list.append(MachineStates.CLEAR_COFFEE)
-        if time.time() - self.coffee_machine.coffee_time < 5:
-            try:
-                return_list.remove(MachineStates.BLOCKED)
-                return_list.append(MachineStates.BLOCKED)
-            except:
-                return_list.append(MachineStates.BLOCKED)
-        else:
-            try:
-                return_list.remove(MachineStates.BLOCKED)
-            except:
-                pass
+            self.coffee_machine.state = MachineStates.CLEAR_COFFEE
 
         return return_list
 
@@ -124,6 +115,8 @@ class CoffeeMachineCloseup(Closeup):
         self.coffee_machine.last_coffee = coffee_type
         self.coffee_machine.coffee_time = time.time()
 
+        self.coffee_machine.state = MachineStates.BLOCKED
+
     def clear_dregs(self):
         self.coffee_machine.coffee_grounds = 0
 
@@ -136,7 +129,7 @@ class CoffeeMachine(AbstractSprite):
         super().__init__()
         self.tile_rect = Rect(9, 3, 1, 2)
         self.renderable = False
-        self._state = MachineStates.NOT_USED
+        self.state = MachineStates.NOT_USED
         self.obstacle = True
         
         self.pot = False
@@ -150,19 +143,18 @@ class CoffeeMachine(AbstractSprite):
 
         self.bubble = None
 
-    @property
-    def state(self):
-        return self._state
-
-    @state.setter
-    def state(self, value):
-        self._state = value
-
     def update(self, context: Context):
         if not self.bubble:
             self.bubble = SpeechBubble(self)
             self.bubble.content = MachineStatesContent(self.state)
             context.current_room.bubbles.append(self.bubble)
+        else:
+            self.bubble.content = MachineStatesContent(self.state)
+            context.current_room.bubbles[context.current_room.bubbles.index(self.bubble)].context = MachineStatesContent(self.state)
+
+        if self.state is MachineStates.BLOCKED:
+            if time.time() - self.coffee_time > 5:
+                self.state = MachineStates.NOT_USED
 
         if self.state is not MachineStates.BLOCKED:
             for event in context.events:
@@ -173,6 +165,7 @@ class CoffeeMachine(AbstractSprite):
                     for sprite in context.current_room.sprites:
                         if type(sprite) == BarKeeper:
                             if sprite.is_near(self):
+                                self.state = MachineStates.IN_USE
                                 context.closeup = self.closeup
                 if (
                     (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
