@@ -1,5 +1,7 @@
 import pygame
 
+from .bar_keeper import BarKeeper
+
 from .sprite_enums import States
 from .sprite_enums import CoffeeStates
 from .static_sprite import StaticSprite
@@ -9,7 +11,23 @@ from ..base.context import Context
 from ..base.closeup import Closeup
 from ..res import IMG_DIR
 
+class CoffeeMachineCloseup(Closeup):
+    def __init__(self, coffee_machine: 'CoffeeMachine'):
+        super().__init__(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
+        self.coffee_machine = coffee_machine
+        self.sprites.append(
+            StaticSprite(
+                SpritePosition(5, 5),
+                IMG_DIR + "coffee_machine/coffee.png"
+            )
+        )
 
+    def update(self, context: Context) -> None:
+        for event in context.events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                context.closeup = None
+                self.coffee_machine.state = States.NOT_USED
+        
 class CoffeeMachine(StaticSprite):
     def __init__(self):
         super().__init__(
@@ -27,21 +45,16 @@ class CoffeeMachine(StaticSprite):
         self.milk: int = 10
         self.coffee: int = 50
 
-        self.closeup = Closeup(
-            IMG_DIR + "coffee_machine/coffee_machine_closeup.png"
-        )
-        self.closeup.sprites.append(
-            StaticSprite(
-                SpritePosition(5, 5),
-                IMG_DIR + "coffee_machine/coffee.png"
-            )
-        )
+        self.closeup = CoffeeMachineCloseup(self)
 
     def update(self, context: Context):
         # TODO: Get state of the coffee machine (is it in use or broken)
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
-                self.state = States.IN_USE
+                for sprite in context.current_room.sprites:
+                    if type(sprite) == BarKeeper:
+                        if sprite.position.is_near(self.position):
+                            self.state = States.IN_USE
 
         # get broken status
         if self.coffee_grounds >= 15:

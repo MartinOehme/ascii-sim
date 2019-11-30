@@ -14,3 +14,6 @@ class Closeup(GameObject):
     @property
     def background(self) -> Surface:
         return self.get_surface("background")
+
+    def update(self, context) -> None:
+        pass

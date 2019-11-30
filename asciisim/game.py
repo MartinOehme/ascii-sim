@@ -24,27 +24,28 @@ class Game(object):
                 self.running = False
             elif event.type == pygame.VIDEORESIZE:
                 self.render_context.resize(event.dict['size'])
-        for sprite in self.context.current_room.sprites:
-            sprite.update(self.context)
+        if self.context.closeup:
+            self.context.closeup.update(self.context)
+        else:
+            for sprite in self.context.current_room.sprites:
+                sprite.update(self.context)
         self.clock.tick(60)
                 
     def render(self):
-        if self.context.closeup is None:
-            self.render_context.screen.blit(
+        self.render_context.screen.blit(
                 self.context.current_room.background,
                 (0, 0)
             )
+        for sprite in self.context.current_room.sprites:
+            self.render_context.screen.blit(
+                sprite.image, sprite.position.rect
+            )
+        for bubble in self.context.current_room.bubbles:
+            self.render_context.screen.blit(
+                bubble.image, bubble.position
+            )
 
-            for sprite in self.context.current_room.sprites:
-                self.render_context.screen.blit(
-                    sprite.image, sprite.position.rect
-                )
-
-            for bubble in self.context.current_room.bubbles:
-                self.render_context.screen.blit(
-                    bubble.image, bubble.position
-                )
-        else:
+        if self.context.closeup:
             self.render_context.screen.blit(
                 self.context.closeup.background, (0, 0)
             )
