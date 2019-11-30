@@ -5,15 +5,18 @@ from pygame import Surface
 from asciisim.sprites.sprite_enums import OrderSitters
 from ..base.speech_bubble import SpeechBubble
 from ..base.room import Room
+from ..base.context import Context
 from ..res import IMG_DIR
 from ..sprites.bar_keeper import BarKeeper
 from ..sprites.customer import CustomerSprite
 from ..sprites.coffee_machine import CoffeeMachine
 from ..sprites.static_sprite import StaticSprite
+from ..sprites.sprite_enums import CustomerStatus
 
 from ..sprites.sprite_enums import MusicTracks
 
 from ..sprites.environment import Radiator, MusicBox
+
 
 class BarRoom(Room):
     def __init__(self):
@@ -36,7 +39,7 @@ class BarRoom(Room):
             barkeeper
         )
 
-        customer = CustomerSprite(5, 4)
+        customer = CustomerSprite(1, 0)
         self.sprites.append(
             customer
         )
@@ -47,6 +50,7 @@ class BarRoom(Room):
         self.sprites.append(
             coffee_machine
         )
+
 
         # add radiator to bar
         radiator = Radiator(Rect(3, 3, 1, 1))
