@@ -17,7 +17,7 @@ class Game(object):
         self.render_context = RenderContext((1920, 1080))
         self.running = True
         
-    def update(self):
+    def update(self):        
         self.context.events = pygame.event.get()
         for event in self.context.events:
             if event.type == pygame.QUIT:
@@ -32,27 +32,32 @@ class Game(object):
         self.clock.tick(60)
                 
     def render(self):
+        current_room = self.context.current_room
+        sprites_to_render = current_room.renderable_sprites_by_z_index
+        
         self.render_context.screen.blit(
                 self.context.current_room.background,
                 (0, 0)
             )
-        for sprite in self.context.current_room.sprites:
+        for sprite in sprites_to_render:
             self.render_context.screen.blit(
-                sprite.image, sprite.position.rect
+                sprite.image, sprite.rect
             )
         for bubble in self.context.current_room.bubbles:
             self.render_context.screen.blit(
-                bubble.image, bubble.position
+                bubble.image, bubble.rect
             )
 
         if self.context.closeup:
             self.render_context.screen.blit(
-                self.context.closeup.background, (0, 0)
+                self.context.closeup.background,
+                self.context.closeup.rect
             )
 
             for sprite in self.context.closeup.sprites:
                 self.render_context.screen.blit(
-                    sprite.image, sprite.position.rect
+                    sprite.image,
+                    sprite.rect
                 )
 
         pygame.display.flip()

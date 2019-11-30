@@ -5,7 +5,7 @@ from .game_object import GameObject
 
 class AbstractSprite(GameObject):    
     def __init__(self):
-        self.position = None
+        super().__init__()
 
     @abstractmethod
     def update(self, context: Context) -> None:
