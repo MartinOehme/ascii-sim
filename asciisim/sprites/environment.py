@@ -33,20 +33,29 @@ class MusicBox(StaticSprite):
         self.volume = volume
 
         if self.track is not MusicTracks.MUSIC_OFF:
-            pygame.mixer.music.load(self.track.value)
-            pygame.mixer.music.play(loops=-1)
+            pygame.mixer_music.load(self.track.value)
+            pygame.mixer_music.play(loops=-1)
 
     def update(self, context: Context):
         context.rooms["bar"].track = self.track
         context.rooms["bar"].volume = self.volume
 
-        pygame.mixer.music.set_volume(self.volume)
+        pygame.mixer_music.set_volume(self.volume/100)
 
     def change_volume(self, value):
-        self.volume += value
+        if 0 < self.volume < 100:
+            self.volume += value
+        if value > 0 and self.volume == 0:
+            self.volume += value
+        if value < 0 and self.volume == 100:
+            self.volume += value
 
     def change_music(self, track: MusicTracks):
-        pygame.mixer.music.fadeout(2)
-        if self.track is not MusicTracks.MUSIC_OFF:
-            pygame.mixer.music.load(track)
-            pygame.mixer.music.play(loops=-1)
+        pygame.mixer_music.fadeout(2)
+        if track is MusicTracks.MUSIC_OFF:
+            pygame.mixer_music.stop()
+        else:
+            pygame.mixer_music.load(track.value)
+            pygame.mixer_music.play(loops=-1)
+
+        self.track = track
