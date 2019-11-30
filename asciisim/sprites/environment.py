@@ -1,13 +1,14 @@
-from ..base.sprite_position import SpritePosition
+from pygame import Rect
+
 from ..base.context import Context
 from ..sprites.static_sprite import StaticSprite
 from ..res import IMG_DIR
 
 
 class Radiator(StaticSprite):
-    def __init__(self, position: SpritePosition, temperature=22):
+    def __init__(self, rect: Rect, temperature=22):
         super().__init__(
-            position,
+            rect,
             IMG_DIR + "radiator.png"
         )
 
@@ -21,9 +22,9 @@ class Radiator(StaticSprite):
 
 
 class MusicBox(StaticSprite):
-    def __init__(self, position: SpritePosition, volume=50):
+    def __init__(self, rect: Rect, volume=50):
         super().__init__(
-            position,
+            rect,
             IMG_DIR + "music_box.png"
         )
 

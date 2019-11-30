@@ -51,14 +51,14 @@ class BarRoom(Room):
         )
 
         # add radiator to bar
-        radiator = Radiator(SpritePosition(3, 3))
+        radiator = Radiator(Rect(3, 3, 1, 1))
 
         self.sprites.append(
             radiator
         )
 
         # add music box to bar
-        music_box = MusicBox(SpritePosition(4, 4))
+        music_box = MusicBox(Rect(4, 4, 1, 1))
 
         self.sprites.append(
             music_box
