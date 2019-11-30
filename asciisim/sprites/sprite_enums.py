@@ -21,8 +21,8 @@ class MachineStates(Enum):
 
 
 class CoffeeTypes(Enum):
-    MAKE_COFFEE = 0
-    MAKE_COFFEE_MILK = 1
+    NORMAL_COFFEE = 0
+    COFFEE_MILK = 1
 
 
 class CustomerStatus(Enum):
