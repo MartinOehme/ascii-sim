@@ -11,7 +11,9 @@ from .static_sprite import StaticSprite
 from ..base.sprite_position import SpritePosition
 from ..base.context import Context
 from ..base.closeup import Closeup
+from ..base.speech_bubble import SpeechBubble
 from ..res import IMG_DIR
+from ..speech_bubble.machine_states import MachineStatesContent
 
 class CoffeeMachineCloseup(Closeup):
     def __init__(self, coffee_machine: 'CoffeeMachine'):
@@ -51,8 +53,22 @@ class CoffeeMachine(StaticSprite):
         self.last_coffee: CoffeeTypes = None
         self.coffee_time = time.time()
 
-    def update(self, context: Context):
+        self.bubble = None
 
+    @property
+    def state(self):
+        return self._state
+
+    @state.setter
+    def state(self, value):
+        self._state = value
+
+
+    def update(self, context: Context):
+        if not self.bubble:
+            self.bubble = SpeechBubble(self)
+            self.bubble.content = MachineStatesContent(self.state)
+            context.current_room.bubbles.append(self.bubble)
         if (
                 (time.time() - self.coffee_time >= 20) and
                 (self.state is not MachineStates.NOT_USED) and

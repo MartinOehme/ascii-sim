@@ -2,16 +2,16 @@ import pygame
 
 from asciisim.res import IMG_DIR
 from ..base.content import Content
-from ..sprites.sprite_enums import CoffeeStates
+from ..sprites.sprite_enums import MachineStates
 
 
-class CoffeeStatesContent(Content):
-    def __init__(self, content: CoffeeStates):
+class MachineStatesContent(Content):
+    def __init__(self, state: MachineStates):
         super().__init__()
-        self.content = content
+        self.state = state
         self.register_surface(
             "image",
-            lambda : pygame.image.load(IMG_DIR + "coffeestate/" + content + ".png")
+            lambda : pygame.image.load(IMG_DIR + "speech_bubbles/machine_states/" + state.value + ".png")
         )
 
     @property

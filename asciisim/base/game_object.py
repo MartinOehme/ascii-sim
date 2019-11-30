@@ -9,7 +9,7 @@ class GameObject(ABC):
     BASE_SURFACES = {}
     SCALED_SURFACES = {}
 
-    
+
     def register_surface(self, name: str, callback: Callable[[], Surface]) -> None:
         key = f"{type(self)}_{name}"
 

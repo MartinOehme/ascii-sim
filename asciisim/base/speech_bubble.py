@@ -9,6 +9,7 @@ from .sprite_position import SpritePosition
 
 class SpeechBubble(GameObject):
     def __init__(self, sprite: AbstractSprite):
+        self.content = None
         self.sprite = sprite
         self.register_surface(
             "up",
@@ -34,7 +35,15 @@ class SpeechBubble(GameObject):
 
     @property
     def image(self) -> Surface:
+        surface = self.get_surface("up")
         if self.sprite.position.y == 0:
-            return self.get_surface("down")
+            surface = self.get_surface("down")
 
-        return self.get_surface("up")
+        if self.content:
+            surface = surface.copy()
+            surface.blit(
+                self.content.image,
+                (10, 10)
+            )
+
+        return surface
