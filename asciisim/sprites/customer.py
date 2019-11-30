@@ -2,8 +2,10 @@ from pygame import Surface
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..base.sprite_position import SpritePosition
-from .sprite_enums import CustomerStatus, OrderWalkers, OrderSitters
+from .sprite_enums import CustomerStatus, CustomerHappiness, OrderWalkers, OrderSitters
+from .bar_keeper import BarKeeper
 import random
+import time
 
 
 class CustomerSprite(AbstractSprite):
@@ -15,6 +17,7 @@ class CustomerSprite(AbstractSprite):
         self.status = CustomerStatus.WALKING
         self.happiness = None
         self.order_value = None
+        self.timer = None
 
     def get_order_value(self): return self.order_value
 
@@ -60,7 +63,6 @@ class CustomerSprite(AbstractSprite):
 
     # Display the customers order
     def display_order(self):
-        # TODO: Start timer
         if self.order_value == OrderWalkers.COFFEE:
             # TODO: Display Coffee dialog
             pass
@@ -103,14 +105,19 @@ class CustomerSprite(AbstractSprite):
         elif self.order_value == OrderSitters.TEMPERATURE_DOWN:
             # TODO: Display temperature down dialog
             pass
+        self.timer = time.time()
 
     def check_order(self):
-        # TODO: End Timer
-        # If barkeeper_order == order_value and fastest timer -> happy
-        # If barkeeper_order == order_value and middle timer -> neutral
-        # If barkeeper_order == order_value and slowest timer -> unhappy
-        # If barkeeper_order != order_value -> unhappy
-        pass
+        # TODO: Check and Adjust times
+        self.timer = time.time() - self.timer
+        if BarKeeper.get_current_order() == self.order_value and self.timer < 20:
+            self.happiness = CustomerHappiness.HAPPY
+        elif BarKeeper.get_current_order() == self.order_value and 20 < self.timer < 40:
+            self.happiness = CustomerHappiness.NEUTRAL
+        elif BarKeeper.get_current_order() == self.order_value and self.timer >= 40:
+            self.happiness = CustomerHappiness.UNHAPPY
+        elif BarKeeper.get_current_order() != self.order_value:
+            self.happiness = CustomerHappiness.UNHAPPY
 
     def update(self, context: Context):
         pass
