@@ -25,24 +25,20 @@ class BarRoom(Room):
             SpritePosition(7, 3),
             SpritePosition(7, 4),
             SpritePosition(7, 5),
-            SpritePosition(6, 1),
             SpritePosition(6, 2),
             SpritePosition(6, 3),
             SpritePosition(6, 4),
             SpritePosition(6, 5),
+            SpritePosition(9, 3),
+            SpritePosition(9, 4),
+            SpritePosition(0, 4),
+            SpritePosition(0, 5),
+            SpritePosition(0, 6),
+            SpritePosition(1, 4),
+            SpritePosition(1, 5),
+            SpritePosition(2, 4),
+            SpritePosition(2, 5),
         ]
-        self.sprites.append(
-            StaticSprite(
-                SpritePosition(0, 0),
-                IMG_DIR + "dummy.png"
-            )
-        )
-        self.sprites.append(
-            StaticSprite(
-                SpritePosition(2, 4),
-                IMG_DIR + "dummy.png"
-            )
-        )
 
         barkeeper = BarKeeper(9, 6)
 
