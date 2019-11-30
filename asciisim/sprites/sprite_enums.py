@@ -8,13 +8,13 @@ class States(Enum):
 
 
 class CoffeeStates(Enum):
-    ALL_GOOD = 0
-    CLEAR_COFFEE = 1
-    CLEAR_WATER = 2
-    REFILL_MILK = 3
-    REFILL_COFFEE = 4
-    MAKE_COFFEE = 5
-    MAKE_COFFEE_MILK = 6
+    ALL_GOOD = 'all_good'
+    CLEAR_COFFEE = 'clear_coffee'
+    CLEAR_WATER = 'clear_water'
+    REFILL_MILK = 'refill_milk'
+    REFILL_COFFEE = 'refill_coffee'
+    MAKE_COFFEE = 'make_coffee'
+    MAKE_COFFEE_MILK = 'make_coffee_milk'
 
 
 class CustomerStatus(Enum):
@@ -23,20 +23,20 @@ class CustomerStatus(Enum):
 
 
 class OrderWalkers(Enum):
-    COFFEE = 0
-    COFFEE_MILK = 1
-    KOLLE_MATE = 2
-    PREMIUM_COLA = 3
-    ZOTRINE = 4
-    RETURN_CUP = 5
-    GET_BROOM = 6
-    RETURN_BOTTLE = 7
-    RETURN_BROOM = 8
+    COFFEE = 'coffee'
+    COFFEE_MILK = 'coffee_milk'
+    KOLLE_MATE = 'kolle_mate'
+    PREMIUM_COLA = 'premium_cola'
+    ZOTRINE = 'zotrine'
+    RETURN_CUP = 'return_cup'
+    GET_BROOM = 'get_broom'
+    RETURN_BOTTLE = 'return_bottle'
+    RETURN_BROOM = 'return_broom'
 
 
 class OrderSitters(Enum):
-    CHANGE_MUSIC = 0
-    MUSIC_VOLUME_UP = 1
-    MUSIC_VOLUME_DOWN = 2
-    TEMPERATURE_UP = 3
-    TEMPERATURE_DOWN = 4
+    CHANGE_MUSIC = 'change_music'
+    MUSIC_VOLUME_UP = 'music_volume_up'
+    MUSIC_VOLUME_DOWN = 'music_volume_down'
+    TEMPERATURE_UP = 'temperature_up'
+    TEMPERATURE_DOWN = 'temperature_down'
