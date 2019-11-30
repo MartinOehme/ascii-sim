@@ -1,7 +1,5 @@
 from pygame import Surface
 
-from .sprite_enums import States
-
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..base.sprite_position import SpritePosition
@@ -12,11 +10,9 @@ class StaticSprite(AbstractSprite):
         super().__init__()
         self.position = position
         self.image = image
-        self.state: States = States.NOT_USED
 
     def update(self, context: Context):
-        if self.state is not States.NOT_USED:
-            self.use_sprite(self.state)
+        pass
 
-    def use_sprite(self, state: States):
+    def use_sprite(self):
         pass

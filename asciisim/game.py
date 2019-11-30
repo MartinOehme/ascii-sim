@@ -24,10 +24,17 @@ class Game(object):
         self.clock.tick(60)
                 
     def render(self):
-        self.screen.blit(self.context.room.background, (0, 0))
+        if self.context.closeup is None:
+            self.screen.blit(self.context.room.background, (0, 0))
 
-        for sprite in self.context.room.sprites:
-            self.screen.blit(sprite.image, sprite.position.rect)
+            for sprite in self.context.room.sprites:
+                self.screen.blit(sprite.image, sprite.position.rect)
+
+        else:
+            self.screen.blit(self.context.closeup.background, (0, 0))
+
+            for sprite in self.context.closeup.sprites:
+                self.screen.blit(sprite.image, sprite.position.rect)
 
         pygame.display.flip()
         
