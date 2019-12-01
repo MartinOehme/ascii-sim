@@ -1,13 +1,15 @@
 import pygame
-from pygame import Surface
 
+from pygame import Surface
+from pygame import Rect
+
+from ..sprites.item import Item
 from ..base.context import Context
 
 from ..sprites.refrigerator import Refrigerator
-from ..sprites.coffee_storage import CoffeeStorage
 from ..base.room import Room
 from ..res import IMG_DIR
-from ..sprites.bar_keeper import BarKeeper
+from ..sprites.sprite_enums import OrderWalkers, MachineStates
 
 
 class StoreRoom(Room):
@@ -18,12 +20,29 @@ class StoreRoom(Room):
             lambda: pygame.image.load(IMG_DIR + "store_room.png")
         )
 
+        self.obstacles += [
+            Rect(4, 1, 2, 3),
+            Rect(5, 4, 1, 3)
+        ]
+
         self.sprites.append(
-            Refrigerator()
+            Item(1, 6, 1, 1, OrderWalkers.BONBON)
         )
 
         self.sprites.append(
-            CoffeeStorage()
+            Item(2, 6, 1, 1, MachineStates.REFILL_MILK)
+        )
+
+        self.sprites.append(
+            Item(3, 6, 1, 1, OrderWalkers.GET_BROOM)
+        )
+
+        self.sprites.append(
+            Item(0, 3, 2, 1, MachineStates.REFILL_COFFEE)
+        )
+
+        self.sprites.append(
+            Refrigerator()
         )
 
         self.sidebar_left = False
