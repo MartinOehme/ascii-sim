@@ -67,7 +67,6 @@ class CustomerSprite(AbstractSprite):
         # generate order for walkers from random value
         if self.status == CustomerStatus.WALKING and self.order_value is None:
             random_value = random.randint(0, 99)
-            print(random_value)
             if 0 <= random_value < 12:
                 self.order_value = OrderWalkers.COFFEE
             elif 12 <= random_value < 24:
@@ -113,7 +112,6 @@ class CustomerSprite(AbstractSprite):
             self.bubble = SpeechBubble(self)
             if self.status == CustomerStatus.WALKING:
                 self.bubble.content = OrderWalkersContent(self.order_value)
-                print(self.order_value.value)
             elif self.order_value == OrderSitters.CHANGE_MUSIC:
                 self.bubble.content = OrderSittersContent(self.order_value)
                 self.track = context.rooms["bar"].track
