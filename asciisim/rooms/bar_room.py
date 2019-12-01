@@ -35,6 +35,7 @@ class BarRoom(Room):
             Rect(6, 2, 1, 4),
             Rect(0, 4, 1, 3),
             Rect(1, 4, 2, 2),
+            Rect(9, 5, 1, 1)
         ]
 
         BarKeeper(9, 6)

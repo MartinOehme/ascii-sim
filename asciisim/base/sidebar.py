@@ -46,8 +46,8 @@ class SideBar(GameObject):
             surface.blit(
                 self.get_surface(self.item.value),
                 Rect(
-                    67 * scaling,
-                    675 * scaling,
+                    67.5 * scaling,
+                    671.5 * scaling,
                     300 * scaling,
                     300 * scaling
                 )
