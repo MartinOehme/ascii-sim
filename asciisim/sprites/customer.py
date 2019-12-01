@@ -143,7 +143,6 @@ class CustomerSprite(AbstractSprite):
                 self.order_value = OrderSitters.TEMPERATURE_UP
             elif 80 <= random_value <= 99:
                 self.order_value = OrderSitters.TEMPERATURE_DOWN
-
         else:
             self.timer = time.time()
             
