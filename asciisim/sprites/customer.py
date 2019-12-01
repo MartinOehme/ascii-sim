@@ -162,19 +162,7 @@ class CustomerSprite(AbstractSprite):
         # Check if correct order was served in what time
         for sprite in context.current_room.sprites:
             if type(sprite) == BarKeeper:
-                if sprite.item == self.order_value and self.timer < 20:
-                    self.happiness = CustomerHappiness.HAPPY
-                    self.is_order_done = True
-                elif sprite.item == self.order_value and 20 <= self.timer < 40:
-                    self.happiness = CustomerHappiness.NEUTRAL
-                    self.is_order_done = True
-                elif sprite.item == self.order_value and self.timer >= 40:
-                    self.happiness = CustomerHappiness.UNHAPPY
-                    self.is_order_done = True
-                elif sprite.item != self.order_value:
-                    self.happiness = CustomerHappiness.UNHAPPY
-                    self.is_order_done = True
-                elif self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer < 6:
+                if self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer < 6:
                     self.happiness = CustomerHappiness.HAPPY
                     self.is_order_done = True
                     sprite.item = OrderWalkers.RETURN_BOTTLE
@@ -198,7 +186,22 @@ class CustomerSprite(AbstractSprite):
                     self.happiness = CustomerHappiness.UNHAPPY
                     self.is_order_done = True
                     sprite.item = OrderWalkers.RETURN_BROOM
-                sprite.item = None
+                elif sprite.item != self.order_value:
+                    self.happiness = CustomerHappiness.UNHAPPY
+                    self.is_order_done = True
+                    sprite.item = None
+                elif sprite.item == self.order_value and self.timer < 20:
+                    self.happiness = CustomerHappiness.HAPPY
+                    self.is_order_done = True
+                    sprite.item = None
+                elif sprite.item == self.order_value and 20 <= self.timer < 40:
+                    self.happiness = CustomerHappiness.NEUTRAL
+                    self.is_order_done = True
+                    sprite.item = None
+                elif sprite.item == self.order_value and self.timer >= 40:
+                    self.happiness = CustomerHappiness.UNHAPPY
+                    self.is_order_done = True
+                    sprite.item = None
                 self.pay_barkeeper(context)
 
     def pay_barkeeper(self, context: Context):
