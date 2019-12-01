@@ -29,7 +29,7 @@ class CustomerSprite(AbstractSprite):
         # status determines if the customer is sitting or walking
         self.status = status
         self.obstacle = True
-        self.happiness = None
+        self.happiness = CustomerHappiness.NEUTRAL
         self.order_value = None
         self.timer = time.time()
         self.walk_timer = time.time()
@@ -112,9 +112,7 @@ class CustomerSprite(AbstractSprite):
             elif 96 <= random_value <= 99:
                 self.order_value = OrderWalkers.GET_BROOM
                 # TODO: make broom return order if broom has been taken
-        else:
-            pass
-
+       
     def generate_order_sitting(self):
         if self.status == CustomerStatus.SITTING:
             if self.order_value is None and time.time() - self.timer >= 40:
@@ -143,24 +141,19 @@ class CustomerSprite(AbstractSprite):
             elif self.order_value == OrderSitters.CHANGE_MUSIC:
                 self.bubble.content = OrderSittersContent(self.order_value)
                 self.track = context.rooms["bar"].track
-                pass
             elif self.order_value == OrderSitters.MUSIC_VOLUME_UP:
                 self.volume = context.rooms["bar"].volume
                 self.bubble.content = OrderSittersContent(self.order_value)
-                pass
             elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN:
                 self.volume = context.rooms["bar"].volume
                 self.bubble.content = OrderSittersContent(self.order_value)
-                pass
             elif self.order_value == OrderSitters.TEMPERATURE_UP:
                 self.temperature = context.rooms["bar"].temperature
                 self.bubble.content = OrderSittersContent(self.order_value)
-                pass
             elif self.order_value == OrderSitters.TEMPERATURE_DOWN:
                 self.temperature = context.rooms["bar"].temperature
                 self.bubble.content = OrderSittersContent(self.order_value)
-                pass
-        context.current_room.bubbles.append(self.bubble)
+            context.current_room.bubbles.append(self.bubble)
         self.timer = time.time()
 
     def check_order_walkers(self, context: Context):
@@ -172,20 +165,51 @@ class CustomerSprite(AbstractSprite):
                 if sprite.item == self.order_value and self.timer < 20:
                     self.happiness = CustomerHappiness.HAPPY
                     self.is_order_done = True
-                    # TODO: SCORE
                 elif sprite.item == self.order_value and 20 <= self.timer < 40:
                     self.happiness = CustomerHappiness.NEUTRAL
                     self.is_order_done = True
-                    # TODO: SCORE
                 elif sprite.item == self.order_value and self.timer >= 40:
                     self.happiness = CustomerHappiness.UNHAPPY
                     self.is_order_done = True
-                    # TODO: SCORE
                 elif sprite.item != self.order_value:
                     self.happiness = CustomerHappiness.UNHAPPY
                     self.is_order_done = True
-                    # TODO: SCORE
+                elif self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer < 6:
+                    self.happiness = CustomerHappiness.HAPPY
+                    self.is_order_done = True
+                    sprite.item = OrderWalkers.RETURN_BOTTLE
+                elif self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer > 10:
+                    self.happiness = CustomerHappiness.UNHAPPY
+                    self.is_order_done = True
+                    sprite.item = OrderWalkers.RETURN_BOTTLE
+                elif self.order_value == OrderWalkers.RETURN_CUP and self.timer < 6:
+                    self.happiness = CustomerHappiness.HAPPY
+                    self.is_order_done = True
+                    sprite.item = OrderWalkers.RETURN_CUP
+                elif self.order_value == OrderWalkers.RETURN_CUP and self.timer > 10:
+                    self.happiness = CustomerHappiness.UNHAPPY
+                    self.is_order_done = True
+                    sprite.item = OrderWalkers.RETURN_CUP
+                elif self.order_value == OrderWalkers.RETURN_BROOM and self.timer < 6:
+                    self.happiness = CustomerHappiness.HAPPY
+                    self.is_order_done = True
+                    sprite.item = OrderWalkers.RETURN_BROOM
+                elif self.order_value == OrderWalkers.RETURN_BROOM and self.timer > 10:
+                    self.happiness = CustomerHappiness.UNHAPPY
+                    self.is_order_done = True
+                    sprite.item = OrderWalkers.RETURN_BROOM
                 sprite.item = None
+                self.pay_barkeeper(context)
+
+    def pay_barkeeper(self, context: Context):
+        for sprite in context.current_room.sprites:
+            if type(sprite) == BarKeeper and self.status == CustomerStatus.WALKING:
+                if self.happiness == CustomerHappiness.HAPPY:
+                    sprite.earnings += 100
+                elif self.happiness == CustomerHappiness.NEUTRAL:
+                    sprite.earnings += 50
+                elif self.happiness == CustomerHappiness.UNHAPPY:
+                    sprite.earnings -= 10
 
     def customer_interaction(self, context: Context):
         for sprite in context.current_room.sprites:
