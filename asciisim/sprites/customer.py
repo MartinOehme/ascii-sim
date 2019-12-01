@@ -113,10 +113,6 @@ class CustomerSprite(AbstractSprite):
             print(self.order_value.value)
             if self.status == CustomerStatus.WALKING:
                 self.bubble.content = OrderWalkersContent(self.order_value)
-<<<<<<< HEAD
-=======
-                print(self.bubble.content.state)
->>>>>>> 42874a5176f58be8bb4f0ee7d4c1457aa3eab3cb
             elif self.order_value == OrderSitters.CHANGE_MUSIC:
                 self.bubble.content = OrderSittersContent(self.order_value)
                 self.track = context.rooms["bar"].track
