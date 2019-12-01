@@ -35,10 +35,6 @@ class BarRoom(Room):
 
         barkeeper = BarKeeper(9, 6)
 
-        self.sprites.append(
-            barkeeper
-        )
-
         customer = CustomerSprite(1, 0)
         self.sprites.append(
             customer

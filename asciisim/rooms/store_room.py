@@ -17,10 +17,6 @@ class StoreRoom(Room):
         )
 
         self.sprites.append(
-            BarKeeper(0, 6)
-        )
-
-        self.sprites.append(
             Refrigerator()
         )
 
