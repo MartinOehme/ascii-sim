@@ -76,6 +76,7 @@ class BarRoom(Room):
             if type(sprite) == CustomerSprite and sprite.status == CustomerStatus.WALKING:
                 self.number_of_customers += 1
                 if len(sprite.return_path) <= 0:
+                    context.current_room.bubbles.pop(context.current_room.bubbles.index(self.sprites[i].bubble))
                     self.sprites.pop(i)
         random_value = random.randint(1, 10)
         if self.number_of_customers < 5 and time.time() - self.timer > random_value:
