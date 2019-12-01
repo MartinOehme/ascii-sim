@@ -163,6 +163,9 @@ class CustomerSprite(AbstractSprite):
         self.timer = time.time()
         
     def check_order_walkers(self, context: Context):
+        if not self.bubble:
+            # Do not serve customers not at the bar
+            return
         # TODO: Check and Adjust times
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
