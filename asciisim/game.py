@@ -3,6 +3,7 @@ from pygame.time import Clock
 from pygame import Surface
 
 from .base.context import Context
+from .base.sidebar import SideBar
 from .render_context import RenderContext
 from .rooms.bar_room import BarRoom
 from .rooms.store_room import StoreRoom
@@ -26,6 +27,7 @@ class Game(object):
         )
         self.context.rooms[Context.STORE_ROOM] = store_room
         self.context.set_room(Context.BAR_ROOM)
+        self.context.sidebar = SideBar()
         self.render_context = RenderContext((1920, 1080))
         self.running = True
         
@@ -46,6 +48,7 @@ class Game(object):
         if self.context.change_room:
             self.context.change_room = False
             self.render_context.sidebar_left = self.context.current_room.sidebar_left
+        self.context.sidebar.update(self.context)
         self.clock.tick(60)
                 
     def render(self):
@@ -76,6 +79,10 @@ class Game(object):
                     sprite.image,
                     sprite.rect
                 )
+        self.render_context.screen.blit(
+            self.context.sidebar.image,
+            self.context.sidebar.rect
+        )
 
         pygame.display.flip()
         
