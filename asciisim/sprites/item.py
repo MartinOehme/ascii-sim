@@ -1,17 +1,17 @@
-import pygame
 
+import pygame
 from pygame.rect import Rect
 
-from asciisim.sprites.sprite_enums import MachineStates
 from ..base.context import Context
 from ..base.sprite import AbstractSprite
 from ..sprites.bar_keeper import BarKeeper
 
 
-class CoffeeStorage(AbstractSprite):
-    def __init__(self):
+class Item(AbstractSprite):
+    def __init__(self, x: int, y: int, w: int, h: int, state):
         super().__init__()
-        self.tile_rect = Rect(0, 3, 2, 1)
+        self.tile_rect = Rect(x, y, w, h)
+        self.state = state
         self.obstacle = True
         self.renderable = False
 
@@ -21,4 +21,4 @@ class CoffeeStorage(AbstractSprite):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
                         if sprite.looks_at(self):
-                            sprite.item = MachineStates.REFILL_COFFEE
+                            sprite.item = self.state
