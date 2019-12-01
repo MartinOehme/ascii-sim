@@ -37,7 +37,7 @@ class BarRoom(Room):
             Rect(1, 4, 2, 2),
         ]
 
-        barkeeper = BarKeeper(9, 6)
+        BarKeeper(9, 6)
 
         customer = CustomerSprite(1, 0)
         self.sprites.append(

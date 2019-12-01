@@ -110,26 +110,26 @@ class CustomerSprite(AbstractSprite):
             self.bubble = SpeechBubble(self)
             if self.status == CustomerStatus.WALKING:
                 self.bubble.content = OrderWalkersContent(self.order_value)
-        elif self.order_value == OrderSitters.CHANGE_MUSIC:
-            self.bubble.content = OrderSittersContent(self.order_value)
-            self.track = context.rooms["bar"].track
-            pass
-        elif self.order_value == OrderSitters.MUSIC_VOLUME_UP:
-            self.volume = context.rooms["bar"].volume
-            self.bubble.content = OrderSittersContent(self.order_value)
-            pass
-        elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN:
-            self.volume = context.rooms["bar"].volume
-            self.bubble.content = OrderSittersContent(self.order_value)
-            pass
-        elif self.order_value == OrderSitters.TEMPERATURE_UP:
-            self.temperature = context.rooms["bar"].temperature
-            self.bubble.content = OrderSittersContent(self.order_value)
-            pass
-        elif self.order_value == OrderSitters.TEMPERATURE_DOWN:
-            self.temperature = context.rooms["bar"].temperature
-            self.bubble.content = OrderSittersContent(self.order_value)
-            pass
+            elif self.order_value == OrderSitters.CHANGE_MUSIC:
+                self.bubble.content = OrderSittersContent(self.order_value)
+                self.track = context.rooms["bar"].track
+                pass
+            elif self.order_value == OrderSitters.MUSIC_VOLUME_UP:
+                self.volume = context.rooms["bar"].volume
+                self.bubble.content = OrderSittersContent(self.order_value)
+                pass
+            elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN:
+                self.volume = context.rooms["bar"].volume
+                self.bubble.content = OrderSittersContent(self.order_value)
+                pass
+            elif self.order_value == OrderSitters.TEMPERATURE_UP:
+                self.temperature = context.rooms["bar"].temperature
+                self.bubble.content = OrderSittersContent(self.order_value)
+                pass
+            elif self.order_value == OrderSitters.TEMPERATURE_DOWN:
+                self.temperature = context.rooms["bar"].temperature
+                self.bubble.content = OrderSittersContent(self.order_value)
+                pass
         context.current_room.bubbles.append(self.bubble)
         self.timer = time.time()
 
