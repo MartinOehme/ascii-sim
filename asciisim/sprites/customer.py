@@ -101,18 +101,23 @@ class CustomerSprite(AbstractSprite):
                 self.order_value = OrderWalkers.COFFEE_MILK
             elif 24 <= random_value < 48:
                 self.order_value = OrderWalkers.RETURN_CUP
-            elif 48 <= random_value < 56:
+            elif 48 <= random_value < 54:
                 self.order_value = OrderWalkers.KOLLE_MATE
-            elif 56 <= random_value < 64:
+            elif 54 <= random_value < 60:
                 self.order_value = OrderWalkers.PREMIUM_COLA
-            elif 64 <= random_value < 72:
+            elif 60 <= random_value < 66:
                 self.order_value = OrderWalkers.ZOTRINE
+            elif 66 <= random_value < 72:
+                self.order_value = OrderWalkers.BONBON
             elif 72 <= random_value < 96:
                 self.order_value = OrderWalkers.RETURN_BOTTLE
-            elif 96 <= random_value <= 99:
+            elif 96 <= random_value < 98:
                 self.order_value = OrderWalkers.GET_BROOM
-                # TODO: make broom return order if broom has been taken
-       
+            elif 98 <= random_value <= 99:
+                self.order_value = OrderWalkers.RETURN_BROOM
+        else:
+            pass
+
     def generate_order_sitting(self):
         if self.status == CustomerStatus.SITTING:
             if self.order_value is None and time.time() - self.timer >= 40:
@@ -171,9 +176,6 @@ class CustomerSprite(AbstractSprite):
                 elif sprite.item == self.order_value and self.timer >= 40:
                     self.happiness = CustomerHappiness.UNHAPPY
                     self.is_order_done = True
-                elif sprite.item != self.order_value:
-                    self.happiness = CustomerHappiness.UNHAPPY
-                    self.is_order_done = True
                 elif self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer < 6:
                     self.happiness = CustomerHappiness.HAPPY
                     self.is_order_done = True
@@ -198,6 +200,9 @@ class CustomerSprite(AbstractSprite):
                     self.happiness = CustomerHappiness.UNHAPPY
                     self.is_order_done = True
                     sprite.item = OrderWalkers.RETURN_BROOM
+                elif sprite.item != self.order_value:
+                    self.happiness = CustomerHappiness.UNHAPPY
+                    self.is_order_done = True
                 sprite.item = None
                 self.pay_barkeeper(context)
 
@@ -220,7 +225,6 @@ class CustomerSprite(AbstractSprite):
 
     # For sitting customers
     def check_order_sitters(self, context: Context):
-        # TODO: SCORE
         if time.time() - self.timer >= 35:
             if self.order_value == OrderSitters.CHANGE_MUSIC \
                     and self.track != context.rooms["bar"].track:
@@ -262,14 +266,14 @@ class CustomerSprite(AbstractSprite):
                     and self.temperature <= context.rooms["bar"].temperature:
                 self.temperature = context.rooms["bar"].temperature
                 self.happiness = CustomerHappiness.UNHAPPY
+            self.pay_barkeeper(context)
             self.order_value = None
             self.timer = time.time()
 
     def update(self, context: Context):
         self.animation.update()
         self.customer_walking(context, self.path)
-        if (self.tile_rect == Rect(5, 4, 1, 1)
-            and time.time() - self.walk_timer > 20/60):
+        if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
             self.generate_order_walking()
             self.display_order(context)
         self.customer_interaction(context)
