@@ -63,14 +63,14 @@ class CustomerSprite(AbstractSprite):
         )
         self.register_surface(
             "sitting",
-            lambda: pygame.image.load(IMG_DIR + "sitting_customer.png")   
+            lambda: pygame.image.load(IMG_DIR + "sitting_customer.png")
         )
-        
+
     @property
     def image(self) -> Surface:
         if self.status == CustomerStatus.SITTING:
             return self.get_surface("sitting")
-        
+
         return self.get_ani_surface(
             self.direction.value,
             (90, 135),
@@ -91,12 +91,12 @@ class CustomerSprite(AbstractSprite):
                     else:
                         self.is_walking = True
 
-            if time.time() - self.walk_timer > 20/60 and self.is_walking:
+            if time.time() - self.walk_timer > 20 / 60 and self.is_walking:
                 self.animation.start()
                 self.tile_rect = i
                 self.walk_timer = time.time()
                 route.pop(0)
-                
+
     def generate_order_walking(self):
         # generate order for walkers from random value
         if self.status == CustomerStatus.WALKING and self.order_value is None:
@@ -128,7 +128,7 @@ class CustomerSprite(AbstractSprite):
     def generate_order_sitting(self):
         if self.order_value:
             return
-        
+
         random_value = random.randint(0, 9)
         if random_value % 2 == 0:
             random_value = random.randint(0, 99)
@@ -144,13 +144,13 @@ class CustomerSprite(AbstractSprite):
                 self.order_value = OrderSitters.TEMPERATURE_DOWN
         else:
             self.timer = time.time()
-            
+
     # Display the customers order
     def display_order(self, context: Context):
         # A sitter without wish needs no bubble
         if self.status == CustomerStatus.SITTING and not self.order_value:
             return
-        
+
         if not self.bubble:
             self.bubble = SpeechBubble(self)
             if self.status == CustomerStatus.WALKING:
@@ -159,6 +159,7 @@ class CustomerSprite(AbstractSprite):
                 self.bubble.content = OrderSittersContent(self.order_value)
                 self.track = context.rooms["bar"].track
             elif self.order_value == OrderSitters.MUSIC_VOLUME_UP:
+
                 self.volume = context.rooms["bar"].volume
                 self.bubble.content = OrderSittersContent(self.order_value)
             elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN:
@@ -172,7 +173,7 @@ class CustomerSprite(AbstractSprite):
                 self.bubble.content = OrderSittersContent(self.order_value)
             context.current_room.bubbles.append(self.bubble)
         self.timer = time.time()
-        
+
     def check_order_walkers(self, context: Context):
         if not self.bubble:
             # Do not serve customers not at the bar
@@ -180,7 +181,7 @@ class CustomerSprite(AbstractSprite):
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
         for sprite in context.current_room.sprites:
-            if type(sprite) == BarKeeper:
+            if type(sprite) == BarKeeper and not self.is_order_done:
                 if self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer < 6:
                     self.happiness = CustomerHappiness.HAPPY
                     self.bubble.content = CustomerHappinessContent(
@@ -320,7 +321,7 @@ class CustomerSprite(AbstractSprite):
         if self.status is CustomerStatus.WALKING:
             self.animation.update()
             self.customer_walking(context, self.path)
-            if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
+            if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20 / 60:
                 self.generate_order_walking()
                 self.display_order(context)
             self.customer_interaction(context)
