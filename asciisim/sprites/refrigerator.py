@@ -53,7 +53,7 @@ class Refrigerator(AbstractSprite):
 
     def update(self, context: Context):
         for event in context.events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
                         if sprite.is_near(self):

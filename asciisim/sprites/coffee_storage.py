@@ -14,7 +14,6 @@ class CoffeeStorage(AbstractSprite):
         self.tile_rect = Rect(0, 3, 2, 1)
         self.obstacle = True
         self.renderable = False
-        self.state = None
 
     def update(self, context: Context):
         for event in context.events:
