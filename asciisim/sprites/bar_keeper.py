@@ -8,24 +8,20 @@ from ..base.game_object import GameObject
 from ..base.context import Context
 from ..base.sprite import AbstractSprite
 from ..res import IMG_DIR
+from ..util.animation import Animation
 from ..util.debounce import Debounce
 
 debounce_decorator = Debounce(300)
 
 
-class BarKeeper(AbstractSprite):
-    WALK_ANIM_FRAME = 75
-    WALK_ANIM_FRAME_COUNT = 4
-    WALK_ANIM_DURATION = 300
-    
+class BarKeeper(AbstractSprite):    
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__()
+
+        self.animation = Animation(4, 75, 300)
         self.tile_rect = Rect(x, y, 1, 1) 
         self.item = None
         self.direction = Direction.DOWN
-        self.frame = 0
-        self.last_frame = 0
-        self.anim_started = 0
         
         self.register_surface(
             Direction.UP.value,
@@ -43,30 +39,14 @@ class BarKeeper(AbstractSprite):
             Direction.LEFT.value,
             lambda: pygame.image.load(IMG_DIR + "bar_keeper/left.png")
         )
-
-    def start_anim(self):
-        ms = time.time_ns() // 1000000
-        self.anim_started = ms
-        self.last_frame = ms
-
-    def continue_anim(self):
-        ms = time.time_ns() // 1000000
-        if ms - self.anim_started > self.WALK_ANIM_DURATION:
-            return
-
-        if ms - self.last_frame < self.WALK_ANIM_FRAME:
-            return
-
-        self.last_frame = ms
-
-        if self.frame + 1 < self.WALK_ANIM_FRAME_COUNT:
-            self.frame += 1
-        else:
-            self.frame = 0
         
     @property
     def image(self) -> Surface:
-        return self.get_ani_surface(self.direction.value, (135, 135), self.frame)
+        return self.get_ani_surface(
+            self.direction.value,
+            (135, 135),
+            self.animation.current_frame
+        )
 
     @debounce_decorator
     def move_up(self, context):
@@ -74,7 +54,7 @@ class BarKeeper(AbstractSprite):
         if self.tile_rect.top > 0:    
             if context.current_room.has_obstacle(self, 0, -1):
                 return
-            self.start_anim()
+            self.animation.start()
             self.tile_rect.top -= 1
 
 
@@ -85,7 +65,7 @@ class BarKeeper(AbstractSprite):
             if context.current_room.has_obstacle(self, 0, 1):
                 return
 
-            self.start_anim()
+            self.animation.start()
             self.tile_rect.top += 1
 
     @debounce_decorator
@@ -101,7 +81,7 @@ class BarKeeper(AbstractSprite):
             if context.current_room.has_obstacle(self, -1, 0):
                 return
 
-            self.start_anim() 
+            self.animation.start() 
             self.tile_rect.left -= 1
 
     @debounce_decorator
@@ -119,7 +99,7 @@ class BarKeeper(AbstractSprite):
         ):
             if context.current_room.has_obstacle(self, 1, 0):
                 return
-            self.start_anim()
+            self.animation.start()
             self.tile_rect.left += 1
         elif (
                 self.tile_rect.left < 5
@@ -127,11 +107,11 @@ class BarKeeper(AbstractSprite):
         ):
             if context.current_room.has_obstacle(self, 1, 0):
                 return
-            self.start_anim()
+            self.animation.start()
             self.tile_rect.left += 1
                     
     def update(self, context):
-        self.continue_anim()
+        self.animation.update()
         if context.keys_pressed[pygame.K_UP]:
             self.move_up(context)
         elif context.keys_pressed[pygame.K_DOWN]:
@@ -173,10 +153,7 @@ class BarKeeper(AbstractSprite):
     def rect(self):
         ms = time.time_ns() // 1000000
         rect = super().rect
-        anim_progress =  (ms - self.anim_started) / self.WALK_ANIM_DURATION
-        if anim_progress > 1:
-            return rect
-        
+        anim_progress = self.animation.progress
         if self.direction == Direction.UP:
             rect.top += self.TILE_SIZE * (1 - anim_progress) 
         elif self.direction == Direction.DOWN:
