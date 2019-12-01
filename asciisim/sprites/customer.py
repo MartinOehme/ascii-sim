@@ -112,9 +112,7 @@ class CustomerSprite(AbstractSprite):
             elif 96 <= random_value <= 99:
                 self.order_value = OrderWalkers.GET_BROOM
                 # TODO: make broom return order if broom has been taken
-        else:
-            pass
-
+       
     def generate_order_sitting(self):
         if self.status == CustomerStatus.SITTING:
             if self.order_value is None and time.time() - self.timer >= 40:
@@ -143,24 +141,19 @@ class CustomerSprite(AbstractSprite):
             elif self.order_value == OrderSitters.CHANGE_MUSIC:
                 self.bubble.content = OrderSittersContent(self.order_value)
                 self.track = context.rooms["bar"].track
-                pass
             elif self.order_value == OrderSitters.MUSIC_VOLUME_UP:
                 self.volume = context.rooms["bar"].volume
                 self.bubble.content = OrderSittersContent(self.order_value)
-                pass
             elif self.order_value == OrderSitters.MUSIC_VOLUME_DOWN:
                 self.volume = context.rooms["bar"].volume
                 self.bubble.content = OrderSittersContent(self.order_value)
-                pass
             elif self.order_value == OrderSitters.TEMPERATURE_UP:
                 self.temperature = context.rooms["bar"].temperature
                 self.bubble.content = OrderSittersContent(self.order_value)
-                pass
             elif self.order_value == OrderSitters.TEMPERATURE_DOWN:
                 self.temperature = context.rooms["bar"].temperature
                 self.bubble.content = OrderSittersContent(self.order_value)
-                pass
-        context.current_room.bubbles.append(self.bubble)
+            context.current_room.bubbles.append(self.bubble)
         self.timer = time.time()
 
     def check_order_walkers(self, context: Context):
