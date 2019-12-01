@@ -3,6 +3,7 @@ from pygame import Rect
 from pygame import Surface
 
 from asciisim.base.speech_bubble import SpeechBubble
+from asciisim.speech_bubble.customer_happiness import CustomerHappinessContent
 from asciisim.speech_bubble.order_sitters import OrderSittersContent
 from asciisim.speech_bubble.order_walkers import OrderWalkersContent
 from ..base.sprite import AbstractSprite
@@ -155,7 +156,7 @@ class CustomerSprite(AbstractSprite):
                 self.bubble.content = OrderSittersContent(self.order_value)
             context.current_room.bubbles.append(self.bubble)
         self.timer = time.time()
-
+        
     def check_order_walkers(self, context: Context):
         # TODO: Check and Adjust times
         self.timer = time.time() - self.timer
@@ -164,22 +165,37 @@ class CustomerSprite(AbstractSprite):
             if type(sprite) == BarKeeper:
                 if self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer < 6:
                     self.happiness = CustomerHappiness.HAPPY
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.HAPPY
+                    )
                     self.is_order_done = True
                     sprite.item = OrderWalkers.RETURN_BOTTLE
                 elif self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer > 10:
                     self.happiness = CustomerHappiness.UNHAPPY
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.UNHAPPY
+                    )
                     self.is_order_done = True
                     sprite.item = OrderWalkers.RETURN_BOTTLE
                 elif self.order_value == OrderWalkers.RETURN_CUP and self.timer < 6:
                     self.happiness = CustomerHappiness.HAPPY
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.HAPPY
+                    )
                     self.is_order_done = True
                     sprite.item = OrderWalkers.RETURN_CUP
                 elif self.order_value == OrderWalkers.RETURN_CUP and self.timer > 10:
                     self.happiness = CustomerHappiness.UNHAPPY
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.UNHAPPY
+                    )
                     self.is_order_done = True
                     sprite.item = OrderWalkers.RETURN_CUP
                 elif self.order_value == OrderWalkers.RETURN_BROOM and self.timer < 6:
                     self.happiness = CustomerHappiness.HAPPY
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.HAPPY
+                    )
                     self.is_order_done = True
                     sprite.item = OrderWalkers.RETURN_BROOM
                 elif self.order_value == OrderWalkers.RETURN_BROOM and self.timer > 10:
@@ -188,18 +204,30 @@ class CustomerSprite(AbstractSprite):
                     sprite.item = OrderWalkers.RETURN_BROOM
                 elif sprite.item != self.order_value:
                     self.happiness = CustomerHappiness.UNHAPPY
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.UNHAPPY
+                    )
                     self.is_order_done = True
                     sprite.item = None
                 elif sprite.item == self.order_value and self.timer < 20:
                     self.happiness = CustomerHappiness.HAPPY
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.HAPPY
+                    )
                     self.is_order_done = True
                     sprite.item = None
                 elif sprite.item == self.order_value and 20 <= self.timer < 40:
                     self.happiness = CustomerHappiness.NEUTRAL
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.NEUTRAL
+                    )
                     self.is_order_done = True
                     sprite.item = None
                 elif sprite.item == self.order_value and self.timer >= 40:
                     self.happiness = CustomerHappiness.UNHAPPY
+                    self.bubble.content = CustomerHappinessContent(
+                        CustomerHappiness.UNHAPPY
+                    )
                     self.is_order_done = True
                     sprite.item = None
                 self.pay_barkeeper(context)
