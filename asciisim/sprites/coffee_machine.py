@@ -159,8 +159,6 @@ class CoffeeMachine(AbstractSprite):
     def update(self, context: Context):
         if not self.bubble:
             self.bubble = SpeechBubble(self)
-            self.bubble.content = MachineStatesContent(self.state)
-            context.current_room.bubbles.append(self.bubble)
 
         if self.state is MachineStates.BLOCKED:
             if time.time() - self.coffee_time > 5:
@@ -186,3 +184,6 @@ class CoffeeMachine(AbstractSprite):
                             if sprite.looks_at(self):
                                 sprite.item = self.last_coffee
                                 self.state = MachineStates.NOT_USED
+
+            self.bubble.content = MachineStatesContent(self.state)
+            context.current_room.bubbles.append(self.bubble)

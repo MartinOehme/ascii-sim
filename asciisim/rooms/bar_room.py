@@ -86,7 +86,4 @@ class BarRoom(Room):
             self.sprites.append(
                 customer
             )
-            customer.generate_order_walking()
-
-            pass
 
