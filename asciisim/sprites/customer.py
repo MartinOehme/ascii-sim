@@ -110,7 +110,6 @@ class CustomerSprite(AbstractSprite):
     def display_order(self, context: Context):
         if not self.bubble:
             self.bubble = SpeechBubble(self)
-            print(self.order_value.value)
             if self.status == CustomerStatus.WALKING:
                 self.bubble.content = OrderWalkersContent(self.order_value)
             elif self.order_value == OrderSitters.CHANGE_MUSIC:
