@@ -19,7 +19,8 @@ class SideBar(GameObject):
                 icon.value,
                 lambda: pygame.transform.smoothscale(
                     pygame.image.load(
-                        IMG_DIR + f"speech_bubbles/order_walkers/{icon.value}.png"
+                        IMG_DIR +
+                        f"speech_bubbles/order_walkers/{icon.value}.png"
                     ),
                     (300, 300)
                 )
