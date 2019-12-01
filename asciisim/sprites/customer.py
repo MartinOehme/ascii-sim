@@ -125,22 +125,24 @@ class CustomerSprite(AbstractSprite):
 
     def check_order_walkers(self, context: Context):
         # TODO: Check and Adjust times
-        # TODO: Get Barkeeper order_value
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
-        if BarKeeper.get_current_order() == self.order_value and self.timer < 20:
-            self.happiness = CustomerHappiness.HAPPY
-            # TODO: HIGHSCORE and leave
-        elif BarKeeper.get_current_order() == self.order_value and 20 <= self.timer < 40:
-            self.happiness = CustomerHappiness.NEUTRAL
-            # TODO: HIGHSCORE and leave
-        elif BarKeeper.get_current_order() == self.order_value and self.timer >= 40:
-            self.happiness = CustomerHappiness.UNHAPPY
-            # TODO: HIGHSCORE and leave
-        elif BarKeeper.get_current_order() != self.order_value:
-            self.happiness = CustomerHappiness.UNHAPPY
-            # TODO: HIGHTSCORE and leave
-        self.order_value = None
+        for sprite in context.current_room.sprites:
+            if type(sprite) == BarKeeper:
+                if sprite.item == self.order_value and self.timer < 20:
+                    self.happiness = CustomerHappiness.HAPPY
+                    # TODO: HIGHSCORE and leave
+                elif sprite.item == self.order_value and 20 <= self.timer < 40:
+                    self.happiness = CustomerHappiness.NEUTRAL
+                    # TODO: HIGHSCORE and leave
+                elif sprite.item == self.order_value and self.timer >= 40:
+                    self.happiness = CustomerHappiness.UNHAPPY
+                    # TODO: HIGHSCORE and leave
+                elif sprite.item != self.order_value:
+                    self.happiness = CustomerHappiness.UNHAPPY
+                    # TODO: HIGHTSCORE and leave
+                self.order_value = None
+                sprite.item = None
 
     # For sitting customers
     def check_order_sitters(self, context: Context):
