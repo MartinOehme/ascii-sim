@@ -121,7 +121,7 @@ class CustomerSprite(AbstractSprite):
 
     def generate_order_sitting(self):
         if self.status == CustomerStatus.SITTING:
-            if self.order_value is None and time.time() - self.timer >= 10:
+            if self.order_value is None and time.time() - self.timer >= 1:
                 random_value = random.randint(0, 9)
                 if random_value % 2 == 0:
                     random_value = random.randint(0, 99)
@@ -137,7 +137,6 @@ class CustomerSprite(AbstractSprite):
                         self.order_value = OrderSitters.TEMPERATURE_DOWN
                 else:
                     self.timer = time.time()
-            print(self.order_value)
 
     # Display the customers order
     def display_order(self, context: Context):
@@ -167,7 +166,6 @@ class CustomerSprite(AbstractSprite):
         if not self.bubble:
             # Do not serve customers not at the bar
             return
-        # TODO: Check and Adjust times
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
         for sprite in context.current_room.sprites:
