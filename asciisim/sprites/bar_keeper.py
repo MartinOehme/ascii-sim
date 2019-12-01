@@ -21,6 +21,7 @@ class BarKeeper(AbstractSprite):
         self.animation = Animation(4, 75, 300)
         self.tile_rect = Rect(x, y, 1, 1) 
         self.item = None
+        self.earnings = 0
         self.direction = Direction.DOWN
         
         self.register_surface(
@@ -111,6 +112,8 @@ class BarKeeper(AbstractSprite):
             self.tile_rect.left += 1
                     
     def update(self, context):
+        print(self.item)
+        print(self.earnings)
         self.animation.update()
         if context.keys_pressed[pygame.K_UP]:
             self.move_up(context)
