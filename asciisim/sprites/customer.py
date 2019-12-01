@@ -61,10 +61,16 @@ class CustomerSprite(AbstractSprite):
             Direction.LEFT.value,
             lambda: pygame.image.load(IMG_DIR + "customer/left.png")
         )
- 
+        self.register_surface(
+            "sitting",
+            lambda: pygame.image.load(IMG_DIR + "sitting_customer.png")   
+        )
         
     @property
     def image(self) -> Surface:
+        if self.status == CustomerStatus.SITTING:
+            return self.get_surface("sitting")
+        
         return self.get_ani_surface(
             self.direction.value,
             (90, 135),
