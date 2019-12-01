@@ -143,7 +143,6 @@ class CustomerSprite(AbstractSprite):
                         self.order_value = OrderSitters.TEMPERATURE_DOWN
                 else:
                     self.timer = time.time()
-            print(self.order_value)
 
     # Display the customers order
     def display_order(self, context: Context):
