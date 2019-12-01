@@ -17,8 +17,8 @@ class RadiatorCloseup(Closeup):
         super().__init__(IMG_DIR + "radiator/radiator_closeup.png")
         self.radiator = radiator
         self.menu = Menu()
-        self.menu.add_control(Control(900, 400, 400, 100))
-        self.menu.add_control(Control(900, 600, 400, 100))
+        self.menu.add_control(Control(900, 400, 400, 100))      # 0 -> temperature up
+        self.menu.add_control(Control(900, 600, 400, 100))      # 1 -> temperature down
 
         self.sprites += self.menu.control_sprites
 
@@ -26,34 +26,57 @@ class RadiatorCloseup(Closeup):
         self.menu.update(context)
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                for sprite in context.current_room.sprites:
-                    if type(sprite) == BarKeeper:
-                        if self.menu.control_index == 0:
-                            sprite.item = OrderSitters.TEMPERATURE_UP
-                        elif self.menu.control_index == 1:
-                            sprite.item = OrderSitters.TEMPERATURE_UP
-
-                    context.closeup = None
+                self.radiator.change_temperature(self.menu.control_index)
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 context.closeup = None
 
+
 class MusicBoxCloseup(Closeup):
-    pass
+    def __init__(self, music_box: 'MusicBox'):
+        super().__init__(IMG_DIR + "music_box/music_box_closeup.png")
+        self.music_box = music_box
+        self.menu = Menu()
+        self.menu.add_control(Control(500, 300, 100, 100))      # 0 -> music off
+        self.menu.add_control(Control(500, 600, 400, 100))      # 1 -> previous track
+        self.menu.add_control(Control(500, 800, 400, 100))      # 2 -> next track
+        self.menu.add_control(Control(1000, 600, 100, 100))     # 3 -> volume down
+        self.menu.add_control(Control(1200, 600, 100, 100))     # 4 -> volume up
+
+        self.sprites += self.menu.control_sprites
+
+    def update(self, context: Context) -> None:
+        self.menu.update(context)
+        for event in context.events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                if self.menu.control_index == 0:
+                    self.music_box.change_music(MusicTracks.MUSIC_OFF)
+                elif self.menu.control_index == 1:
+                    self.music_box.change_music(MusicTracks.TRACK1)
+                elif self.menu.control_index == 2:
+                    self.music_box.change_music(MusicTracks.TRACK2)
+                elif self.menu.control_index == 3:
+                    self.music_box.change_volume(-2)
+                elif self.menu.control_index == 4:
+                    self.music_box.change_volume(2)
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                context.closeup = None
 
 
 class Radiator(AbstractSprite):
-    def __init__(self, temperature=22):
+    def __init__(self, rect: Rect = Rect(3, 6, 2, 1), temperature: int = 22):
         super().__init__()
-        self.tile_rect = Rect(3, 6, 2, 1)
+        self.tile_rect = rect
         self.renderable = False
         self.obstacle = True
         self.closeup = RadiatorCloseup(self)
 
-        self.temperature = temperature
+        self.temperature: int = temperature
 
     def update(self, context: Context):
         context.rooms["bar"].temperature = self.temperature
+
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 for sprite in context.current_room.sprites:
@@ -62,15 +85,16 @@ class Radiator(AbstractSprite):
                             context.closeup = self.closeup
 
     def change_temperature(self, value):
-        self.temperature += value
+        self.temperature += (1 - 2*value)
 
 
 class MusicBox(AbstractSprite):
-    def __init__(self, rect: Rect, track: MusicTracks = MusicTracks.MUSIC_OFF, volume=50):
+    def __init__(self, rect: Rect = Rect(8, 1, 2, 1), track: MusicTracks = MusicTracks.MUSIC_OFF, volume=50):
         super().__init__()
-        self.tile_rect = Rect(8, 1, 1, 2)
+        self.tile_rect = rect
         self.renderable = False
         self.obstacle = True
+        self.closeup = MusicBoxCloseup(self)
 
         self.track: MusicTracks = track
         self.volume = volume
@@ -82,17 +106,24 @@ class MusicBox(AbstractSprite):
     def update(self, context: Context):
         context.rooms["bar"].track = self.track
         context.rooms["bar"].volume = self.volume
-
         pygame.mixer_music.set_volume(self.volume/100)
+
+        for event in context.events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                for sprite in context.current_room.sprites:
+                    if type(sprite) == BarKeeper:
+                        if sprite.looks_at(self):
+                            context.closeup = self.closeup
 
     def change_volume(self, value):
         if 0 < self.volume < 100:
             self.volume += value
         elif (value > 0 and self.volume == 0) or (value < 0 and self.volume == 100):
             self.volume += value
+        pygame.mixer_music.set_volume(self.volume/100)
 
     def change_music(self, track: MusicTracks):
-        pygame.mixer_music.fadeout(2000)
+        pygame.mixer_music.fadeout(500)
         if track is MusicTracks.MUSIC_OFF:
             pygame.mixer_music.stop()
         else:
@@ -100,60 +131,3 @@ class MusicBox(AbstractSprite):
             pygame.mixer_music.play(loops=-1)
 
         self.track = track
-
-
-
-
-
-
-
-
-
-
-
-class RefrigeratorCloseup(Closeup):
-    def __init__(self, refrigeratore: 'Refrigerator'):
-        super().__init__(IMG_DIR + "refrigeratore/refrigeratore_closeup.png")
-        self.refrigeratore = refrigeratore
-        self.menu = Menu()
-        self.menu.add_control(Control(760, 200, 400, 100))
-        self.menu.add_control(Control(760, 400, 400, 100))
-        self.menu.add_control(Control(760, 600, 400, 100))
-
-        self.sprites += self.menu.control_sprites
-
-    def update(self, context: Context) -> None:
-        self.menu.update(context)
-        for event in context.events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                for sprite in context.current_room.sprites:
-                    if type(sprite) == BarKeeper:
-                        if self.menu.control_index == 0:
-                            sprite.item = OrderWalkers.KOLLE_MATE
-                        elif self.menu.control_index == 1:
-                            sprite.item = OrderWalkers.PREMIUM_COLA
-                        elif self.menu.control_index == 2:
-                            sprite.item = OrderWalkers.ZOTRINE
-
-                    context.closeup = None
-
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
-                context.closeup = None
-
-
-class Refrigerator(AbstractSprite):
-    def __init__(self):
-        super().__init__()
-        self.closeup = RefrigeratorCloseup(self)
-        self.tile_rect = Rect(0, 4, 2, 1)
-        self.obstacle = True
-        self.renderable = False
-        self.state = None
-
-    def update(self, context: Context):
-        for event in context.events:
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                for sprite in context.current_room.sprites:
-                    if type(sprite) == BarKeeper:
-                        if sprite.looks_at(self):
-                            context.closeup = self.closeup
