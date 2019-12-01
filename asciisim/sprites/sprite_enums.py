@@ -58,7 +58,8 @@ class CustomerHappiness(Enum):
 
 class MusicTracks(Enum):
     MUSIC_OFF = None
-    # https://freesound.org/s/399821/
-    TRACK1 = SOUND_DIR + "track1.mp3"
+    # https://freesound.org/s/399821/ (mp3)
+    # https://freesound.org/s/35122/ (wav)
+    TRACK1 = SOUND_DIR + "track1.wav"
     # https://freesound.org/s/415511/
     TRACK2 = SOUND_DIR + "track2.mp3"
