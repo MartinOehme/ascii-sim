@@ -17,9 +17,9 @@ class RefrigeratorCloseup(Closeup):
         super().__init__(IMG_DIR + "refrigeratore/refrigeratore_closeup.png")
         self.refrigeratore = refrigeratore
         self.menu = Menu()
-        self.menu.add_control(Control(760, 200, 400, 100))
-        self.menu.add_control(Control(760, 400, 400, 100))
-        self.menu.add_control(Control(760, 600, 400, 100))
+        self.menu.add_control(Control(250, 250, 255, 750))
+        self.menu.add_control(Control(594, 250, 255, 750))
+        self.menu.add_control(Control(950, 250, 255, 750))
 
         self.sprites += self.menu.control_sprites
 
@@ -30,11 +30,11 @@ class RefrigeratorCloseup(Closeup):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
                         if self.menu.control_index == 0:
-                            sprite.item = OrderWalkers.KOLLE_MATE
-                        elif self.menu.control_index == 1:
                             sprite.item = OrderWalkers.PREMIUM_COLA
-                        elif self.menu.control_index == 2:
+                        elif self.menu.control_index == 1:
                             sprite.item = OrderWalkers.ZOTRINE
+                        elif self.menu.control_index == 2:
+                            sprite.item = OrderWalkers.KOLLE_MATE
 
                     context.closeup = None
 
