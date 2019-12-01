@@ -3,7 +3,7 @@ from pygame import Rect
 
 from .context import Context
 from .game_object import GameObject
-from ..sprites.sprite_enums import OrderWalkers
+from ..sprites.sprite_enums import OrderWalkers, MachineStates
 from ..res import IMG_DIR
 
 class SideBar(GameObject):
@@ -21,6 +21,17 @@ class SideBar(GameObject):
                     pygame.image.load(
                         IMG_DIR +
                         f"speech_bubbles/order_walkers/{icon.value}.png"
+                    ),
+                    (300, 300)
+                )
+            )
+        for icon in MachineStates:
+            self.register_surface(
+                icon.value,
+                lambda: pygame.transform.smoothscale(
+                    pygame.image.load(
+                        IMG_DIR +
+                        f"speech_bubbles/machine_states/{icon.value}.png"
                     ),
                     (300, 300)
                 )
