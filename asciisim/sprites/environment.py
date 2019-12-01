@@ -17,8 +17,8 @@ class RadiatorCloseup(Closeup):
         super().__init__(IMG_DIR + "radiator/radiator_closeup.png")
         self.radiator = radiator
         self.menu = Menu()
-        self.menu.add_control(Control(900, 400, 400, 100))      # 0 -> temperature up
-        self.menu.add_control(Control(900, 600, 400, 100))      # 1 -> temperature down
+        self.menu.add_control(Control(710, 350, 140, 140))      # 0 -> temperature up
+        self.menu.add_control(Control(710, 490, 140, 130))      # 1 -> temperature down
 
         self.sprites += self.menu.control_sprites
 
@@ -37,11 +37,11 @@ class MusicBoxCloseup(Closeup):
         super().__init__(IMG_DIR + "music_box/music_box_closeup.png")
         self.music_box = music_box
         self.menu = Menu()
-        self.menu.add_control(Control(500, 300, 100, 100))      # 0 -> music off
-        self.menu.add_control(Control(500, 600, 400, 100))      # 1 -> previous track
-        self.menu.add_control(Control(500, 800, 400, 100))      # 2 -> next track
-        self.menu.add_control(Control(1000, 600, 100, 100))     # 3 -> volume down
-        self.menu.add_control(Control(1200, 600, 100, 100))     # 4 -> volume up
+        self.menu.add_control(Control(778, 435, 337, 337))      # 0 -> music off
+        self.menu.add_control(Control(1390, 530, 150, 150))      # 1 -> previous track
+        self.menu.add_control(Control(1583, 530, 150, 150))      # 2 -> next track
+        self.menu.add_control(Control(626, 530, 150, 150))     # 3 -> volume down
+        self.menu.add_control(Control(1115, 530, 150, 150))     # 4 -> volume up
 
         self.sprites += self.menu.control_sprites
 

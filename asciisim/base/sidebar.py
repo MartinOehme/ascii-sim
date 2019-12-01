@@ -5,15 +5,18 @@ from .context import Context
 from .game_object import GameObject
 from ..sprites.sprite_enums import OrderWalkers, MachineStates
 from ..res import IMG_DIR
+from ..res import FONT_DIR
 
 class SideBar(GameObject):
     def __init__(self):
+        self.font = pygame.font.Font(FONT_DIR + "Game_font.ttf", 50)
         self.is_left = True
         self.register_surface(
             "sidebar",
             lambda: pygame.image.load(IMG_DIR + "sidebar.png")
         )
         self.item = None
+        self.score = 0
         for icon in OrderWalkers:
             self.register_surface(
                 icon.value,
@@ -41,6 +44,23 @@ class SideBar(GameObject):
     def image(self):
         surface = self.get_surface("sidebar").copy()
         scaling = self.TILE_SIZE / 135
+
+        score = self.font.render(f"Score : {self.score}", 16, (255, 255, 255))
+        score_size = score.get_size()
+        score = pygame.transform.smoothscale(
+            score,
+            (
+                int(score_size[0] * scaling),
+                int(score_size[1] * scaling)
+            )
+        )
+        surface.blit(
+            score,
+            (
+                int(100 * scaling),
+                int(1000 * scaling)
+            )
+        )
         
         if self.item:
             surface.blit(
@@ -57,6 +77,7 @@ class SideBar(GameObject):
         
     def update(self, context):
         self.item = context.bar_keeper.item
+        self.score = context.bar_keeper.earnings
         if context.room_key == Context.BAR_ROOM:
             self.is_left = True
         else:
