@@ -40,6 +40,7 @@ class OrderWalkers(Enum):
     GET_BROOM = 'get_broom'
     RETURN_BOTTLE = 'return_bottle'
     RETURN_BROOM = 'return_broom'
+    BONBON = 'bonbon'
 
 
 class OrderSitters(Enum):

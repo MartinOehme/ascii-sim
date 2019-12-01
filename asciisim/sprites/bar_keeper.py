@@ -111,6 +111,7 @@ class BarKeeper(AbstractSprite):
             self.tile_rect.left += 1
                     
     def update(self, context):
+        print(self.item)
         self.animation.update()
         if context.keys_pressed[pygame.K_UP]:
             self.move_up(context)
