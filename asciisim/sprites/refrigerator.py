@@ -38,7 +38,7 @@ class RefrigeratorCloseup(Closeup):
 
                     context.closeup = None
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 context.closeup = None
 
 
