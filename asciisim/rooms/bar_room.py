@@ -39,11 +39,10 @@ class BarRoom(Room):
 
         BarKeeper(9, 6)
 
-        customer = CustomerSprite(1, 0)
+        customer = CustomerSprite(0, 5, status=CustomerStatus.SITTING)
         self.sprites.append(
             customer
         )
-        customer.generate_order_walking()
 
         coffee_machine = CoffeeMachine()
 
@@ -79,7 +78,7 @@ class BarRoom(Room):
                     self.bubbles.pop(self.bubbles.index(sprite.bubble))
                     self.sprites.pop(i)
                     self.number_of_customers -= 1
-        random_value = random.randint(1, 10)
+        random_value = random.randint(10, 30)
         if self.number_of_customers < 5 and time.time() - self.timer > random_value:
             self.timer = time.time()
             customer = CustomerSprite(1, 0)
