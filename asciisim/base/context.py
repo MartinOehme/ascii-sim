@@ -18,7 +18,8 @@ class Context(object):
         self.room = None
         self.rooms = {}
         self.room_key: str = ""
-
+        self.sidebar = None
+        
     def set_room(self, key) -> None:
         if key in self.rooms:
             self.room_key = key
