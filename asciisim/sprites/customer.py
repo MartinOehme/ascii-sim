@@ -67,7 +67,6 @@ class CustomerSprite(AbstractSprite):
         # generate order for walkers from random value
         if self.status == CustomerStatus.WALKING and self.order_value is None:
             random_value = random.randint(0, 99)
-            print(random_value)
             if 0 <= random_value < 12:
                 self.order_value = OrderWalkers.COFFEE
             elif 12 <= random_value < 24:
