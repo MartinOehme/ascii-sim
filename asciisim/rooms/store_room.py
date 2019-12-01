@@ -1,8 +1,10 @@
 import pygame
 from pygame import Surface
-from pygame import Rect
 
-from asciisim.sprites.refrigerator import Refrigerator
+from ..base.context import Context
+
+from ..sprites.refrigerator import Refrigerator
+from ..sprites.coffee_storage import CoffeeStorage
 from ..base.room import Room
 from ..res import IMG_DIR
 from ..sprites.bar_keeper import BarKeeper
@@ -17,11 +19,11 @@ class StoreRoom(Room):
         )
 
         self.sprites.append(
-            BarKeeper(0, 6)
+            Refrigerator()
         )
 
         self.sprites.append(
-            Refrigerator()
+            CoffeeStorage()
         )
 
         self.sidebar_left = False
@@ -29,3 +31,6 @@ class StoreRoom(Room):
     @property
     def background(self) -> Surface:
         return self.get_surface("background")
+
+    def update(self, context: Context):
+        pass

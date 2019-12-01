@@ -39,18 +39,16 @@ class BarRoom(Room):
 
         barkeeper = BarKeeper(9, 6)
 
-        self.sprites.append(
-            barkeeper
-        )
-
         customer = CustomerSprite(1, 0)
         self.sprites.append(
             customer
         )
         customer.generate_order_walking()
 
+        coffee_machine = CoffeeMachine()
+
         self.sprites.append(
-            CoffeeMachine()
+            coffee_machine
         )
 
 

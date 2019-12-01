@@ -6,13 +6,23 @@ from .base.context import Context
 from .render_context import RenderContext
 from .rooms.bar_room import BarRoom
 from .rooms.store_room import StoreRoom
+from .sprites.bar_keeper import BarKeeper
 
 class Game(object):    
     def __init__(self):
         self.clock: Clock = Clock()
         self.context: Context = Context()
-        self.context.rooms[Context.BAR_ROOM] = BarRoom()
-        self.context.rooms[Context.STORE_ROOM] = StoreRoom()
+        self.context.bar_keeper = BarKeeper()
+        bar_room = BarRoom()
+        bar_room.sprites.append(
+            self.context.bar_keeper
+        )
+        self.context.rooms[Context.BAR_ROOM] = bar_room
+        store_room = StoreRoom()
+        store_room.sprites.append(
+            self.context.bar_keeper
+        )
+        self.context.rooms[Context.STORE_ROOM] = store_room
         self.context.set_room(Context.BAR_ROOM)
         self.render_context = RenderContext((1920, 1080))
         self.running = True

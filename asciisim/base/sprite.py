@@ -1,6 +1,5 @@
 from abc import abstractmethod
 
-from .context import Context
 from .game_object import GameObject
 
 class AbstractSprite(GameObject):    
@@ -8,5 +7,5 @@ class AbstractSprite(GameObject):
         super().__init__()
 
     @abstractmethod
-    def update(self, context: Context) -> None:
+    def update(self, context) -> None:
         pass        
