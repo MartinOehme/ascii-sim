@@ -179,7 +179,6 @@ class CustomerSprite(AbstractSprite):
         if not self.bubble:
             # Do not serve customers not at the bar
             return
-        # TODO: Check and Adjust times
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
         for sprite in context.current_room.sprites:
