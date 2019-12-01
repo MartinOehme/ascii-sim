@@ -20,5 +20,5 @@ class CoffeeStorage(AbstractSprite):
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
-                        if sprite.is_near(self):
+                        if sprite.looks_at(self):
                             sprite.item = MachineStates.REFILL_COFFEE

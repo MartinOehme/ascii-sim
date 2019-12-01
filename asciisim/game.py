@@ -13,6 +13,8 @@ class Game(object):
         self.clock: Clock = Clock()
         self.context: Context = Context()
         self.context.bar_keeper = BarKeeper()
+        self.context.bar_keeper.tile_rect.left = 9
+        self.context.bar_keeper.tile_rect.bottom = 6
         bar_room = BarRoom()
         bar_room.sprites.append(
             self.context.bar_keeper
