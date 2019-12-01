@@ -23,6 +23,8 @@ class BarKeeper(AbstractSprite):
         return self.get_surface("image")
 
     def update(self, context: Context):
+        print(self.item)
+
         for event in context.events:
             if event.type != pygame.KEYDOWN:
                 continue
