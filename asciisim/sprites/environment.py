@@ -24,7 +24,7 @@ class Radiator(AbstractSprite):
 class MusicBox(AbstractSprite):
     def __init__(self, rect: Rect, track: MusicTracks = MusicTracks.MUSIC_OFF, volume=50):
         super().__init__()
-        self.tile_rect = Rect(8, 1, 1, 1)
+        self.tile_rect = Rect(8, 1, 1, 2)
         self.renderable = False
         self.obstacle = True
 

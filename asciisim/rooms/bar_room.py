@@ -76,7 +76,9 @@ class BarRoom(Room):
             if type(sprite) == CustomerSprite and sprite.status == CustomerStatus.WALKING:
                 self.number_of_customers += 1
                 if len(sprite.return_path) <= 0:
+                    self.bubbles.pop(self.bubbles.index(sprite.bubble))
                     self.sprites.pop(i)
+                    self.number_of_customers -= 1
         random_value = random.randint(1, 10)
         if self.number_of_customers < 5 and time.time() - self.timer > random_value:
             self.timer = time.time()
@@ -84,7 +86,4 @@ class BarRoom(Room):
             self.sprites.append(
                 customer
             )
-            customer.generate_order_walking()
-
-            pass
 
