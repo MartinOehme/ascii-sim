@@ -20,11 +20,11 @@ class CoffeeMachineCloseup(Closeup):
         super().__init__(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
         self.coffee_machine = coffee_machine
         self.menu = Menu()
-        self.menu.add_control(Control(480, 30, 550, 210))       # 0 -> Coffee tank
-        self.menu.add_control(Control(460, 650, 300, 100))      # 1 -> Coffee with Milk button
-        self.menu.add_control(Control(850, 630, 220, 100))      # 2 -> Coffee button
-        self.menu.add_control(Control(470, 770, 520, 130))      # 3 -> Coffee dregs
-        self.menu.add_control(Control(50, 630, 300, 350))       # 4 -> Milk tank
+        self.menu.add_control(Control(960, 310, 194, 194))      # 0 -> Coffee button
+        self.menu.add_control(Control(1195, 310, 194, 194))      # 1 -> Coffee with Milk button
+        self.menu.add_control(Control(624, 31, 472, 192))       # 2 -> Coffee tank
+        self.menu.add_control(Control(1000, 576, 356, 292))      # 3 -> Coffee dregs
+        self.menu.add_control(Control(611, 283, 247, 585))      # 4 -> Milk tank
 
         self.sprites += self.menu.control_sprites
         
@@ -36,11 +36,11 @@ class CoffeeMachineCloseup(Closeup):
                 check_list = self.default_routine(context, check_list)
                 for event in context.events:
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                        if self.menu.control_index == 1:
-                            self.make_coffee(CoffeeTypes.COFFEE_MILK)
-                            context.closeup = None
-                        elif self.menu.control_index == 2:
+                        if self.menu.control_index == 0:
                             self.make_coffee()
+                            context.closeup = None
+                        elif self.menu.control_index == 1:
+                            self.make_coffee(CoffeeTypes.COFFEE_MILK)
                             context.closeup = None
             elif status is MachineStates.CLEAR_COFFEE:
                 check_list = self.default_routine(context, check_list)
@@ -83,7 +83,7 @@ class CoffeeMachineCloseup(Closeup):
                         context.closeup = None
                         self.coffee_machine.state = MachineStates.NOT_USED
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                        if self.menu.control_index == 0:
+                        if self.menu.control_index == 2:
                             if self.refill_coffee(sprite):
                                 try:
                                     check_list.remove(MachineStates.REFILL_COFFEE)
