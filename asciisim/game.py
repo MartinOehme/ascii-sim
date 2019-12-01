@@ -29,6 +29,7 @@ class Game(object):
         
     def update(self):        
         self.context.events = pygame.event.get()
+        self.context.keys_pressed =  pygame.key.get_pressed()
         for event in self.context.events:
             if event.type == pygame.QUIT:
                 self.running = False

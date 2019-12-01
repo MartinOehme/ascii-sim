@@ -15,6 +15,7 @@ class Context(object):
         self.closeup: Closeup = None
         self.delta_t = 0
         self.events: List[Event] = []
+        self.keys_pressed = {}
         self.room: Room = None
         self.rooms: Dict[str, Room] = {}
         self.room_key: str = ""
