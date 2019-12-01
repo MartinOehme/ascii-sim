@@ -6,7 +6,7 @@ def milliseconds():
 class Animation(object):
     def __init__(self, frames: int, frame_ms: int, total_ms: int = 0):
         self.current_frame = 0
-        self.frames = 0
+        self.frames = frames
         self.frame_ms = frame_ms
         self.last_frame = 0
         self.started = 0

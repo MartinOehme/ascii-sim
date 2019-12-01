@@ -8,7 +8,13 @@ from asciisim.speech_bubble.order_walkers import OrderWalkersContent
 from ..base.sprite import AbstractSprite
 from ..base.context import Context
 from ..res import IMG_DIR
-from .sprite_enums import CustomerStatus, CustomerHappiness, OrderWalkers, OrderSitters
+from ..util.animation import Animation
+from ..util.debounce import Debounce
+from .sprite_enums import CustomerStatus
+from .sprite_enums import CustomerHappiness
+from .sprite_enums import Direction
+from .sprite_enums import OrderWalkers
+from .sprite_enums import OrderSitters
 from .bar_keeper import BarKeeper
 import random
 import time
@@ -17,6 +23,7 @@ import time
 class CustomerSprite(AbstractSprite):
     def __init__(self, x: int = 0, y: int = 0, status=CustomerStatus.WALKING):
         super().__init__()
+        self.animation = Animation(4, 150, 600)
         self.bubble = None
         self.tile_rect = Rect(x, y, 1, 1)
         # status determines if the customer is sitting or walking
@@ -36,14 +43,33 @@ class CustomerSprite(AbstractSprite):
         self.return_path = [Rect(5, 4, 1, 1), Rect(5, 3, 1, 1), Rect(5, 2, 1, 1), Rect(5, 1, 1, 1), Rect(4, 1, 1, 1),
                             Rect(3, 1, 1, 1), Rect(2, 1, 1, 1), Rect(1, 1, 1, 1), Rect(1, 0, 1, 1)]
 
+        self.direction = Direction.DOWN
         self.register_surface(
-            "image",
-            lambda: pygame.image.load(IMG_DIR + "dummy.png")
+            Direction.UP.value,
+            lambda: pygame.image.load(IMG_DIR + "customer/up.png")
         )
-
+        self.register_surface(
+            Direction.DOWN.value,
+            lambda: pygame.image.load(IMG_DIR + "customer/down.png")
+        )
+        self.register_surface(
+            Direction.RIGHT.value,
+            lambda: pygame.image.load(IMG_DIR + "customer/right.png")
+        )
+        self.register_surface(
+            Direction.LEFT.value,
+            lambda: pygame.image.load(IMG_DIR + "customer/left.png")
+        )
+ 
+        
     @property
     def image(self) -> Surface:
-        return self.get_surface("image")
+        return self.get_ani_surface(
+            self.direction.value,
+            (90, 135),
+            self.animation.current_frame
+        )
+
 
     def get_order_value(self):
         return self.order_value
@@ -60,10 +86,11 @@ class CustomerSprite(AbstractSprite):
                         self.is_walking = True
 
             if time.time() - self.walk_timer > 20/60 and self.is_walking:
+                self.animation.start()
                 self.tile_rect = i
                 self.walk_timer = time.time()
                 route.pop(0)
-
+                
     def generate_order_walking(self):
         # generate order for walkers from random value
         if self.status == CustomerStatus.WALKING and self.order_value is None:
@@ -209,6 +236,7 @@ class CustomerSprite(AbstractSprite):
             self.timer = time.time()
 
     def update(self, context: Context):
+        self.animation.update()
         self.customer_walking(context, self.path)
         if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
             self.display_order(context)
