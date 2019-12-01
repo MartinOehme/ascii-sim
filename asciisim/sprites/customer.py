@@ -30,6 +30,7 @@ class CustomerSprite(AbstractSprite):
         self.track = None
         self.volume = None
         self.temperature = None
+        self.is_order_done = False
         self.path = [Rect(1, 1, 1, 1), Rect(1, 2, 1, 1), Rect(1, 3, 1, 1), Rect(2, 3, 1, 1), Rect(3, 3, 1, 1),
                      Rect(3, 4, 1, 1), Rect(4, 4, 1, 1), Rect(5, 4, 1, 1)]
         self.return_path = [Rect(5, 4, 1, 1), Rect(5, 3, 1, 1), Rect(5, 2, 1, 1), Rect(5, 1, 1, 1), Rect(4, 1, 1, 1),
@@ -143,16 +144,20 @@ class CustomerSprite(AbstractSprite):
             if type(sprite) == BarKeeper:
                 if sprite.item == self.order_value and self.timer < 20:
                     self.happiness = CustomerHappiness.HAPPY
-                    # TODO: HIGHSCORE and leave
+                    self.is_order_done = True
+                    # TODO: HIGHSCORE
                 elif sprite.item == self.order_value and 20 <= self.timer < 40:
                     self.happiness = CustomerHappiness.NEUTRAL
-                    # TODO: HIGHSCORE and leave
+                    self.is_order_done = True
+                    # TODO: HIGHSCORE
                 elif sprite.item == self.order_value and self.timer >= 40:
                     self.happiness = CustomerHappiness.UNHAPPY
-                    # TODO: HIGHSCORE and leave
+                    self.is_order_done = True
+                    # TODO: HIGHSCORE
                 elif sprite.item != self.order_value:
                     self.happiness = CustomerHappiness.UNHAPPY
-                    # TODO: HIGHTSCORE and leave
+                    self.is_order_done = True
+                    # TODO: HIGHTSCORE
                 self.order_value = None
                 sprite.item = None
 
@@ -207,5 +212,6 @@ class CustomerSprite(AbstractSprite):
         self.customer_walking(context, self.path)
         if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
             self.display_order(context)
-            # TODO Check order
-        self.customer_walking(context, self.return_path)
+        if self.is_order_done:
+            self.customer_walking(context, self.return_path)
+            self.bubble = None
