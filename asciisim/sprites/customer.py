@@ -47,8 +47,8 @@ class CustomerSprite(AbstractSprite):
     def get_order_value(self):
         return self.order_value
 
-    def customer_walking(self, context: Context):
-        for i in self.path:
+    def customer_walking(self, context: Context, route):
+        for i in route:
             for sprite in context.current_room.sprites:
                 if sprite is self:
                     break
@@ -61,12 +61,13 @@ class CustomerSprite(AbstractSprite):
             if time.time() - self.walk_timer > 20/60 and self.is_walking:
                 self.tile_rect = i
                 self.walk_timer = time.time()
-                self.path.pop(0)
+                route.pop(0)
 
     def generate_order_walking(self):
         # generate order for walkers from random value
         if self.status == CustomerStatus.WALKING and self.order_value is None:
             random_value = random.randint(0, 99)
+            print(random_value)
             if 0 <= random_value < 12:
                 self.order_value = OrderWalkers.COFFEE
             elif 12 <= random_value < 24:
@@ -110,6 +111,7 @@ class CustomerSprite(AbstractSprite):
     def display_order(self, context: Context):
         if not self.bubble:
             self.bubble = SpeechBubble(self)
+            print(self.order_value.value)
             if self.status == CustomerStatus.WALKING:
                 self.bubble.content = OrderWalkersContent(self.order_value)
             elif self.order_value == OrderSitters.CHANGE_MUSIC:
@@ -204,6 +206,8 @@ class CustomerSprite(AbstractSprite):
             self.timer = time.time()
 
     def update(self, context: Context):
-        self.customer_walking(context)
+        self.customer_walking(context, self.path)
         if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
             self.display_order(context)
+            # TODO Check order
+        self.customer_walking(context, self.return_path)
