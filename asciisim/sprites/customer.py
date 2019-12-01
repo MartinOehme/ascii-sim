@@ -145,25 +145,31 @@ class CustomerSprite(AbstractSprite):
                 if sprite.item == self.order_value and self.timer < 20:
                     self.happiness = CustomerHappiness.HAPPY
                     self.is_order_done = True
-                    # TODO: HIGHSCORE
+                    # TODO: SCORE
                 elif sprite.item == self.order_value and 20 <= self.timer < 40:
                     self.happiness = CustomerHappiness.NEUTRAL
                     self.is_order_done = True
-                    # TODO: HIGHSCORE
+                    # TODO: SCORE
                 elif sprite.item == self.order_value and self.timer >= 40:
                     self.happiness = CustomerHappiness.UNHAPPY
                     self.is_order_done = True
-                    # TODO: HIGHSCORE
+                    # TODO: SCORE
                 elif sprite.item != self.order_value:
                     self.happiness = CustomerHappiness.UNHAPPY
                     self.is_order_done = True
-                    # TODO: HIGHTSCORE
-                self.order_value = None
+                    # TODO: SCORE
                 sprite.item = None
+
+    def customer_interaction(self, context: Context):
+        for sprite in context.current_room.sprites:
+            if type(sprite) == BarKeeper and sprite.looks_at(self, 2):
+                for event in context.events:
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                        self.check_order_walkers(context)
 
     # For sitting customers
     def check_order_sitters(self, context: Context):
-        # TODO: HIGHSCORE
+        # TODO: SCORE
         if time.time() - self.timer >= 35:
             if self.order_value == OrderSitters.CHANGE_MUSIC \
                     and self.track != context.rooms["bar"].track:
@@ -212,6 +218,6 @@ class CustomerSprite(AbstractSprite):
         self.customer_walking(context, self.path)
         if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
             self.display_order(context)
+        self.customer_interaction(context)
         if self.is_order_done:
             self.customer_walking(context, self.return_path)
-            self.bubble = None
