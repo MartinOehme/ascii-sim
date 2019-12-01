@@ -26,10 +26,7 @@ class RadiatorCloseup(Closeup):
         self.menu.update(context)
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                if self.menu.control_index == 0:
-                    self.radiator.change_temperature(2)
-                elif self.menu.control_index == 1:
-                    self.radiator.change_temperature(-2)
+                self.radiator.change_temperature(self.menu.control_index)
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 context.closeup = None
@@ -68,17 +65,18 @@ class MusicBoxCloseup(Closeup):
 
 
 class Radiator(AbstractSprite):
-    def __init__(self, temperature=22):
+    def __init__(self, rect: Rect = Rect(3, 6, 2, 1), temperature: int = 22):
         super().__init__()
-        self.tile_rect = Rect(3, 6, 2, 1)
+        self.tile_rect = rect
         self.renderable = False
         self.obstacle = True
         self.closeup = RadiatorCloseup(self)
 
-        self.temperature = temperature
+        self.temperature: int = temperature
 
     def update(self, context: Context):
         context.rooms["bar"].temperature = self.temperature
+
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 for sprite in context.current_room.sprites:
@@ -87,13 +85,13 @@ class Radiator(AbstractSprite):
                             context.closeup = self.closeup
 
     def change_temperature(self, value):
-        self.temperature += value
+        self.temperature += (1 - 2*value)
 
 
 class MusicBox(AbstractSprite):
-    def __init__(self, rect: Rect, track: MusicTracks = MusicTracks.MUSIC_OFF, volume=50):
+    def __init__(self, rect: Rect = Rect(8, 1, 2, 1), track: MusicTracks = MusicTracks.MUSIC_OFF, volume=50):
         super().__init__()
-        self.tile_rect = Rect(8, 1, 2, 1)
+        self.tile_rect = rect
         self.renderable = False
         self.obstacle = True
         self.closeup = MusicBoxCloseup(self)
