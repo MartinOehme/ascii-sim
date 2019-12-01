@@ -273,6 +273,10 @@ class CustomerSprite(AbstractSprite):
     def update(self, context: Context):
         self.animation.update()
         self.customer_walking(context, self.path)
+        if self.status == CustomerStatus.SITTING:
+            self.generate_order_sitting()
+            self.display_order(context)
+            self.check_order_sitters(context)
         if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
             self.generate_order_walking()
             self.display_order(context)
