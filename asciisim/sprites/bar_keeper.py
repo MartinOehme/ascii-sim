@@ -69,27 +69,26 @@ class BarKeeper(AbstractSprite):
     @debounce_decorator
     def move_up(self, context):
         self.direction = "up"
-        self.start_anim()
         if self.tile_rect.top > 0:    
             if context.current_room.has_obstacle(self, 0, -1):
                 return
+            self.start_anim()
             self.tile_rect.top -= 1
 
 
     @debounce_decorator
     def move_down(self, context):
         self.direction = "down"
-        self.start_anim()
         if self.tile_rect.top < 6:
             if context.current_room.has_obstacle(self, 0, 1):
                 return
-                
+
+            self.start_anim()
             self.tile_rect.top += 1
 
     @debounce_decorator
     def move_left(self, context):
         self.direction = "left"
-        self.start_anim()
         if (self.tile_rect.left == 0
             and self.tile_rect.top == 6
             and context.room_key == Context.STORE_ROOM):
@@ -100,12 +99,12 @@ class BarKeeper(AbstractSprite):
             if context.current_room.has_obstacle(self, -1, 0):
                 return
 
+            self.start_anim() 
             self.tile_rect.left -= 1
 
     @debounce_decorator
     def move_right(self, context):
         self.direction = "right"
-        self.start_anim()
         if (self.tile_rect.left == 9
             and self.tile_rect.top == 6
             and context.room_key == Context.BAR_ROOM):
@@ -118,7 +117,7 @@ class BarKeeper(AbstractSprite):
         ):
             if context.current_room.has_obstacle(self, 1, 0):
                 return
-            
+            self.start_anim()
             self.tile_rect.left += 1
         elif (
                 self.tile_rect.left < 5
@@ -126,7 +125,7 @@ class BarKeeper(AbstractSprite):
         ):
             if context.current_room.has_obstacle(self, 1, 0):
                 return
-    
+            self.start_anim()
             self.tile_rect.left += 1
                     
     def update(self, context):

@@ -15,7 +15,7 @@ class Context(object):
         self.delta_t = 0
         self.events: List[Event] = []
         self.keys_pressed = {}
-        self.room None
+        self.room = None
         self.rooms = {}
         self.room_key: str = ""
 
