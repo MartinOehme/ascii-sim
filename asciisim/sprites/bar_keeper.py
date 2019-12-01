@@ -66,8 +66,6 @@ class BarKeeper(AbstractSprite):
 
             self.tile_rect.left -= 1
 
-<<<<<<< HEAD
-=======
     def move_right(self, context):
         self.direction = "right"
 
@@ -94,10 +92,7 @@ class BarKeeper(AbstractSprite):
     
             self.tile_rect.left += 1
                     
->>>>>>> master
-    def update(self, context: Context):
-        print(self.item)
-
+    def update(self, context):
         for event in context.events:
             if event.type != pygame.KEYDOWN:
                 continue

@@ -3,15 +3,14 @@ from pygame import Rect
 
 from ..base.context import Context
 from ..sprites.static_sprite import AbstractSprite
-from ..res import IMG_DIR
 from ..sprites.sprite_enums import MusicTracks
+
 
 class Radiator(AbstractSprite):
     def __init__(self, temperature=22):
         super().__init__()
         self.tile_rect = Rect(3, 6, 2, 1)
         self.renderable = False
-        self.obstacle = True
 
         self.temperature = temperature
 
