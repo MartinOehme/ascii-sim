@@ -27,14 +27,16 @@ class RefrigeratorCloseup(Closeup):
         self.menu.update(context)
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                if self.menu.control_index == 0:
-                    self.refrigeratore.state = OrderWalkers.KOLLE_MATE
-                elif self.menu.control_index == 1:
-                    self.refrigeratore.state = OrderWalkers.PREMIUM_COLA
-                elif self.menu.control_index == 2:
-                    self.refrigeratore.state = OrderWalkers.ZOTRINE
+                for sprite in context.current_room.sprites:
+                    if type(sprite) == BarKeeper:
+                        if self.menu.control_index == 0:
+                            sprite.item = OrderWalkers.KOLLE_MATE
+                        elif self.menu.control_index == 1:
+                            sprite.item = OrderWalkers.PREMIUM_COLA
+                        elif self.menu.control_index == 2:
+                            sprite.item = OrderWalkers.ZOTRINE
 
-                context.closeup = None
+                    context.closeup = None
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
                 context.closeup = None
@@ -56,4 +58,4 @@ class Refrigerator(AbstractSprite):
                     if type(sprite) == BarKeeper:
                         if sprite.is_near(self):
                             context.closeup = self.closeup
-                            sprite.item = self.state
+

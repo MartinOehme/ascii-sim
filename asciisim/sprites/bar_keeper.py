@@ -43,6 +43,8 @@ class BarKeeper(AbstractSprite):
                         and self.tile_rect.top == 6
                         and context.room_key == Context.STORE_ROOM):
                     context.set_room(Context.BAR_ROOM)
+                    self.tile_rect.left = 9
+                    self.tile_rect.top = 6
                 elif self.tile_rect.left > 0:
                     if context.current_room.has_obstacle(self, -1, 0):
                         return
@@ -53,6 +55,8 @@ class BarKeeper(AbstractSprite):
                         and self.tile_rect.top == 6
                         and context.room_key == Context.BAR_ROOM):
                     context.set_room(Context.STORE_ROOM)
+                    self.tile_rect.left = 0
+                    self.tile_rect.top = 6
                 elif (self.tile_rect.left < 9
                       and context.room_key  == Context.BAR_ROOM
                 ):
