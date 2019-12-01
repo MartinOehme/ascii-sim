@@ -61,10 +61,16 @@ class CustomerSprite(AbstractSprite):
             Direction.LEFT.value,
             lambda: pygame.image.load(IMG_DIR + "customer/left.png")
         )
- 
+        self.register_surface(
+            "sitting",
+            lambda: pygame.image.load(IMG_DIR + "sitting_customer.png")   
+        )
         
     @property
     def image(self) -> Surface:
+        if self.status == CustomerStatus.SITTING:
+            return self.get_surface("sitting")
+        
         return self.get_ani_surface(
             self.direction.value,
             (90, 135),
@@ -119,28 +125,34 @@ class CustomerSprite(AbstractSprite):
         else:
             pass
 
+    @Debounce(10000)
     def generate_order_sitting(self):
-        if self.status == CustomerStatus.SITTING:
-            if self.order_value is None and time.time() - self.timer >= 10:
-                random_value = random.randint(0, 9)
-                if random_value % 2 == 0:
-                    random_value = random.randint(0, 99)
-                    if 0 <= random_value < 20:
-                        self.order_value = OrderSitters.CHANGE_MUSIC
-                    elif 20 <= random_value < 40:
-                        self.order_value = OrderSitters.MUSIC_VOLUME_UP
-                    elif 40 <= random_value < 60:
-                        self.order_value = OrderSitters.MUSIC_VOLUME_DOWN
-                    elif 60 <= random_value < 80:
-                        self.order_value = OrderSitters.TEMPERATURE_UP
-                    elif 80 <= random_value <= 99:
-                        self.order_value = OrderSitters.TEMPERATURE_DOWN
-                else:
-                    self.timer = time.time()
-            print(self.order_value)
+        if self.order_value:
+            return
+        
+        random_value = random.randint(0, 9)
+        if random_value % 2 == 0:
+            random_value = random.randint(0, 99)
+            if 0 <= random_value < 20:
+                self.order_value = OrderSitters.CHANGE_MUSIC
+            elif 20 <= random_value < 40:
+                self.order_value = OrderSitters.MUSIC_VOLUME_UP
+            elif 40 <= random_value < 60:
+                self.order_value = OrderSitters.MUSIC_VOLUME_DOWN
+            elif 60 <= random_value < 80:
+                self.order_value = OrderSitters.TEMPERATURE_UP
+            elif 80 <= random_value <= 99:
+                self.order_value = OrderSitters.TEMPERATURE_DOWN
 
+        else:
+            self.timer = time.time()
+            
     # Display the customers order
     def display_order(self, context: Context):
+        # A sitter without wish needs no bubble
+        if self.status == CustomerStatus.SITTING and not self.order_value:
+            return
+        
         if not self.bubble:
             self.bubble = SpeechBubble(self)
             if self.status == CustomerStatus.WALKING:
@@ -167,7 +179,6 @@ class CustomerSprite(AbstractSprite):
         if not self.bubble:
             # Do not serve customers not at the bar
             return
-        # TODO: Check and Adjust times
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
         for sprite in context.current_room.sprites:
