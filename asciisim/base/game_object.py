@@ -39,7 +39,16 @@ class GameObject(ABC):
             return
 
         self.BASE_SURFACES[key] = callback()
-        self.SCALED_SURFACES[key] = self.BASE_SURFACES[key]
+        size = self.BASE_SURFACES[key].get_size()
+        scaling = self.TILE_SIZE / 135
+        self.SCALED_SURFACES[key] = pygame.transform.smoothscale(
+            self.BASE_SURFACES[key],
+            (
+                int(size[0] * scaling),
+                int(size[1] * scaling)
+            )
+        )
+            
 
         
     @property
