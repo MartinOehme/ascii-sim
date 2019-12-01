@@ -22,9 +22,4 @@ class CoffeeStorage(AbstractSprite):
                 for sprite in context.current_room.sprites:
                     if type(sprite) == BarKeeper:
                         if sprite.is_near(self):
-<<<<<<< HEAD
-                            sprite.item = self.state
-                            context.closeup = self.closeup
-=======
                             sprite.item = MachineStates.REFILL_COFFEE
->>>>>>> aea52c122baabedb10093b8e53c867c12126cfc8
