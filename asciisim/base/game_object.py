@@ -1,5 +1,6 @@
 from abc import ABC
 from typing import Callable
+from typing import Tuple
 
 import pygame
 from pygame import Rect
@@ -77,3 +78,14 @@ class GameObject(ABC):
         key = f"{type(self)}_{name}"
 
         return self.SCALED_SURFACES[key]
+
+    def get_ani_surface(self, name: str, size: Tuple[int, int], frame: int):
+        key = f"{type(self)}_{name}"
+        scale = self.TILE_SIZE / 135
+
+        return self.SCALED_SURFACES[key].subsurface(Rect(
+            size[0] * frame * scale,
+            0,
+            size[0] * scale,
+            size[1] * scale
+        ))
