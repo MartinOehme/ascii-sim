@@ -38,6 +38,7 @@ class Game(object):
         if self.context.closeup:
             self.context.closeup.update(self.context)
         else:
+            self.context.current_room.update(self.context)
             for sprite in self.context.current_room.sprites:
                 sprite.update(self.context)
         if self.context.change_room:

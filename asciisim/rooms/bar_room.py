@@ -1,6 +1,8 @@
 import pygame
 from pygame import Rect
 from pygame import Surface
+import random
+import time
 
 from asciisim.sprites.sprite_enums import OrderSitters
 from ..base.speech_bubble import SpeechBubble
@@ -21,6 +23,8 @@ from ..sprites.environment import Radiator, MusicBox
 class BarRoom(Room):
     def __init__(self):
         super().__init__()
+        self.number_of_customers = 0
+        self.timer = time.time()
         self.register_surface(
             "background",
             lambda: pygame.image.load(IMG_DIR + "bar_room.png")
@@ -65,3 +69,20 @@ class BarRoom(Room):
     @property
     def background(self) -> Surface:
         return self.get_surface("background")
+
+    def update(self, context: Context):
+        self.number_of_customers = 0
+        for sprite in context.current_room.sprites:
+            if type(sprite) == CustomerSprite and sprite.status == CustomerStatus.WALKING:
+                self.number_of_customers += 1
+        random_value = random.randint(1, 10)
+        if self.number_of_customers < 5 and time.time() - self.timer > random_value:
+            self.timer = time.time()
+            customer = CustomerSprite(1, 0)
+            self.sprites.append(
+                customer
+            )
+            customer.generate_order_walking()
+
+            pass
+

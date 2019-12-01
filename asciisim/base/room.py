@@ -4,6 +4,7 @@ from pygame import Rect
 from pygame import Surface
 
 from .game_object import GameObject
+from .context import Context
 
 from ..sprites.sprite_enums import MusicTracks
 
@@ -20,7 +21,6 @@ class Room(GameObject):
         # music
         self.track: MusicTracks = None
         self.volume = 50
-        self.no_of_sitters = 0
 
     @property
     def renderable_sprites_by_z_index(self):
@@ -53,4 +53,6 @@ class Room(GameObject):
         ))
 
         return -1 != tmp_tile_rect.collidelist(obstacle_rects)
-        
+
+    def update(self, context: Context):
+        pass
