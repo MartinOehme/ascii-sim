@@ -26,6 +26,7 @@ class CustomerSprite(AbstractSprite):
         self.order_value = None
         self.timer = time.time()
         self.walk_timer = time.time()
+        self.is_walking = True
         self.track = None
         self.volume = None
         self.temperature = None
@@ -46,9 +47,18 @@ class CustomerSprite(AbstractSprite):
     def get_order_value(self):
         return self.order_value
 
-    def customer_walking(self):
+    def customer_walking(self, context: Context):
         for i in self.path:
-            if time.time() - self.walk_timer > 20/60:
+            for sprite in context.current_room.sprites:
+                if sprite is self:
+                    break
+                if type(sprite) == type(self):
+                    if sprite.is_near(self):
+                        self.is_walking = False
+                    else:
+                        self.is_walking = True
+
+            if time.time() - self.walk_timer > 20/60 and self.is_walking:
                 self.tile_rect = i
                 self.walk_timer = time.time()
                 self.path.pop(0)
@@ -194,6 +204,6 @@ class CustomerSprite(AbstractSprite):
             self.timer = time.time()
 
     def update(self, context: Context):
-        self.customer_walking()
+        self.customer_walking(context)
         if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20/60:
             self.display_order(context)
