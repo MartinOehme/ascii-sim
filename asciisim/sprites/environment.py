@@ -5,6 +5,7 @@ from ..base.context import Context
 from ..sprites.static_sprite import AbstractSprite
 from ..sprites.sprite_enums import MusicTracks
 
+
 class Radiator(AbstractSprite):
     def __init__(self, temperature=22):
         super().__init__()
