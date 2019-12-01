@@ -32,6 +32,8 @@ class CustomerSprite(AbstractSprite):
         self.temperature = None
         self.path = [Rect(1, 1, 1, 1), Rect(1, 2, 1, 1), Rect(1, 3, 1, 1), Rect(2, 3, 1, 1), Rect(3, 3, 1, 1),
                      Rect(3, 4, 1, 1), Rect(4, 4, 1, 1), Rect(5, 4, 1, 1)]
+        self.return_path = [Rect(5, 4, 1, 1), Rect(5, 3, 1, 1), Rect(5, 2, 1, 1), Rect(5, 1, 1, 1), Rect(4, 1, 1, 1),
+                            Rect(3, 1, 1, 1), Rect(2, 1, 1, 1), Rect(1, 1, 1, 1), Rect(1, 0, 1, 1)]
 
         self.register_surface(
             "image",
