@@ -10,10 +10,10 @@ class OrderWalkersContent(Content):
         super().__init__()
         self.state = state
         self.register_surface(
-            "image",
+            f"image_{self.state.value}",
             lambda : pygame.image.load(IMG_DIR + "speech_bubbles/order_walkers/" + state.value + ".png")
         )
 
     @property
     def image(self) -> pygame.Surface:
-        return self.get_surface("image")
+        return self.get_surface(f"image_{self.state.value}")

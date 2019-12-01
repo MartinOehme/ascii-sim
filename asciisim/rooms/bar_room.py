@@ -37,7 +37,7 @@ class BarRoom(Room):
             Rect(1, 4, 2, 2),
         ]
 
-        barkeeper = BarKeeper(9, 6)
+        BarKeeper(9, 6)
 
         customer = CustomerSprite(1, 0)
         self.sprites.append(
@@ -72,9 +72,11 @@ class BarRoom(Room):
 
     def update(self, context: Context):
         self.number_of_customers = 0
-        for sprite in context.current_room.sprites:
+        for i, sprite in enumerate(context.current_room.sprites, start=0):
             if type(sprite) == CustomerSprite and sprite.status == CustomerStatus.WALKING:
                 self.number_of_customers += 1
+                if len(sprite.return_path) <= 0:
+                    self.sprites.pop(i)
         random_value = random.randint(1, 10)
         if self.number_of_customers < 5 and time.time() - self.timer > random_value:
             self.timer = time.time()
