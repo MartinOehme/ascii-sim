@@ -63,3 +63,10 @@ class MusicTracks(Enum):
     TRACK1 = SOUND_DIR + "track1.wav"
     # https://freesound.org/s/415511/
     TRACK2 = SOUND_DIR + "track2.mp3"
+
+
+class Direction(Enum):
+    UP = "up"
+    DOWN = "down"
+    LEFT = "left"
+    RIGHT = "right"

@@ -174,7 +174,7 @@ class CoffeeMachine(AbstractSprite):
                 ):
                     for sprite in context.current_room.sprites:
                         if type(sprite) == BarKeeper:
-                            if sprite.is_near(self):
+                            if sprite.looks_at(self):
                                 self.state = MachineStates.IN_USE
                                 context.closeup = self.closeup
                 if (
@@ -183,6 +183,6 @@ class CoffeeMachine(AbstractSprite):
                 ):
                     for sprite in context.current_room.sprites:
                         if type(sprite) == BarKeeper:
-                            if sprite.is_near(self):
+                            if sprite.looks_at(self):
                                 sprite.item = self.last_coffee
                                 self.state = MachineStates.NOT_USED
