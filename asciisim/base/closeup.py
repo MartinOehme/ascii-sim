@@ -17,11 +17,10 @@ class Closeup(GameObject):
 
     @property
     def rect(self) -> Rect:
-        scale = self.TILE_SIZE / 135
         return Rect(
             0, 0,
-            1920 * scale,
-            1080 * scale
+            1920 * self.SCALING,
+            1080 * self.SCALING
         )
 
     @property

@@ -10,11 +10,12 @@ from pygame import Surface
 class GameObject(ABC):
     BASE_SURFACES = {}
     SCALED_SURFACES = {}
+    LEFT_BORDER = 68
+    SCALING = 1
     SIDEBAR_LEFT = True
     SIDEBAR_WIDTH = 435
-    LEFT_BORDER = 68
-    TOP_BORDER = 68
     TILE_SIZE = 135
+    TOP_BORDER = 68
 
     def __init__(self):
         self.obstacle = False
@@ -39,12 +40,11 @@ class GameObject(ABC):
 
         self.BASE_SURFACES[key] = callback()
         size = self.BASE_SURFACES[key].get_size()
-        scaling = self.TILE_SIZE / 135
         self.SCALED_SURFACES[key] = pygame.transform.smoothscale(
             self.BASE_SURFACES[key],
             (
-                int(size[0] * scaling),
-                int(size[1] * scaling)
+                int(size[0] * self.SCALING),
+                int(size[1] * self.SCALING)
             )
         )
 
@@ -63,11 +63,12 @@ class GameObject(ABC):
 
     @classmethod
     def update_render_context(cls, render_context) -> None:
-        cls.SIDEBAR_WIDTH = render_context.sidebar_width
         cls.LEFT_BORDER = render_context.left_border
+        cls.SCALING = render_context.scaling
         cls.SIDEBAR_LEFT = render_context.sidebar_left
-        cls.TOP_BORDER = render_context.top_border
+        cls.SIDEBAR_WIDTH = render_context.sidebar_width
         cls.TILE_SIZE = render_context.tile_size
+        cls.TOP_BORDER = render_context.top_border
 
         for key, surface in cls.BASE_SURFACES.items():
             size = surface.get_size()
@@ -87,11 +88,10 @@ class GameObject(ABC):
 
     def get_ani_surface(self, name: str, size: Tuple[int, int], frame: int):
         key = f"{type(self)}_{name}"
-        scale = self.TILE_SIZE / 135
 
         return self.SCALED_SURFACES[key].subsurface(Rect(
-            size[0] * frame * scale,
+            size[0] * frame * self.SCALING,
             0,
-            size[0] * scale,
-            size[1] * scale
+            size[0] * self.SCALING,
+            size[1] * self.SCALING
         ))

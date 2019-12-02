@@ -42,9 +42,9 @@ class RenderContext(object):
 
         self.left_border = 68 * self.resolution[0] / 1920
         self.scaling = self.resolution[0] / 1920
-        self.sidebar_width = 435 * self.resolution[0] / 1920
-        self.tile_size = 135 * self.resolution[0] / 1920
-        self.top_border = 68 * self.resolution[0] / 1920
+        self.sidebar_width = 435 * self.scaling
+        self.tile_size = 135 * self.scaling
+        self.top_border = 68 * self.scaling
 
         Control.update_render_context(self)
         GameObject.update_render_context(self)

@@ -45,22 +45,21 @@ class SideBar(GameObject):
     @property
     def image(self):
         surface = self.get_surface("sidebar").copy()
-        scaling = self.TILE_SIZE / 135
 
         score = self.font.render(f"Score : {self.score}", 16, (255, 255, 255))
         score_size = score.get_size()
         score = pygame.transform.smoothscale(
             score,
             (
-                int(score_size[0] * scaling),
-                int(score_size[1] * scaling)
+                int(score_size[0] * self.SCALING),
+                int(score_size[1] * self.SCALING)
             )
         )
         surface.blit(
             score,
             (
-                int(100 * scaling),
-                int(1000 * scaling)
+                int(100 * self.SCALING),
+                int(1000 * self.SCALING)
             )
         )
 
@@ -68,10 +67,10 @@ class SideBar(GameObject):
             surface.blit(
                 self.get_surface(self.item.value),
                 Rect(
-                    67.5 * scaling,
-                    671.5 * scaling,
-                    300 * scaling,
-                    300 * scaling
+                    67.5 * self.SCALING,
+                    671.5 * self.SCALING,
+                    300 * self.SCALING,
+                    300 * self.SCALING
                 )
             )
 
@@ -89,9 +88,8 @@ class SideBar(GameObject):
     def rect(self) -> Rect:
         img_size = self.image.get_size()
         left = 0
-        scaling = self.TILE_SIZE / 135
         if not self.is_left:
-            left = 1920 * scaling - img_size[0]
+            left = 1920 * self.SCALING - img_size[0]
         return Rect(
             (left, 0),
             img_size

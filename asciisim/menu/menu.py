@@ -48,7 +48,6 @@ class Menu(GameObject):
             self.select_control(self.control_index - 1)
 
     def update(self, context):
-        scaling = self.TILE_SIZE / 135
         for event in context.events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP or event.key == pygame.K_LEFT:

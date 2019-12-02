@@ -43,7 +43,6 @@ class SpeechBubble(GameObject):
     @property
     def image(self) -> Surface:
         surface = self.get_surface("up")
-        scaling = self.TILE_SIZE / 135
         if self.sprite.tile_rect.top == 0:
             surface = self.get_surface("down")
 
@@ -52,8 +51,8 @@ class SpeechBubble(GameObject):
             surface.blit(
                 self.content.image,
                 (
-                    17.5 * scaling,
-                    17.5 * scaling
+                    17.5 * self.SCALING,
+                    17.5 * self.SCALING
                 )
             )
 
