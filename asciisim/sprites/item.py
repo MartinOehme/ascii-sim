@@ -1,4 +1,3 @@
-
 import pygame
 from pygame.rect import Rect
 

@@ -9,7 +9,8 @@ from .rooms.bar_room import BarRoom
 from .rooms.store_room import StoreRoom
 from .sprites.bar_keeper import BarKeeper
 
-class Game(object):    
+
+class Game(object):
     def __init__(self):
         self.clock: Clock = Clock()
         self.context: Context = Context()
@@ -30,10 +31,10 @@ class Game(object):
         self.context.sidebar = SideBar()
         self.render_context = RenderContext((1920, 1080))
         self.running = True
-        
-    def update(self):        
+
+    def update(self):
         self.context.events = pygame.event.get()
-        self.context.keys_pressed =  pygame.key.get_pressed()
+        self.context.keys_pressed = pygame.key.get_pressed()
         for event in self.context.events:
             if event.type == pygame.QUIT:
                 self.running = False
@@ -50,15 +51,15 @@ class Game(object):
             self.render_context.sidebar_left = self.context.current_room.sidebar_left
         self.context.sidebar.update(self.context)
         self.clock.tick(60)
-                
+
     def render(self):
         current_room = self.context.current_room
         sprites_to_render = current_room.renderable_sprites_by_z_index
-    
+
         self.render_context.screen.blit(
-                self.context.current_room.background,
-                (0, 0)
-            )
+            self.context.current_room.background,
+            (0, 0)
+        )
         for sprite in sprites_to_render:
             self.render_context.screen.blit(
                 sprite.image, sprite.rect
@@ -73,7 +74,7 @@ class Game(object):
                 self.context.closeup.background,
                 self.context.closeup.rect
             )
-    
+
             for sprite in self.context.closeup.renderable_sprites:
                 self.render_context.screen.blit(
                     sprite.image,
@@ -85,9 +86,8 @@ class Game(object):
         )
 
         pygame.display.flip()
-        
+
     def main(self):
         while self.running:
             self.update()
             self.render()
-

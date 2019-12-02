@@ -4,8 +4,10 @@ from pygame import Surface
 
 from .game_object import GameObject
 
+
 class Closeup(GameObject):
     def __init__(self, background_path):
+        super().__init__()
         self.register_surface(
             "background",
             lambda: pygame.image.load(background_path)
@@ -29,7 +31,6 @@ class Closeup(GameObject):
             self.sprites
         )
 
-    
     @property
     def background(self) -> Surface:
         return self.get_surface("background")

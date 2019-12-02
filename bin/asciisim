@@ -2,22 +2,22 @@
 # -*- coding: utf-8 -*-
 
 try:
-	import asciisim
+    import asciisim
 except ImportError:
-	# Module is not installed.
-	import inspect
-	import os
-	from pathlib import Path
-	directory = Path(
-		os.path.dirname(
-			os.path.abspath(inspect.getfile(inspect.currentframe()))
-		)
-	)
-	import sys
-	sys.path.insert(0, str(directory.parent))
-	import asciisim
+    # Module is not installed.
+    import inspect
+    import os
+    from pathlib import Path
 
+    directory = Path(
+        os.path.dirname(
+            os.path.abspath(inspect.getfile(inspect.currentframe()))
+        )
+    )
+    import sys
+
+    sys.path.insert(0, str(directory.parent))
+    import asciisim
 
 if __name__ == "__main__":
-	asciisim.AsciiSim().main()
-
+    asciisim.AsciiSim().main()

@@ -11,7 +11,7 @@ class MachineStatesContent(Content):
         self.state = state
         self.register_surface(
             f"image_{self.state.value}",
-            lambda : pygame.image.load(IMG_DIR + "speech_bubbles/machine_states/" + state.value + ".png")
+            lambda: pygame.image.load(IMG_DIR + "speech_bubbles/machine_states/" + state.value + ".png")
         )
 
     @property

@@ -58,4 +58,3 @@ class Refrigerator(AbstractSprite):
                     if type(sprite) == BarKeeper:
                         if sprite.looks_at(self):
                             context.closeup = self.closeup
-

@@ -12,7 +12,7 @@ class AsciiSim(object):
     def __init__(self):
         self.game = None
         self.screen = None
-        
+
     def initialize(self):
         if not pygame.font:
             print('Error, pygame.font not found!')
@@ -31,4 +31,3 @@ class AsciiSim(object):
     def main(self):
         self.initialize()
         self.game.main()
-    

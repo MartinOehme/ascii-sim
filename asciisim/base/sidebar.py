@@ -7,8 +7,10 @@ from ..sprites.sprite_enums import OrderWalkers, MachineStates
 from ..res import IMG_DIR
 from ..res import FONT_DIR
 
+
 class SideBar(GameObject):
     def __init__(self):
+        super().__init__()
         self.font = pygame.font.Font(FONT_DIR + "Game_font.ttf", 50)
         self.is_left = True
         self.register_surface(
@@ -39,7 +41,7 @@ class SideBar(GameObject):
                     (300, 300)
                 )
             )
-        
+
     @property
     def image(self):
         surface = self.get_surface("sidebar").copy()
@@ -61,7 +63,7 @@ class SideBar(GameObject):
                 int(1000 * scaling)
             )
         )
-        
+
         if self.item:
             surface.blit(
                 self.get_surface(self.item.value),
@@ -72,9 +74,9 @@ class SideBar(GameObject):
                     300 * scaling
                 )
             )
-        
+
         return surface
-        
+
     def update(self, context):
         self.item = context.bar_keeper.item
         self.score = context.bar_keeper.earnings
@@ -82,7 +84,7 @@ class SideBar(GameObject):
             self.is_left = True
         else:
             self.is_left = False
-        
+
     @property
     def rect(self) -> Rect:
         img_size = self.image.get_size()

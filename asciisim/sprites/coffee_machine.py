@@ -15,19 +15,20 @@ from ..menu.menu import Menu
 from ..res import IMG_DIR
 from ..speech_bubble.machine_states import MachineStatesContent
 
+
 class CoffeeMachineCloseup(Closeup):
     def __init__(self, coffee_machine: 'CoffeeMachine'):
         super().__init__(IMG_DIR + "coffee_machine/coffee_machine_closeup.png")
         self.coffee_machine = coffee_machine
         self.menu = Menu()
-        self.menu.add_control(Control(960, 310, 194, 194))      # 0 -> Coffee button
-        self.menu.add_control(Control(1195, 310, 194, 194))      # 1 -> Coffee with Milk button
-        self.menu.add_control(Control(624, 31, 472, 192))       # 2 -> Coffee tank
-        self.menu.add_control(Control(1000, 576, 356, 292))      # 3 -> Coffee dregs
-        self.menu.add_control(Control(611, 283, 247, 585))      # 4 -> Milk tank
+        self.menu.add_control(Control(960, 310, 194, 194))  # 0 -> Coffee button
+        self.menu.add_control(Control(1195, 310, 194, 194))  # 1 -> Coffee with Milk button
+        self.menu.add_control(Control(624, 31, 472, 192))  # 2 -> Coffee tank
+        self.menu.add_control(Control(1000, 576, 356, 292))  # 3 -> Coffee dregs
+        self.menu.add_control(Control(611, 283, 247, 585))  # 4 -> Milk tank
 
         self.sprites += self.menu.control_sprites
-        
+
     def update(self, context: Context) -> None:
         self.menu.update(context)
         check_list = self.check_status()
@@ -145,7 +146,7 @@ class CoffeeMachine(AbstractSprite):
         self.renderable = False
         self.state = MachineStates.NOT_USED
         self.obstacle = True
-        
+
         self.coffee_grounds = 0
         self.milk: int = 10
         self.coffee: int = 50
@@ -160,7 +161,7 @@ class CoffeeMachine(AbstractSprite):
         if not self.bubble:
             self.bubble = SpeechBubble(self)
             context.current_room.bubbles.append(self.bubble)
-            
+
         if self.state is MachineStates.BLOCKED:
             if time.time() - self.coffee_time > 5:
                 self.state = MachineStates.COFFEE_READY
@@ -168,8 +169,8 @@ class CoffeeMachine(AbstractSprite):
         if self.state is not MachineStates.BLOCKED:
             for event in context.events:
                 if (
-                    (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
-                    and (self.state is not MachineStates.COFFEE_READY)
+                        (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
+                        and (self.state is not MachineStates.COFFEE_READY)
                 ):
                     for sprite in context.current_room.sprites:
                         if type(sprite) == BarKeeper:
@@ -177,8 +178,8 @@ class CoffeeMachine(AbstractSprite):
                                 self.state = MachineStates.IN_USE
                                 context.closeup = self.closeup
                 if (
-                    (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
-                    and (self.state is MachineStates.COFFEE_READY)
+                        (event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN)
+                        and (self.state is MachineStates.COFFEE_READY)
                 ):
                     for sprite in context.current_room.sprites:
                         if type(sprite) == BarKeeper:

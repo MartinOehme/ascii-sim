@@ -9,6 +9,7 @@ from pygame import Surface
 from .base.game_object import GameObject
 from .menu.control import Control
 
+
 class RenderContext(object):
     def __init__(self, resolution: Tuple[int, int]):
         pygame.display.set_caption("AsciiSim")
@@ -33,7 +34,7 @@ class RenderContext(object):
             self.resolution = height_size
         else:
             self.resolution = width_size
-        
+
         self.screen = pygame.display.set_mode(
             self.resolution,
             pygame.RESIZABLE | pygame.HWSURFACE | pygame.DOUBLEBUF

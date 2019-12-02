@@ -15,7 +15,7 @@ class Room(GameObject):
         self.sprites = []
         self.bubbles = []
         self.sidebar_left = True
-        
+
         # radiator temperature
         self.temperature = 22
         # music
@@ -26,7 +26,7 @@ class Room(GameObject):
     def renderable_sprites_by_z_index(self):
         return filter(
             lambda sprite: sprite.renderable,
-            sorted(self.sprites, key = lambda sprite: sprite.z_index)
+            sorted(self.sprites, key=lambda sprite: sprite.z_index)
         )
 
     @property
@@ -35,7 +35,7 @@ class Room(GameObject):
             lambda sprite: sprite.obstacle,
             self.sprites
         )
-    
+
     def has_obstacle(self, other: GameObject, dx: int, dy: int) -> bool:
         tmp_tile_rect = Rect(
             other.tile_rect.left + dx,
@@ -43,7 +43,7 @@ class Room(GameObject):
             other.tile_rect.width,
             other.tile_rect.height,
         )
-        
+
         if -1 != tmp_tile_rect.collidelist(self.obstacles):
             return True
 

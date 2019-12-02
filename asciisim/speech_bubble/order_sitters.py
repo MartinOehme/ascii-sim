@@ -11,7 +11,7 @@ class OrderSittersContent(Content):
         self.state = state
         self.register_surface(
             f"image_{self.state.value}",
-            lambda : pygame.image.load(IMG_DIR + "speech_bubbles/order_sitters/" + state.value + ".png")
+            lambda: pygame.image.load(IMG_DIR + "speech_bubbles/order_sitters/" + state.value + ".png")
         )
 
     @property

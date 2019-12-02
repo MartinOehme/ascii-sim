@@ -2,6 +2,7 @@ from enum import Enum
 
 from ..res import SOUND_DIR
 
+
 class MachineStates(Enum):
     ALL_GOOD = 'all_good'
     # Closeup not open

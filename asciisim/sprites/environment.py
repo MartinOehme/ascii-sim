@@ -17,8 +17,8 @@ class RadiatorCloseup(Closeup):
         super().__init__(IMG_DIR + "radiator/radiator_closeup.png")
         self.radiator = radiator
         self.menu = Menu()
-        self.menu.add_control(Control(710, 350, 140, 140))      # 0 -> temperature up
-        self.menu.add_control(Control(710, 490, 140, 130))      # 1 -> temperature down
+        self.menu.add_control(Control(710, 350, 140, 140))  # 0 -> temperature up
+        self.menu.add_control(Control(710, 490, 140, 130))  # 1 -> temperature down
 
         self.sprites += self.menu.control_sprites
 
@@ -37,11 +37,11 @@ class MusicBoxCloseup(Closeup):
         super().__init__(IMG_DIR + "music_box/music_box_closeup.png")
         self.music_box = music_box
         self.menu = Menu()
-        self.menu.add_control(Control(778, 435, 337, 337))      # 0 -> music off
-        self.menu.add_control(Control(1390, 530, 150, 150))      # 1 -> previous track
-        self.menu.add_control(Control(1583, 530, 150, 150))      # 2 -> next track
-        self.menu.add_control(Control(626, 530, 150, 150))     # 3 -> volume down
-        self.menu.add_control(Control(1115, 530, 150, 150))     # 4 -> volume up
+        self.menu.add_control(Control(778, 435, 337, 337))  # 0 -> music off
+        self.menu.add_control(Control(1390, 530, 150, 150))  # 1 -> previous track
+        self.menu.add_control(Control(1583, 530, 150, 150))  # 2 -> next track
+        self.menu.add_control(Control(626, 530, 150, 150))  # 3 -> volume down
+        self.menu.add_control(Control(1115, 530, 150, 150))  # 4 -> volume up
 
         self.sprites += self.menu.control_sprites
 
@@ -85,7 +85,7 @@ class Radiator(AbstractSprite):
                             context.closeup = self.closeup
 
     def change_temperature(self, value):
-        self.temperature += (1 - 2*value)
+        self.temperature += (1 - 2 * value)
 
 
 class MusicBox(AbstractSprite):
@@ -106,7 +106,7 @@ class MusicBox(AbstractSprite):
     def update(self, context: Context):
         context.rooms["bar"].track = self.track
         context.rooms["bar"].volume = self.volume
-        pygame.mixer_music.set_volume(self.volume/100)
+        pygame.mixer_music.set_volume(self.volume / 100)
 
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
@@ -120,7 +120,7 @@ class MusicBox(AbstractSprite):
             self.volume += value
         elif (value > 0 and self.volume == 0) or (value < 0 and self.volume == 100):
             self.volume += value
-        pygame.mixer_music.set_volume(self.volume/100)
+        pygame.mixer_music.set_volume(self.volume / 100)
 
     def change_music(self, track: MusicTracks):
         pygame.mixer_music.fadeout(500)

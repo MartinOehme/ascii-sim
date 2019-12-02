@@ -1,7 +1,9 @@
 import time
 
+
 def milliseconds():
     return time.time_ns() // 1000000
+
 
 class Animation(object):
     def __init__(self, frames: int, frame_ms: int, total_ms: int = 0):
@@ -16,19 +18,18 @@ class Animation(object):
     def progress(self):
         if not self.total_ms:
             return 1
-        
+
         ms = milliseconds()
-        anim_progress =  (ms - self.started) / self.total_ms
+        anim_progress = (ms - self.started) / self.total_ms
 
         return min(anim_progress, 1)
-        
-        
+
     def start(self):
         ms = milliseconds()
         self.current_frame = 0
         self.last_frame = ms
         self.started = ms
-    
+
     def update(self):
         ms = milliseconds()
 

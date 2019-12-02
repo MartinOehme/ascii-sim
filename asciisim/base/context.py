@@ -2,7 +2,8 @@ from typing import Dict, List
 
 from pygame.event import Event
 
-from.closeup import Closeup
+from .closeup import Closeup
+
 
 class Context(object):
     BAR_ROOM = "bar"
@@ -19,7 +20,7 @@ class Context(object):
         self.rooms = {}
         self.room_key: str = ""
         self.sidebar = None
-        
+
     def set_room(self, key) -> None:
         if key in self.rooms:
             self.room_key = key

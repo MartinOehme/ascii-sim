@@ -20,7 +20,7 @@ class StaticSprite(AbstractSprite):
     @property
     def image(self) -> Surface:
         return self.get_surface("image")
-        
+
     def update(self, context: Context):
         pass
 

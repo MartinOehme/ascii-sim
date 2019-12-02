@@ -9,6 +9,7 @@ from .sprite import AbstractSprite
 
 class SpeechBubble(GameObject):
     def __init__(self, sprite: AbstractSprite):
+        super().__init__()
         self.content = None
         self.sprite = sprite
         self.register_surface(
@@ -19,9 +20,10 @@ class SpeechBubble(GameObject):
             "down",
             lambda: pygame.image.load(IMG_DIR + "speech_bubbles/down.png")
         )
-        
+        self.tile_rect = self._tile_rect
+
     @property
-    def tile_rect(self) -> Rect:
+    def _tile_rect(self) -> Rect:
         if self.sprite.tile_rect.top == 0:
             return Rect(
                 self.sprite.tile_rect.left,

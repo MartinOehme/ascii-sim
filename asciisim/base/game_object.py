@@ -15,7 +15,7 @@ class GameObject(ABC):
     LEFT_BORDER = 68
     TOP_BORDER = 68
     TILE_SIZE = 135
-    
+
     def __init__(self):
         self.obstacle = False
         self.renderable = True
@@ -31,7 +31,6 @@ class GameObject(ABC):
         )
         return tmp_rect.colliderect(other.tile_rect)
 
-        
     def register_surface(self, name: str, callback: Callable[[], Surface]) -> None:
         key = f"{type(self)}_{name}"
 
@@ -48,22 +47,20 @@ class GameObject(ABC):
                 int(size[1] * scaling)
             )
         )
-            
 
-        
     @property
     def rect(self):
         left = self.TILE_SIZE * self.tile_rect.left + self.LEFT_BORDER
         if self.SIDEBAR_LEFT:
             left += self.SIDEBAR_WIDTH
-        
+
         return Rect(
             left,
             self.TILE_SIZE * self.tile_rect.top + self.TOP_BORDER,
             self.TILE_SIZE * self.tile_rect.width,
             self.TILE_SIZE * self.tile_rect.height,
         )
-        
+
     @classmethod
     def update_render_context(cls, render_context) -> None:
         cls.SIDEBAR_WIDTH = render_context.sidebar_width
@@ -82,7 +79,7 @@ class GameObject(ABC):
                 surface,
                 new_size
             )
-        
+
     def get_surface(self, name: str) -> Surface:
         key = f"{type(self)}_{name}"
 
