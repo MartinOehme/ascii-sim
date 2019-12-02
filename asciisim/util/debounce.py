@@ -4,16 +4,20 @@ import time
 class Debounce(object):
     def __init__(self, delay: int):
         self.delay: int = delay
-        self.last_execution = 0
+        self.last_executions = {}
 
     def __call__(self, func):
-        def inner(*args, **kwargs):
+        def inner(instance, *args, **kwargs):
             milliseconds = time.time_ns() // 1000000
-            if milliseconds - self.last_execution < self.delay:
+            key = id(instance)
+            if key not in self.last_executions:
+                self.last_executions[key] = 0
+
+            if milliseconds - self.last_executions[key] < self.delay:
                 return
 
-            self.last_execution = milliseconds
+            self.last_executions[key] = milliseconds
 
-            return func(*args, **kwargs)
+            return func(instance, *args, **kwargs)
 
         return inner

@@ -23,6 +23,7 @@ class BarKeeper(AbstractSprite):
         self.item = None
         self.earnings = 0
         self.direction = Direction.DOWN
+        self.obstacle = True
 
         self.register_surface(
             Direction.UP.value,

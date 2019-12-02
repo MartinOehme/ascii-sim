@@ -1,7 +1,6 @@
 from typing import List
 
 from pygame import Rect
-from pygame import Surface
 
 from .game_object import GameObject
 from .context import Context
@@ -11,7 +10,8 @@ from ..sprites.sprite_enums import MusicTracks
 
 class Room(GameObject):
     def __init__(self):
-        self.obstacles: List[SpritePosition] = []
+        super().__init__()
+        self.obstacles: List[Rect] = []
         self.sprites = []
         self.bubbles = []
         self.sidebar_left = True

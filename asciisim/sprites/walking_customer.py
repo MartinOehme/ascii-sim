@@ -1,5 +1,6 @@
 import random
 import time
+from typing import List
 
 import pygame
 from pygame import Rect
@@ -14,6 +15,7 @@ from .sprite_enums import OrderWalkers
 from ..base.context import Context
 from ..res import IMG_DIR
 from ..speech_bubble.customer_happiness import CustomerHappinessContent
+from ..util.debounce import Debounce
 
 
 class WalkingCustomer(AbstractCustomer):
@@ -25,7 +27,7 @@ class WalkingCustomer(AbstractCustomer):
             Rect(4, 4, 1, 1), Rect(5, 4, 1, 1)
         ]
         self.return_path = [
-            Rect(5, 4, 1, 1), Rect(5, 3, 1, 1), Rect(5, 2, 1, 1),
+            Rect(5, 3, 1, 1), Rect(5, 2, 1, 1),
             Rect(5, 1, 1, 1), Rect(4, 1, 1, 1), Rect(3, 1, 1, 1),
             Rect(2, 1, 1, 1), Rect(1, 1, 1, 1), Rect(1, 0, 1, 1)
         ]
@@ -55,22 +57,18 @@ class WalkingCustomer(AbstractCustomer):
             self.animation.current_frame
         )
 
-    def customer_walking(self, context: Context, route):
-        for i in route:
-            for sprite in context.current_room.sprites:
-                if sprite is self:
-                    break
-                if isinstance(sprite, self.__class__):
-                    if sprite.is_near(self):
-                        self.is_walking = False
-                    else:
-                        self.is_walking = True
-
-            if time.time() - self.walk_timer > 20 / 60 and self.is_walking:
-                self.animation.start()
-                self.tile_rect = i
-                self.walk_timer = time.time()
-                route.pop(0)
+    @Debounce(300)
+    def customer_walking(self, context: Context, route: List[Rect]):
+        if not route:
+            return
+        next_step = route[0]
+        dx = next_step.left - self.tile_rect.left
+        dy = next_step.top - self.tile_rect.top
+        if context.current_room.has_obstacle(self, dx, dy):
+            return
+        self.animation.start()
+        self.tile_rect = next_step
+        route.pop(0)
 
     def generate_order(self):
         # generate order for walkers from random value
@@ -103,91 +101,86 @@ class WalkingCustomer(AbstractCustomer):
             return
         self.timer = time.time() - self.timer
         # Check if correct order was served in what time
-        for sprite in context.current_room.sprites:
-            if isinstance(sprite, BarKeeper) and not self.is_order_done:
-                if self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer < 6:
-                    self.happiness = CustomerHappiness.HAPPY
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.HAPPY
-                    )
-                    self.is_order_done = True
-                    sprite.item = OrderWalkers.RETURN_BOTTLE
-                elif self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer > 10:
-                    self.happiness = CustomerHappiness.UNHAPPY
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.UNHAPPY
-                    )
-                    self.is_order_done = True
-                    sprite.item = OrderWalkers.RETURN_BOTTLE
-                elif self.order_value == OrderWalkers.RETURN_CUP and self.timer < 6:
-                    self.happiness = CustomerHappiness.HAPPY
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.HAPPY
-                    )
-                    self.is_order_done = True
-                    sprite.item = OrderWalkers.RETURN_CUP
-                elif self.order_value == OrderWalkers.RETURN_CUP and self.timer > 10:
-                    self.happiness = CustomerHappiness.UNHAPPY
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.UNHAPPY
-                    )
-                    self.is_order_done = True
-                    sprite.item = OrderWalkers.RETURN_CUP
-                elif self.order_value == OrderWalkers.RETURN_BROOM and self.timer < 6:
-                    self.happiness = CustomerHappiness.HAPPY
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.HAPPY
-                    )
-                    self.is_order_done = True
-                    sprite.item = OrderWalkers.RETURN_BROOM
-                elif self.order_value == OrderWalkers.RETURN_BROOM and self.timer > 10:
-                    self.happiness = CustomerHappiness.UNHAPPY
-                    self.is_order_done = True
-                    sprite.item = OrderWalkers.RETURN_BROOM
-                elif sprite.item != self.order_value:
-                    self.happiness = CustomerHappiness.UNHAPPY
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.UNHAPPY
-                    )
-                    self.is_order_done = True
-                    sprite.item = None
-                elif sprite.item == self.order_value and self.timer < 20:
-                    self.happiness = CustomerHappiness.HAPPY
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.HAPPY
-                    )
-                    self.is_order_done = True
-                    sprite.item = None
-                elif sprite.item == self.order_value and 20 <= self.timer < 40:
-                    self.happiness = CustomerHappiness.NEUTRAL
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.NEUTRAL
-                    )
-                    self.is_order_done = True
-                    sprite.item = None
-                elif sprite.item == self.order_value and self.timer >= 40:
-                    self.happiness = CustomerHappiness.UNHAPPY
-                    self.bubble.content = CustomerHappinessContent(
-                        CustomerHappiness.UNHAPPY
-                    )
-                    self.is_order_done = True
-                    sprite.item = None
-                self.pay_barkeeper(context)
-                self.order_value = None
+        bar_keeper = context.bar_keeper
+
+        if self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer < 6:
+            self.happiness = CustomerHappiness.HAPPY
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.HAPPY
+            )
+            bar_keeper.item = OrderWalkers.RETURN_BOTTLE
+        elif self.order_value == OrderWalkers.RETURN_BOTTLE and self.timer > 10:
+            self.happiness = CustomerHappiness.UNHAPPY
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.UNHAPPY
+            )
+            bar_keeper.item = OrderWalkers.RETURN_BOTTLE
+        elif self.order_value == OrderWalkers.RETURN_CUP and self.timer < 6:
+            self.happiness = CustomerHappiness.HAPPY
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.HAPPY
+            )
+            bar_keeper.item = OrderWalkers.RETURN_CUP
+        elif self.order_value == OrderWalkers.RETURN_CUP and self.timer > 10:
+            self.happiness = CustomerHappiness.UNHAPPY
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.UNHAPPY
+            )
+            bar_keeper.item = OrderWalkers.RETURN_CUP
+        elif self.order_value == OrderWalkers.RETURN_BROOM and self.timer < 6:
+            self.happiness = CustomerHappiness.HAPPY
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.HAPPY
+            )
+            bar_keeper.item = OrderWalkers.RETURN_BROOM
+        elif self.order_value == OrderWalkers.RETURN_BROOM and self.timer > 10:
+            self.happiness = CustomerHappiness.UNHAPPY
+            bar_keeper.item = OrderWalkers.RETURN_BROOM
+        elif bar_keeper.item != self.order_value:
+            self.happiness = CustomerHappiness.UNHAPPY
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.UNHAPPY
+            )
+            bar_keeper.item = None
+        elif bar_keeper.item == self.order_value and self.timer < 20:
+            self.happiness = CustomerHappiness.HAPPY
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.HAPPY
+            )
+            bar_keeper.item = None
+        elif bar_keeper.item == self.order_value and 20 <= self.timer < 40:
+            self.happiness = CustomerHappiness.NEUTRAL
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.NEUTRAL
+            )
+            bar_keeper.item = None
+        elif bar_keeper.item == self.order_value and self.timer >= 40:
+            self.happiness = CustomerHappiness.UNHAPPY
+            self.bubble.content = CustomerHappinessContent(
+                CustomerHappiness.UNHAPPY
+            )
+            bar_keeper.item = None
+        self.pay_barkeeper(context)
+        self.order_value = None
+        self.is_order_done = True
+        self.path = self.return_path
 
     def customer_interaction(self, context: Context):
-        for sprite in context.current_room.sprites:
-            if isinstance(sprite, BarKeeper) and sprite.looks_at(self, 2):
-                for event in context.events:
-                    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                        self.check_order(context)
+        bar_keeper: BarKeeper = context.bar_keeper
+        if not bar_keeper.looks_at(self, 2):
+            return
+        if self.is_order_done:
+            return
+        for event in context.events:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                self.check_order(context)
 
     def update(self, context: Context):
         self.animation.update()
         self.customer_walking(context, self.path)
-        if self.tile_rect == Rect(5, 4, 1, 1) and time.time() - self.walk_timer > 20 / 60:
+        if self.tile_rect == Rect(5, 4, 1, 1) and not self.order_value:
+            # The customer is a the bar and has not ordered yet
             self.generate_order()
             self.display_order(context)
         self.customer_interaction(context)
-        if self.is_order_done:
-            self.customer_walking(context, self.return_path)
+
