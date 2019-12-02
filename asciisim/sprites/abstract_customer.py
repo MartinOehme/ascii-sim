@@ -1,3 +1,5 @@
+from abc import ABC
+
 import pygame
 from pygame import Rect
 from pygame import Surface
@@ -21,7 +23,7 @@ import random
 import time
 
 
-class CustomerSprite(AbstractSprite):
+class AbstractCustomer(AbstractSprite, ABC):
     def __init__(self, x: int = 0, y: int = 0, status=CustomerStatus.WALKING):
         super().__init__()
         self.animation = Animation(4, 150, 600)
@@ -85,7 +87,8 @@ class CustomerSprite(AbstractSprite):
             for sprite in context.current_room.sprites:
                 if sprite is self:
                     break
-                if type(sprite) == type(self):
+                print(sprite)
+                if isinstance(sprite, self.__class__):
                     if sprite.is_near(self):
                         self.is_walking = False
                     else:

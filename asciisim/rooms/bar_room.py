@@ -7,10 +7,9 @@ import time
 from ..base.room import Room
 from ..base.context import Context
 from ..res import IMG_DIR
-from ..sprites.bar_keeper import BarKeeper
-from ..sprites.customer import CustomerSprite
+from ..sprites.sitting_customer import SittingCustomer
+from ..sprites.walking_customer import WalkingCustomer
 from ..sprites.coffee_machine import CoffeeMachine
-from ..sprites.sprite_enums import CustomerStatus
 
 from ..sprites.environment import Radiator, MusicBox
 
@@ -33,29 +32,24 @@ class BarRoom(Room):
             Rect(9, 5, 1, 1)
         ]
 
-        BarKeeper(9, 6)
-
-        customer = CustomerSprite(0, 5, status=CustomerStatus.SITTING)
+        customer = SittingCustomer(0, 5)
         self.sprites.append(
             customer
         )
 
         coffee_machine = CoffeeMachine()
-
         self.sprites.append(
             coffee_machine
         )
 
         # add radiator to bar
         radiator = Radiator()
-
         self.sprites.append(
             radiator
         )
 
         # add music box to bar
         music_box = MusicBox()
-
         self.sprites.append(
             music_box
         )
@@ -66,8 +60,8 @@ class BarRoom(Room):
 
     def update(self, context: Context):
         self.number_of_customers = 0
-        for i, sprite in enumerate(context.current_room.sprites, start=0):
-            if type(sprite) == CustomerSprite and sprite.status == CustomerStatus.WALKING:
+        for i, sprite in enumerate(context.current_room.sprites):
+            if type(sprite) == WalkingCustomer:
                 self.number_of_customers += 1
                 if len(sprite.return_path) <= 0:
                     self.bubbles.pop(self.bubbles.index(sprite.bubble))
@@ -76,7 +70,7 @@ class BarRoom(Room):
         random_value = random.randint(10, 30)
         if self.number_of_customers < 5 and time.time() - self.timer > random_value:
             self.timer = time.time()
-            customer = CustomerSprite(1, 0)
+            customer = WalkingCustomer(1, 0)
             self.sprites.append(
                 customer
             )

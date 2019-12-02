@@ -20,10 +20,9 @@ class SpeechBubble(GameObject):
             "down",
             lambda: pygame.image.load(IMG_DIR + "speech_bubbles/down.png")
         )
-        self.tile_rect = self._tile_rect
 
     @property
-    def _tile_rect(self) -> Rect:
+    def tile_rect(self) -> Rect:
         if self.sprite.tile_rect.top == 0:
             return Rect(
                 self.sprite.tile_rect.left,
@@ -36,6 +35,10 @@ class SpeechBubble(GameObject):
             self.sprite.tile_rect.top - 1,
             1, 1
         )
+
+    @tile_rect.setter
+    def tile_rect(self, value):
+        pass
 
     @property
     def image(self) -> Surface:
