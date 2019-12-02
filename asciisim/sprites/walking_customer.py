@@ -60,7 +60,6 @@ class WalkingCustomer(AbstractCustomer):
             for sprite in context.current_room.sprites:
                 if sprite is self:
                     break
-                print(sprite)
                 if isinstance(sprite, self.__class__):
                     if sprite.is_near(self):
                         self.is_walking = False
