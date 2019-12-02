@@ -250,6 +250,7 @@ class CustomerSprite(AbstractSprite):
                     self.is_order_done = True
                     sprite.item = None
                 self.pay_barkeeper(context)
+                self.order_value = None
 
     def pay_barkeeper(self, context: Context):
         for sprite in context.current_room.sprites:
