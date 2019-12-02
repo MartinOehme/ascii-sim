@@ -4,7 +4,7 @@ from pygame import Rect
 from asciisim.sprites.bar_keeper import BarKeeper
 from ..base.context import Context
 from ..base.closeup import Closeup
-from ..sprites.static_sprite import AbstractSprite
+from ..base.sprite import AbstractSprite
 from ..sprites.sprite_enums import MusicTracks, OrderSitters
 
 from ..res import IMG_DIR
