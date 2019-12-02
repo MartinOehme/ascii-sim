@@ -13,9 +13,9 @@ from ..sprites.bar_keeper import BarKeeper
 
 
 class RefrigeratorCloseup(Closeup):
-    def __init__(self, refrigeratore: 'Refrigerator'):
-        super().__init__(IMG_DIR + "refrigeratore/refrigeratore_closeup.png")
-        self.refrigeratore = refrigeratore
+    def __init__(self, refrigerator: 'Refrigerator'):
+        super().__init__(IMG_DIR + "refrigerator/refrigerator_closeup.png")
+        self.refrigerator = refrigerator
         self.menu = Menu()
         self.menu.add_control(Control(250, 250, 255, 750))
         self.menu.add_control(Control(594, 250, 255, 750))
