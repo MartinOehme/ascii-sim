@@ -75,14 +75,11 @@ class Radiator(AbstractSprite):
         self.temperature: int = temperature
 
     def update(self, context: Context):
-        context.rooms["bar"].temperature = self.temperature
-
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                for sprite in context.current_room.sprites:
-                    if type(sprite) == BarKeeper:
-                        if sprite.looks_at(self):
-                            context.closeup = self.closeup
+                bar_keeper: BarKeeper = context.bar_keeper
+                if bar_keeper.looks_at(self):
+                    context.closeup = self.closeup
 
     def change_temperature(self, value):
         self.temperature += (1 - 2 * value)
@@ -104,16 +101,13 @@ class MusicBox(AbstractSprite):
             pygame.mixer_music.play(loops=-1)
 
     def update(self, context: Context):
-        context.rooms["bar"].track = self.track
-        context.rooms["bar"].volume = self.volume
         pygame.mixer_music.set_volume(self.volume / 100)
 
         for event in context.events:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                for sprite in context.current_room.sprites:
-                    if type(sprite) == BarKeeper:
-                        if sprite.looks_at(self):
-                            context.closeup = self.closeup
+                bar_keeper: BarKeeper = context.bar_keeper
+                if bar_keeper.looks_at(self):
+                    context.closeup = self.closeup
 
     def change_volume(self, value):
         if 0 < self.volume < 100:

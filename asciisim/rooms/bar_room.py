@@ -18,7 +18,10 @@ class BarRoom(Room):
     def __init__(self):
         super().__init__()
         self.number_of_customers = 0
+        self.music_box = MusicBox()
+        self.radiator = Radiator()
         self.timer = time.time()
+
         self.register_surface(
             "background",
             lambda: pygame.image.load(IMG_DIR + "bar_room.png")
@@ -42,21 +45,29 @@ class BarRoom(Room):
             coffee_machine
         )
 
-        # add radiator to bar
-        radiator = Radiator()
-        self.sprites.append(
-            radiator
-        )
 
-        # add music box to bar
-        music_box = MusicBox()
         self.sprites.append(
-            music_box
+            self.radiator
+        )
+        self.sprites.append(
+            self.music_box
         )
 
     @property
     def background(self) -> Surface:
         return self.get_surface("background")
+
+    @property
+    def volume(self):
+        return self.music_box.volume
+
+    @property
+    def track(self):
+        return self.music_box.track
+
+    @property
+    def temperature(self):
+        return self.radiator.temperature
 
     def update(self, context: Context):
         self.number_of_customers = 0

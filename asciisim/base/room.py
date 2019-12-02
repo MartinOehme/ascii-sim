@@ -16,12 +16,6 @@ class Room(GameObject):
         self.bubbles = []
         self.sidebar_left = True
 
-        # radiator temperature
-        self.temperature = 22
-        # music
-        self.track: MusicTracks = None
-        self.volume = 50
-
     @property
     def renderable_sprites_by_z_index(self):
         return filter(
